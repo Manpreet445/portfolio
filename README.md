@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Sketchbook — Manpreet's Portfolio
 
-## Getting Started
+A vibrant, motion-rich personal portfolio that feels like flipping through an
+artist's working sketchbook. You land on a clean white desk, scroll, and a
+coral sketchbook **opens and turns its pages** to reveal projects, skills and a
+roadmap.
 
-First, run the development server:
+> **2D, not 3D.** Depth comes only from soft diffuse shadows, layered stacking
+> and paper texture — no perspective, no `rotateY`, no WebGL. Page turns are a
+> flat lift + slide + fade with a swelling shadow.
+
+## Stack
+
+- **Next.js 16 (App Router) + TypeScript**
+- **Tailwind CSS v4** — palette defined as `@theme` tokens in `app/globals.css`
+- **Motion** (`motion`, formerly Framer Motion) — floating objects, hover
+  states, badge pop-ins, staggered reveals, springs
+- **GSAP + ScrollTrigger** — scroll-scrubbed cover lift, page turns + snapping
+- **Inline SVG** (`pathLength`) — doodles, the roadmap spine, skill icons that
+  draw themselves in
+- Procedural paper texture (`feTurbulence`) and placeholder mockups — no binary
+  assets required to run
+
+Everything honours `prefers-reduced-motion` (a stacked, fade-in fallback) and
+animations are transform/opacity-only.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/                  layout (fonts + metadata), page (the scroll sequence), globals.css, icon/robots/sitemap
+components/Desk/       hero desk + floating objects (art.tsx, FloatingObject, HeroDesk)
+components/Sketchbook/ Cover, Page, SketchbookStage (the GSAP orchestrator)
+components/spreads/    Intro, Project, Features, Roadmap spreads
+components/ui/         doodles, badges, tags, taped photos, mockups, paper grain, scroll cue
+data/projects.ts       typed content — projects, skills, roadmap, profile  ← edit me
+lib/motion.ts          shared spring presets, reveal variants, pointer parallax hook
+public/art/            drop real screenshots here, then set `src` in data/projects.ts
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Make it yours
 
-## Learn More
+1. **Content** — edit `data/projects.ts` (`profile`, `projects`, `skills`,
+   `milestones`). Each project has a typed `status: 'concept' | 'in-production'
+   | 'completed'` that drives the roadmap stamps.
+2. **Images** — see [`public/art/README.md`](public/art/README.md).
+3. **Cover colour / palette** — change the `--color-*` tokens in
+   `app/globals.css` (`--color-coral` is the cover hue).
+4. **Deploy** — push to GitHub and import on Vercel. Set
+   `NEXT_PUBLIC_SITE_URL` to your domain so `robots.txt`/`sitemap.xml` and
+   Open Graph URLs are correct.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🤖 Scaffolded with [Claude Code](https://claude.com/claude-code)

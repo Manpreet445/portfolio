@@ -1,26 +1,162 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+   The Sketchbook — design tokens
+   2D-with-dimension: depth comes from soft diffuse shadows + layering,
+   never from perspective / 3D transforms.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  /* Surfaces — the warm-white "desk" and the paper */
+  --color-paper: #faf8f4; /* desk tabletop */
+  --color-paper-deep: #f1ede4; /* desk in shadow */
+  --color-cream: #fcfaf5; /* watercolor page base */
+  --color-cream-edge: #f4efe4; /* deckled page edge */
+
+  /* Ink */
+  --color-ink: #2b2b2b;
+  --color-ink-soft: #5b554d;
+  --color-ink-faint: #9a9389;
+
+  /* Cover hue — electric coral + tints/shades */
+  --color-coral: #ff5a4d;
+  --color-coral-deep: #e2473b;
+  --color-coral-soft: #ff8b80;
+  --color-coral-wash: #ffe5e1;
+
+  /* Accents (1–2 complementary brights) */
+  --color-sun: #ffc93c; /* sunny yellow — primary accent */
+  --color-tangerine: #ff8a3d; /* in-production */
+  --color-leaf: #2bb673; /* completed */
+  --color-sky: #4d9de0;
+
+  /* Type families (resolved from next/font variables on <html>) */
+  --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--ff-display), var(--ff-sans), sans-serif;
+  --font-serif: var(--ff-serif), ui-serif, Georgia, serif;
+  --font-hand: var(--ff-hand), "Comic Sans MS", cursive;
+
+  /* Soft, diffuse, multi-layer shadows — the primary depth tool */
+  --shadow-float: 0 2px 4px rgba(43, 43, 43, 0.04),
+    0 8px 18px rgba(43, 43, 43, 0.08), 0 18px 40px rgba(43, 43, 43, 0.06);
+  --shadow-lift: 0 6px 12px rgba(43, 43, 43, 0.08),
+    0 22px 48px rgba(43, 43, 43, 0.16), 0 40px 80px rgba(43, 43, 43, 0.1);
+  --shadow-page: 0 1px 2px rgba(43, 43, 43, 0.05),
+    0 12px 30px rgba(43, 43, 43, 0.12), 0 30px 70px rgba(43, 43, 43, 0.1);
+}
+
+/* ------------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-sun);
+  color: var(--color-ink);
+}
+
+/* The desk surface — a faint warm vignette so the centre reads as lit */
+.desk-surface {
+  background:
+    radial-gradient(120% 90% at 50% 30%, #ffffff 0%, var(--color-paper) 55%, var(--color-paper-deep) 100%);
+}
+
+/* Watercolor cold-press page: warm base + faint blotches + soft fiber.
+   The grain itself is layered via the <PaperGrain/> component (feTurbulence). */
+.page-paper {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(80% 60% at 25% 20%, rgba(255, 201, 60, 0.05), transparent 60%),
+    radial-gradient(70% 70% at 80% 75%, rgba(77, 157, 224, 0.04), transparent 60%),
+    radial-gradient(60% 50% at 60% 40%, rgba(255, 90, 77, 0.035), transparent 55%);
+}
+
+/* Soft inner-spine shadow painted flat down the gutter */
+.page-gutter {
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(43, 43, 43, 0.07) 45%,
+    rgba(43, 43, 43, 0.1) 50%,
+    rgba(43, 43, 43, 0.07) 55%,
+    transparent
+  );
+}
+
+/* Faint deckled / toothy page edge */
+.page-deckle {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 0 22px rgba(180, 168, 148, 0.18);
+}
+
+/* Hand-feel headings sit a touch tighter */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Inked rubber-stamp look for status badges */
+.stamp {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
+/* Washi-tape chip texture */
+.washi {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.14) 0px,
+    rgba(255, 255, 255, 0.14) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+/* SVG line-draw helper used where Framer Motion isn't driving it */
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  pathLength: 1;
+}
+
+/* Thin, paper-friendly scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-coral-soft);
+  border-radius: 999px;
+  border: 2px solid var(--color-paper-deep);
+}
+
+/* Respect reduced motion globally: kill non-essential animation, keep content visible */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
