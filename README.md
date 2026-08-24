@@ -1,28 +1,49 @@
-# The Sketchbook — Manpreet's Portfolio
+# Manpreet Singh — Portfolio
 
-A vibrant, motion-rich personal portfolio that feels like flipping through an
-artist's working sketchbook. You land on a clean white desk, scroll, and a
-coral sketchbook **opens and turns its pages** to reveal projects, skills and a
-roadmap.
+A pixel-art portfolio built around an animated lofi scene. The hero pins to the
+viewport while the rest of the page rises over it like a curtain; the artwork
+animates on a stepped, sprite-sheet cadence while the interface itself moves
+smoothly.
 
-> **2D, not 3D.** Depth comes only from soft diffuse shadows, layered stacking
-> and paper texture — no perspective, no `rotateY`, no WebGL. Page turns are a
-> flat lift + slide + fade with a swelling shadow.
+**Live:** _add your Vercel URL here_
 
 ## Stack
 
-- **Next.js 16 (App Router) + TypeScript**
-- **Tailwind CSS v4** — palette defined as `@theme` tokens in `app/globals.css`
-- **Motion** (`motion`, formerly Framer Motion) — floating objects, hover
-  states, badge pop-ins, staggered reveals, springs
-- **GSAP + ScrollTrigger** — scroll-scrubbed cover lift, page turns + snapping
-- **Inline SVG** (`pathLength`) — doodles, the roadmap spine, skill icons that
-  draw themselves in
-- Procedural paper texture (`feTurbulence`) and placeholder mockups — no binary
-  assets required to run
+- **Next.js 16** (App Router) + **TypeScript** + **React 19**
+- **Tailwind CSS v4** — the whole palette lives as `@theme` tokens in
+  `app/globals.css`
+- **Motion** (formerly Framer Motion) — scroll-linked transforms, reveals,
+  spring-driven pointer interactions
+- **Lenis** — momentum smooth scrolling
 
-Everything honours `prefers-reduced-motion` (a stacked, fade-in fallback) and
-animations are transform/opacity-only.
+## Design notes
+
+The one rule the motion follows: **pixel art animates in `steps()`, UI glides.**
+Stars, steam and the hero loop advance frame-by-frame like a sprite sheet;
+cards, headings and buttons ease on a long expo-out curve. Stepping a 40px card
+travel reads as jank rather than charm, so the two never mix.
+
+Depth comes from construction, not blur — 2px ink borders and hard offset
+shadows, square corners, no glassmorphism. The full system is written up in
+[`design-system/MASTER.md`](design-system/MASTER.md).
+
+## Performance & accessibility
+
+- Artwork ships as right-sized WebP with `srcset`, so a phone pulls ~130KB of
+  images instead of several megabytes
+- The hero loop pauses once it scrolls out of sight, and falls back to a still
+  frame on Data Saver or slow connections
+- Everything honours `prefers-reduced-motion`: the scene freezes, reveals
+  become instant, smooth scrolling switches off
+- WCAG AA contrast, visible focus rings, 44px touch targets, keyboard-operable
+  disclosures and nav
+
+## Security
+
+Security headers are set in [`next.config.ts`](next.config.ts): a
+production-only CSP, HSTS, `frame-ancestors 'none'`, `nosniff`,
+`Referrer-Policy` and a `Permissions-Policy` that switches off camera,
+microphone and geolocation. The framework header is disabled.
 
 ## Run it
 
@@ -32,29 +53,14 @@ npm run dev      # http://localhost:3000
 npm run build    # production build
 ```
 
-## Where things live
+## Layout
 
 ```
-app/                  layout (fonts + metadata), page (the scroll sequence), globals.css, icon/robots/sitemap
-components/Desk/       hero desk + floating objects (art.tsx, FloatingObject, HeroDesk)
-components/Sketchbook/ Cover, Page, SketchbookStage (the GSAP orchestrator)
-components/spreads/    Intro, Project, Features, Roadmap spreads
-components/ui/         doodles, badges, tags, taped photos, mockups, paper grain, scroll cue
-data/projects.ts       typed content — projects, skills, roadmap, profile  ← edit me
-lib/motion.ts          shared spring presets, reveal variants, pointer parallax hook
-public/art/            drop real screenshots here, then set `src` in data/projects.ts
+app/                 layout (fonts, metadata, headers), page, globals.css
+components/aurora/   every section, plus the motion and interaction primitives
+data/projects.ts     typed content — profile, projects, experience, skills, journey
+design-system/       the design system this site is built against
+public/              pixel artwork (WebP) and the hero loop
 ```
 
-## Make it yours
-
-1. **Content** — edit `data/projects.ts` (`profile`, `projects`, `skills`,
-   `milestones`). Each project has a typed `status: 'concept' | 'in-production'
-   | 'completed'` that drives the roadmap stamps.
-2. **Images** — see [`public/art/README.md`](public/art/README.md).
-3. **Cover colour / palette** — change the `--color-*` tokens in
-   `app/globals.css` (`--color-coral` is the cover hue).
-4. **Deploy** — push to GitHub and import on Vercel. Set
-   `NEXT_PUBLIC_SITE_URL` to your domain so `robots.txt`/`sitemap.xml` and
-   Open Graph URLs are correct.
-
-🤖 Scaffolded with [Claude Code](https://claude.com/claude-code)
+Content is data-driven: edit `data/projects.ts` and the sections follow.

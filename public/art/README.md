@@ -1,16 +1,19 @@
 # /public/art
 
-Drop real project screenshots / mockups here (WebP or PNG), then point a
-project's image at them in [`data/projects.ts`](../../data/projects.ts):
+Project artwork, exported as WebP in two widths:
 
-```ts
-images: [
-  { alt: "Atlas dashboard", src: "/art/atlas-dashboard.webp", rotate: -3 },
-  { alt: "Atlas on mobile", src: "/art/atlas-mobile.webp", rotate: 4 },
-],
+```
+recepie.webp      900px — desktop cards
+recepie-sm.webp   500px — phones (picked via srcset)
 ```
 
-When `src` is set, the taped-photo frame renders your real image via
-`next/image`. When it's absent, a procedural placeholder mockup is drawn
-instead (`mockup` + `tone` fields). Recommended export width: ~1200px,
-compressed WebP. Keep a roughly 16:11 aspect for the cleanest framing.
+Point a project at the wide file in
+[`data/projects.ts`](../../data/projects.ts); the card derives the `-sm`
+variant automatically:
+
+```ts
+images: [{ alt: "Recepie meal planner", src: "/art/recepie.webp" }],
+```
+
+If `src` is omitted the card falls back to a procedural SVG mockup driven by
+the `mockup` and `tone` fields.
