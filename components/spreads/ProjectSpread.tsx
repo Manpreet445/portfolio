@@ -52,8 +52,16 @@ export default function ProjectSpread({
       {/* RIGHT PAGE — annotations */}
       <div className="flex flex-col justify-center gap-3 md:pl-4">
         <motion.div variants={riseIn} className="flex items-center gap-3">
-          <span className="font-hand text-2xl text-coral-deep">
+          <span className="relative font-hand text-2xl text-coral-deep">
             №{String(pageNumber).padStart(2, "0")}
+            <Doodle
+              kind="circle"
+              play={active}
+              color="var(--color-coral)"
+              strokeWidth={2.5}
+              className="absolute -inset-x-3 -inset-y-2 h-[150%] w-[160%]"
+              delay={0.6}
+            />
           </span>
           <span className="font-display text-xs font-medium uppercase tracking-[0.25em] text-ink-faint">
             {project.year}
@@ -64,6 +72,15 @@ export default function ProjectSpread({
           <h3 className="font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">
             {project.title}
           </h3>
+          <Doodle
+            kind="star"
+            play={active}
+            color="var(--color-sun)"
+            fill
+            strokeWidth={2}
+            className="absolute -right-7 -top-4 h-6 w-6"
+            delay={0.7}
+          />
           <Doodle
             kind="underline"
             play={active}

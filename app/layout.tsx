@@ -1,43 +1,35 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk, Fraunces, Caveat } from "next/font/google";
+import { Nunito, Pixelify_Sans, VT323 } from "next/font/google";
 import "./globals.css";
 
-/* Body / UI sans (General Sans-like) */
-const inter = Inter({
+/* Body / UI sans — round and cozy, stays readable at length */
+const nunito = Nunito({
   variable: "--ff-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
-/* Display headings (Clash Display / Cabinet Grotesk-like) */
-const spaceGrotesk = Space_Grotesk({
+/* Display headings — chunky pixel face */
+const pixelify = Pixelify_Sans({
   variable: "--ff-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-/* Soft serif for notebook annotations */
-const fraunces = Fraunces({
-  variable: "--ff-serif",
+/* Meta labels, tags, timestamps — terminal pixel mono */
+const vt323 = VT323({
+  variable: "--ff-mono",
   subsets: ["latin"],
-  style: ["italic", "normal"],
-  display: "swap",
-});
-
-/* Marker / handwritten for doodle labels */
-const caveat = Caveat({
-  variable: "--ff-hand",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: "400",
   display: "swap",
 });
 
 const SITE = {
-  name: "Manpreet — Software Developer",
-  title: "Manpreet · The Sketchbook",
+  name: "Manpreet Singh — Full-Stack Developer",
+  title: "Manpreet Singh · Full-Stack Developer",
   description:
-    "The working sketchbook of Manpreet, a software developer. Scroll to open the book and flip through projects, skills and what's next.",
+    "Portfolio of Manpreet Singh, a full-stack developer in Calgary building TypeScript-first web apps and cross-platform mobile apps with Next.js, React Native, Supabase and Firebase.",
   url: "https://example.com",
 };
 
@@ -45,18 +37,23 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
     default: SITE.title,
-    template: "%s · The Sketchbook",
+    template: "%s · Manpreet",
   },
   description: SITE.description,
   keywords: [
-    "Manpreet",
-    "software developer",
+    "Manpreet Singh",
+    "full-stack developer",
+    "Calgary developer",
     "portfolio",
-    "web developer",
-    "frontend",
-    "full-stack",
+    "Next.js",
+    "TypeScript",
+    "React Native",
+    "Expo",
+    "Supabase",
+    "Firebase",
+    "SAIT",
   ],
-  authors: [{ name: "Manpreet" }],
+  authors: [{ name: "Manpreet Singh" }],
   openGraph: {
     type: "website",
     title: SITE.title,
@@ -73,8 +70,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#faf8f4",
-  colorScheme: "light",
+  themeColor: "#1d1730",
+  colorScheme: "dark",
+  // let the page paint into the notch area; safe-area insets handle the rest
+  viewportFit: "cover",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -85,9 +86,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${caveat.variable}`}
+      className={`${nunito.variable} ${pixelify.variable} ${vt323.variable}`}
     >
-      <body className="min-h-dvh antialiased">{children}</body>
+      <body className="scanlines min-h-dvh antialiased">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

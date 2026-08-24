@@ -18,6 +18,8 @@ export type ProjectImage = {
   rotate?: number;
 };
 
+export type ProjectAccent = "coral" | "sky" | "leaf" | "sun" | "tangerine";
+
 export type Project = {
   slug: string;
   title: string;
@@ -27,8 +29,22 @@ export type Project = {
   images: ProjectImage[];
   tags: string[];
   status: ProjectStatus;
+  /** cover hue for this project's sketchbook in the stack */
+  accent: ProjectAccent;
   /** a short handwritten margin note */
   note?: string;
+  /** public source */
+  repo?: string;
+  /** deployed app */
+  live?: string;
+};
+
+export const accentHex: Record<ProjectAccent, { base: string; deep: string }> = {
+  coral: { base: "#ff5a4d", deep: "#e2473b" },
+  sky: { base: "#4d9de0", deep: "#357ec0" },
+  leaf: { base: "#2bb673", deep: "#1f9e63" },
+  sun: { base: "#ffc93c", deep: "#e6ab1f" },
+  tangerine: { base: "#ff8a3d", deep: "#e2701f" },
 };
 
 export type Skill = {
@@ -47,126 +63,181 @@ export type Milestone = {
 
 export const profile = {
   name: "Manpreet",
-  role: "Software Developer",
-  tagline: "I design and build things for the web — calmly, carefully, end to end.",
-  location: "Available worldwide · remote",
-  email: "amritzandu08@gmail.com",
+  fullName: "Manpreet Singh",
+  role: "Full-Stack Developer",
+  tagline:
+    "I build TypeScript-first web apps and cross-platform mobile apps — from the data model to the last pixel.",
+  /** compact form for mono/meta chips */
+  location: "Canada · remote or on-site",
+  /** natural form for running sentences */
+  locationProse: "Based in Canada, open to both remote and on-site",
+  email: "manpreetzandu45@gmail.com",
   socials: [
-    { label: "GitHub", href: "https://github.com" },
-    { label: "LinkedIn", href: "https://linkedin.com" },
-    { label: "Email", href: "mailto:amritzandu08@gmail.com" },
+    { label: "GitHub", href: "https://github.com/Manpreet445" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/manpreet-singh-z" },
+    { label: "Email", href: "mailto:manpreetzandu45@gmail.com" },
   ],
 };
 
 export const projects: Project[] = [
   {
-    slug: "atlas",
-    title: "Atlas Analytics",
+    slug: "recepie",
+    title: "Recepie",
     description:
-      "A real-time analytics dashboard that turns noisy event streams into calm, legible charts. Built for teams who want answers, not spreadsheets.",
-    role: "Full-stack · Lead",
-    year: "2025",
-    note: "favourite project so far!",
-    images: [
-      { alt: "Atlas dashboard overview", mockup: "dashboard", tone: "sky", rotate: -3 },
-      { alt: "Atlas mobile report", mockup: "mobile", tone: "coral", rotate: 4 },
-    ],
-    tags: ["Next.js", "TypeScript", "PostgreSQL", "D3", "WebSockets"],
-    status: "completed",
-  },
-  {
-    slug: "fern",
-    title: "Fern",
-    description:
-      "A tiny plant-care companion app with a soft, tactile interface. Gentle reminders, a growing collection, and watercolor illustrations throughout.",
-    role: "Design + iOS",
-    year: "2025",
-    note: "watercolor everything",
-    images: [
-      { alt: "Fern app home", mockup: "mobile", tone: "leaf", rotate: 3 },
-      { alt: "Fern plant detail", mockup: "mobile", tone: "sun", rotate: -4 },
-    ],
-    tags: ["SwiftUI", "Figma", "Core Data", "Motion"],
-    status: "in-production",
-  },
-  {
-    slug: "press",
-    title: "Press Kit Studio",
-    description:
-      "A drag-and-drop builder for beautiful, link-in-bio press kits. Pick a paper, drop in your story, publish in a minute.",
-    role: "Solo · Concept",
+      "An AI meal-planning platform that turns your goals into a week of food. Gemini writes the recipes against a strict JSON schema, a Mifflin-St Jeor calculator sizes every macro, and a typed fallback keeps the app usable even when the AI is down.",
+    role: "Full-stack · Solo",
     year: "2026",
-    note: "still sketching this one",
     images: [
-      { alt: "Press Kit editor", mockup: "web", tone: "coral", rotate: -2 },
-      { alt: "Published press kit", mockup: "chart", tone: "sun", rotate: 5 },
+      {
+        alt: "Recepie meal planner interface",
+        src: "/art/recepie.webp",
+        mockup: "web",
+        tone: "sun",
+      },
     ],
-    tags: ["React", "Canvas", "Supabase", "Stripe"],
-    status: "concept",
+    tags: [
+      "Next.js 16",
+      "TypeScript",
+      "React 19",
+      "Tailwind v4",
+      "Gemini API",
+      "Supabase",
+      "Zod",
+      "Vitest",
+    ],
+    status: "completed",
+    accent: "sun",
+    repo: "https://github.com/Manpreet445/Recepie",
+    live: "https://recepie-app-gilt.vercel.app",
+  },
+  {
+    slug: "studyspot",
+    title: "StudySpot",
+    description:
+      "A real-time campus study-spot finder. Firestore listeners push crowd levels to every device the moment they change — no polling, no refresh — with native Google Maps on mobile and Leaflet on web from one shared codebase.",
+    role: "Mobile + web · Solo",
+    year: "2026",
+    images: [
+      {
+        alt: "StudySpot map and spot list",
+        src: "/art/studyspot.webp",
+        mockup: "mobile",
+        tone: "sky",
+      },
+    ],
+    tags: [
+      "React Native",
+      "Expo SDK 55",
+      "Firebase",
+      "Firestore",
+      "react-native-maps",
+      "Leaflet",
+    ],
+    status: "in-production",
+    accent: "sky",
+    repo: "https://github.com/Manpreet445/StudySpot",
+  },
+  {
+    slug: "movies",
+    title: "Movie Booking System",
+    description:
+      "An OOP-first booking engine in Python: CRUD across movies, customers and bookings, modelled in UML and split into clean model, service and CLI layers.",
+    role: "Solo · Coursework",
+    year: "2025",
+    images: [
+      {
+        alt: "Cinema seat booking screen",
+        src: "/art/movie-booking.webp",
+        mockup: "web",
+        tone: "leaf",
+      },
+    ],
+    tags: ["Python", "OOP", "UML", "CLI"],
+    status: "completed",
+    accent: "leaf",
+    repo: "https://github.com/Manpreet445/Movies-System-",
   },
 ];
 
 export const skills: Skill[] = [
   {
     label: "Front-end craft",
-    blurb: "React, Next.js & TypeScript with an obsessive eye for motion and detail.",
+    blurb:
+      "React 19, Next.js App Router and TypeScript, styled in Tailwind and moved with Framer Motion.",
     icon: "layout",
   },
   {
-    label: "Systems & APIs",
-    blurb: "Node, Postgres and clean, well-tested service layers that hold up.",
+    label: "Cross-platform mobile",
+    blurb:
+      "React Native and Expo — one codebase shipping to iOS, Android and the web.",
+    icon: "code",
+  },
+  {
+    label: "Data & backend",
+    blurb:
+      "Supabase/PostgreSQL, Cloud Firestore and SQLite — schemas, auth and security rules.",
     icon: "stack",
   },
   {
-    label: "Interaction design",
-    blurb: "Prototyping feel-first interfaces in Figma before a line of code.",
-    icon: "pen",
-  },
-  {
-    label: "Performance",
-    blurb: "Fast by default — measuring, trimming and lazy-loading the heavy bits.",
-    icon: "bolt",
-  },
-  {
-    label: "Animation",
-    blurb: "Framer Motion & GSAP for physics-y, organic, never-robotic movement.",
+    label: "AI integration",
+    blurb:
+      "Gemini with schema-enforced JSON output and typed fallbacks, so the UI never breaks.",
     icon: "spark",
   },
   {
-    label: "End-to-end",
-    blurb: "From the first sketch to the Vercel deploy — happy owning the whole thing.",
-    icon: "code",
+    label: "Testing & rigor",
+    blurb:
+      "Vitest unit suites, OOP and UML modelling, SDLC discipline from design through deploy.",
+    icon: "bolt",
+  },
+  {
+    label: "Design & ship",
+    blurb:
+      "UI/UX in Figma, then out to Vercel, Firebase or GCP — happy owning the whole path.",
+    icon: "pen",
   },
 ];
 
 export const milestones: Milestone[] = [
   {
-    title: "Foundations",
-    note: "Learned the craft, shipped first client sites, fell for clean code.",
-    year: "2022",
-    status: "completed",
-  },
-  {
-    title: "Atlas Analytics",
-    note: "Led a real-time dashboard from empty repo to production launch.",
+    title: "Started at SAIT",
+    note: "Began the Software Development diploma in Calgary — OOP, databases, web and UI/UX.",
     year: "2025",
     status: "completed",
   },
   {
-    title: "Fern",
-    note: "A tactile plant-care app — currently in the App Store review pipeline.",
+    title: "Movie Booking System",
+    note: "First OOP build: a UML-modelled Python booking engine split into clean service layers.",
     year: "2025",
+    status: "completed",
+  },
+  {
+    title: "StudySpot",
+    note: "Real-time React Native + Firebase app — live crowd levels shared across mobile and web.",
+    year: "2026",
     status: "in-production",
   },
   {
-    title: "Press Kit Studio",
-    note: "A no-code press-kit builder. Sketching the editor & data model now.",
+    title: "Recepie",
+    note: "Shipped an AI meal planner on Next.js, Gemini and Supabase — live on Vercel.",
+    year: "2026",
+    status: "completed",
+  },
+  {
+    title: "BAETT-EMS contract",
+    note: "Four-month part-time contract with BAETT — owned auth, document storage and billing on a five-person build.",
+    year: "2026",
+    status: "in-production",
+  },
+  {
+    title: "AWS Cloud Practitioner",
+    note: "Certification in progress alongside the diploma, deepening the cloud side.",
     year: "2026",
     status: "concept",
   },
   {
-    title: "Open source year",
-    note: "Plan: publish the motion + paper-texture toolkit behind this site.",
+    title: "Graduating & hiring",
+    note: "Diploma completes September 2026. Open to full-time roles — PGWP eligible, no sponsorship needed.",
     year: "2026",
     status: "concept",
   },
@@ -195,3 +266,69 @@ export const statusMeta: Record<
     fill: "bg-leaf/10",
   },
 };
+
+/* ------------------------------------------------------------------ *
+   Work experience — richer than a project card: the problem, the areas
+   I owned, and the engineering decisions inside each one.
+ * ------------------------------------------------------------------ */
+
+export type ExperienceArea = {
+  title: string;
+  body: string;
+};
+
+export type Experience = {
+  company: string;
+  product: string;
+  role: string;
+  /** engagement type, e.g. Contract - Part-time */
+  employment: string;
+  context: string;
+  duration: string;
+  year: string;
+  problem: string;
+  lead: string;
+  areas: ExperienceArea[];
+  stack: string[];
+};
+
+export const experiences: Experience[] = [
+  {
+    company: "BAETT",
+    product: "BAETT-EMS",
+    role: "Full-Stack Developer · Authentication & Billing",
+    employment: "Contract · Part-time",
+    context: "SAIT Capstone · Team of 5",
+    duration: "4 months",
+    year: "2026",
+    problem:
+      "A document and approvals platform for engineering consultancies — one system of record in place of scattered email threads and spreadsheets.",
+    lead: "I owned three areas: authentication, document storage, and billing.",
+    areas: [
+      {
+        title: "Authentication",
+        body: "Moved the platform onto a managed identity provider with organization membership and admin-assigned roles, so every session maps to a named person and authorization fails closed.",
+      },
+      {
+        title: "Document storage",
+        body: "Direct-to-storage uploads through server-generated presigned URLs, with versioned deliverables so earlier revisions stay retrievable.",
+      },
+      {
+        title: "Billing",
+        body: "Subscription plans with metered usage, where each plan limit is enforced atomically in the database so concurrent requests cannot overspend it.",
+      },
+    ],
+    stack: [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "Clerk",
+      "Stripe",
+      "Cloudflare R2",
+      "Docker",
+      "Azure",
+      "Vitest",
+    ],
+  },
+];

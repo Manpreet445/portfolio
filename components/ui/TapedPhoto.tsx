@@ -36,7 +36,7 @@ export default function TapedPhoto({
 
       {/* printed photo: thick white border + soft multi-layer shadow */}
       <div
-        className="overflow-hidden rounded-[3px] border-[6px] border-white bg-white"
+        className="relative overflow-hidden rounded-[3px] border-[6px] border-white bg-white"
         style={{ boxShadow: "var(--shadow-float)" }}
       >
         <div className="relative aspect-[16/11] w-full overflow-hidden bg-cream">
@@ -52,7 +52,21 @@ export default function TapedPhoto({
             <Mockup image={image} />
           )}
         </div>
+        {/* hand-drawn ink frame on top of the print */}
+        <svg
+          aria-hidden
+          preserveAspectRatio="none"
+          viewBox="0 0 200 140"
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          style={{ filter: "url(#rough)" }}
+        >
+          <rect x="3" y="3" width="194" height="134" fill="none" stroke="rgba(43,43,43,0.22)" strokeWidth="1.6" />
+        </svg>
       </div>
+      {/* a little pencil caption under the print */}
+      <figcaption className="mt-1 text-center font-hand text-base leading-none text-ink-faint">
+        {image.alt}
+      </figcaption>
     </motion.figure>
   );
 }

@@ -1,63 +1,64 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ *
-   The Sketchbook — design tokens
-   2D-with-dimension: depth comes from soft diffuse shadows + layering,
-   never from perspective / 3D transforms.
+   Lofi Pixel — design tokens
+   A cozy dusk-purple night sky. Depth comes from chunky 2px borders +
+   hard offset shadows. Pixel art animates on steps(); UI motion glides.
  * ------------------------------------------------------------------ */
 
 @theme {
-  /* Surfaces — the warm-white "desk" and the paper */
-  --color-paper: #faf8f4; /* desk tabletop */
-  --color-paper-deep: #f1ede4; /* desk in shadow */
-  --color-cream: #fcfaf5; /* watercolor page base */
-  --color-cream-edge: #f4efe4; /* deckled page edge */
+  /* Canvas layers — dusk, not black */
+  --color-abyss: #14101f;
+  --color-night: #1d1730;
+  --color-raised: #262040;
 
-  /* Ink */
-  --color-ink: #2b2b2b;
-  --color-ink-soft: #5b554d;
-  --color-ink-faint: #9a9389;
+  /* Text — AA-checked against --color-night */
+  --color-fog: #f3edda; /* warm cream */
+  --color-mist: #bdb3d6; /* lavender gray */
+  --color-dust: #8d81ad; /* faint meta */
 
-  /* Cover hue — electric coral + tints/shades */
-  --color-coral: #ff5a4d;
-  --color-coral-deep: #e2473b;
-  --color-coral-soft: #ff8b80;
-  --color-coral-wash: #ffe5e1;
+  /* Cozy accents */
+  --color-ember: #ffb454; /* lamp-glow amber — primary */
+  --color-ember-bright: #ffc87a;
+  --color-orchid: #a78bfa; /* twilight lavender */
+  --color-orchid-bright: #c4b5fd;
+  --color-blush: #ff9db8; /* sunset pink */
+  --color-mint: #7fd8a4; /* shipped green */
 
-  /* Accents (1–2 complementary brights) */
-  --color-sun: #ffc93c; /* sunny yellow — primary accent */
-  --color-tangerine: #ff8a3d; /* in-production */
-  --color-leaf: #2bb673; /* completed */
-  --color-sky: #4d9de0;
+  /* Hairlines & pixel ink */
+  --color-line: rgba(243, 237, 218, 0.14);
+  --color-line-soft: rgba(243, 237, 218, 0.08);
+  --color-ink: #0f0c1c; /* pixel border ink */
 
   /* Type families (resolved from next/font variables on <html>) */
   --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--ff-display), var(--ff-sans), sans-serif;
-  --font-serif: var(--ff-serif), ui-serif, Georgia, serif;
-  --font-hand: var(--ff-hand), "Comic Sans MS", cursive;
+  --font-mono: var(--ff-mono), ui-monospace, "SFMono-Regular", monospace;
 
-  /* Soft, diffuse, multi-layer shadows — the primary depth tool */
-  --shadow-float: 0 2px 4px rgba(43, 43, 43, 0.04),
-    0 8px 18px rgba(43, 43, 43, 0.08), 0 18px 40px rgba(43, 43, 43, 0.06);
-  --shadow-lift: 0 6px 12px rgba(43, 43, 43, 0.08),
-    0 22px 48px rgba(43, 43, 43, 0.16), 0 40px 80px rgba(43, 43, 43, 0.1);
-  --shadow-page: 0 1px 2px rgba(43, 43, 43, 0.05),
-    0 12px 30px rgba(43, 43, 43, 0.12), 0 30px 70px rgba(43, 43, 43, 0.1);
+  /* Motion */
+  --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Hard pixel shadows — no blur anywhere */
+  --shadow-pixel: 4px 4px 0 rgba(15, 12, 28, 0.55);
+  --shadow-pixel-sm: 3px 3px 0 rgba(15, 12, 28, 0.55);
 }
 
 /* ------------------------------------------------------------------ */
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Lenis drives smoothing; native smooth-scroll would fight it. Falls back
+     to instant jumps when Lenis is off (reduced-motion) — which is correct. */
+  scroll-behavior: auto;
 }
 
 body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
+  background-color: var(--color-night);
+  color: var(--color-fog);
   font-family: var(--font-sans);
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
@@ -65,98 +66,337 @@ body {
 }
 
 ::selection {
-  background: var(--color-sun);
-  color: var(--color-ink);
+  background: var(--color-ember);
+  color: var(--color-abyss);
 }
 
-/* The desk surface — a faint warm vignette so the centre reads as lit */
-.desk-surface {
-  background:
-    radial-gradient(120% 90% at 50% 30%, #ffffff 0%, var(--color-paper) 55%, var(--color-paper-deep) 100%);
+/* Visible, consistent keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-ember-bright);
+  outline-offset: 3px;
 }
 
-/* Watercolor cold-press page: warm base + faint blotches + soft fiber.
-   The grain itself is layered via the <PaperGrain/> component (feTurbulence). */
-.page-paper {
-  background-color: var(--color-cream);
-  background-image:
-    radial-gradient(80% 60% at 25% 20%, rgba(255, 201, 60, 0.05), transparent 60%),
-    radial-gradient(70% 70% at 80% 75%, rgba(77, 157, 224, 0.04), transparent 60%),
-    radial-gradient(60% 50% at 60% 40%, rgba(255, 90, 77, 0.035), transparent 55%);
-}
-
-/* Soft inner-spine shadow painted flat down the gutter */
-.page-gutter {
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(43, 43, 43, 0.07) 45%,
-    rgba(43, 43, 43, 0.1) 50%,
-    rgba(43, 43, 43, 0.07) 55%,
-    transparent
-  );
-}
-
-/* Faint deckled / toothy page edge */
-.page-deckle {
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
-    inset 0 0 22px rgba(180, 168, 148, 0.18);
-}
-
-/* Hand-feel headings sit a touch tighter */
-.font-display {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
-}
-
-/* Inked rubber-stamp look for status badges */
-.stamp {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+/* Skip link — hidden until focused */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border: 2px solid var(--color-ink);
+  background: var(--color-ember);
+  color: var(--color-abyss);
   font-weight: 700;
+  font-size: 14px;
+  box-shadow: var(--shadow-pixel-sm);
+  transform: translateY(-200%);
+  transition: transform 200ms var(--ease-glide);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
-/* Washi-tape chip texture */
-.washi {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.14) 0px,
-    rgba(255, 255, 255, 0.14) 2px,
-    transparent 2px,
-    transparent 6px
+/* ------------------------------------------------------------------ *
+   Pixel surfaces — chunky ink borders, hard offset shadows, square corners
+ * ------------------------------------------------------------------ */
+
+.panel {
+  background: var(--color-raised);
+  border: 2px solid var(--color-ink);
+  box-shadow:
+    var(--shadow-pixel),
+    inset 0 0 0 1px var(--color-line-soft);
+}
+
+/* Nav bar surface (was glass — pixels don't blur) */
+.glass {
+  background: rgba(29, 23, 48, 0.92);
+  border: 2px solid var(--color-ink);
+  box-shadow: var(--shadow-pixel-sm);
+}
+
+/* When the mobile drawer is open the bar must be solid — translucency lets
+   the hero text underneath bleed into the menu */
+.glass-opaque {
+  background: var(--color-night);
+}
+
+/* Retro game button: press = travel into its own shadow */
+.btn-pixel {
+  border: 2px solid var(--color-ink);
+  box-shadow: var(--shadow-pixel-sm);
+  transition:
+    transform 140ms var(--ease-glide),
+    box-shadow 140ms var(--ease-glide),
+    filter 150ms;
+}
+.btn-pixel:hover {
+  filter: brightness(1.07);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(15, 12, 28, 0.55);
+}
+.btn-pixel:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(15, 12, 28, 0.55);
+}
+
+/* Square corners everywhere (legacy class names kept from v1) */
+.radius-organic,
+.radius-organic-b {
+  border-radius: 2px;
+}
+
+/* One gradient phrase per view, max — dusk sunset ramp, slowly shimmering */
+.text-sunset {
+  background: linear-gradient(
+    92deg,
+    var(--color-ember-bright) 0%,
+    var(--color-blush) 35%,
+    var(--color-orchid-bright) 60%,
+    var(--color-ember-bright) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sunset-shimmer 7s linear infinite;
+}
+@keyframes sunset-shimmer {
+  to {
+    background-position: 220% 0;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+   Animated pixel weather — steps() only, frozen under reduced motion
+ * ------------------------------------------------------------------ */
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.star {
+  position: absolute;
+  background: var(--color-fog);
+  animation: twinkle var(--tw-dur, 3s) steps(2, jump-none) infinite;
+  animation-delay: var(--tw-delay, 0s);
+}
+
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-20vw);
+  }
+  to {
+    transform: translateX(115vw);
+  }
+}
+.cloud {
+  position: absolute;
+  color: rgba(243, 237, 218, 0.07);
+  animation: cloud-drift var(--cloud-dur, 120s) steps(90) infinite;
+  animation-delay: var(--cloud-delay, 0s);
+}
+
+@keyframes steam-rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-14px);
+    opacity: 0;
+  }
+}
+.steam {
+  animation: steam-rise 2.4s steps(6) infinite;
+  animation-delay: var(--steam-delay, 0s);
+}
+
+@keyframes tail-swish {
+  0%,
+  55%,
+  100% {
+    transform: rotate(0deg);
+  }
+  70%,
+  85% {
+    transform: rotate(-14deg);
+  }
+}
+.cat-tail {
+  transform-origin: 10% 90%;
+  animation: tail-swish 4s steps(3, jump-none) infinite;
+}
+
+/* Faint CRT scanlines over everything */
+.scanlines::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.1;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(15, 12, 28, 0.9) 0px,
+    rgba(15, 12, 28, 0.9) 1px,
+    transparent 1px,
+    transparent 3px
   );
 }
 
-/* SVG line-draw helper used where Framer Motion isn't driving it */
-.draw {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  pathLength: 1;
+/* The reticle replaces the pointer — only once it has actually mounted, so
+   no-JS and touch users keep their native cursor. Text selection keeps a
+   caret so reading and copying still feel normal. */
+html.has-pixel-cursor,
+html.has-pixel-cursor * {
+  cursor: none;
+}
+/* real text fields keep a caret — the reticle is decoration, not a caret */
+html.has-pixel-cursor input,
+html.has-pixel-cursor textarea,
+html.has-pixel-cursor [contenteditable] {
+  cursor: auto;
 }
 
-/* Thin, paper-friendly scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
+/* ------------------------------------------------------------------ *
+   Mobile foundations
+ * ------------------------------------------------------------------ */
+
+/* Keep fixed chrome clear of the notch / dynamic island */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
 }
-::-webkit-scrollbar-track {
-  background: var(--color-paper-deep);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-coral-soft);
-  border-radius: 999px;
-  border: 2px solid var(--color-paper-deep);
+/* Gutters respect the curved-screen inset in landscape */
+@supports (padding: env(safe-area-inset-left)) {
+  body {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
 }
 
-/* Respect reduced motion globally: kill non-essential animation, keep content visible */
+/* No grey flash on tap — the pressed state is already designed */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* removes the 300ms double-tap delay */
+}
+
+/* Long unbroken strings (emails, URLs) must never widen the page */
+body {
+  overflow-wrap: break-word;
+}
+
+/* Crisp pixel rendering for sprite art */
+.pixel-art {
+  image-rendering: pixelated;
+  shape-rendering: crispEdges;
+}
+
+/* Hard pixel text shadows — readable text directly over artwork, no box */
+.px-shadow {
+  text-shadow:
+    2px 2px 0 var(--color-ink),
+    0 0 12px rgba(15, 12, 28, 0.8);
+}
+.px-shadow-sm {
+  text-shadow:
+    1px 1px 0 var(--color-ink),
+    0 0 8px rgba(15, 12, 28, 0.8);
+}
+/* Heavy dark halo — keeps even gradient-filled text legible over busy art.
+   The layered dark glows build a soft plate behind the glyphs without a box. */
+.px-shadow-strong {
+  text-shadow:
+    2px 2px 0 var(--color-ink),
+    -1px -1px 0 var(--color-ink),
+    0 0 6px var(--color-ink),
+    0 0 18px rgba(6, 7, 13, 0.95),
+    0 0 34px rgba(6, 7, 13, 0.85);
+}
+
+/* Video thins out into the page at its bottom edge — no colored wash */
+.fade-bottom {
+  mask-image: linear-gradient(180deg, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, black 80%, transparent 100%);
+}
+
+/* Hero text-protection vignette. Mobile: darkens top and bottom (clusters
+   stack), clear middle. Desktop: darkens the top-left and bottom-right
+   corners (the diagonal split), leaving the subject + window/moon luminous. */
+.hero-vignette {
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 7, 13, 0.92) 0%,
+    rgba(6, 7, 13, 0.55) 22%,
+    transparent 40%,
+    transparent 58%,
+    rgba(6, 7, 13, 0.55) 78%,
+    rgba(6, 7, 13, 0.94) 100%
+  );
+}
+@media (min-width: 768px) {
+  .hero-vignette {
+    background:
+      /* top-left: light — just a small identity mark lives here */
+      linear-gradient(
+        to bottom right,
+        rgba(6, 7, 13, 0.82) 0%,
+        rgba(6, 7, 13, 0.35) 12%,
+        transparent 28%
+      ),
+      /* bottom-right: strong and tall — the headline sits over the bright
+         window here, so this reaches high and dark to keep it legible */
+        linear-gradient(
+          to top left,
+          rgba(6, 7, 13, 0.96) 0%,
+          rgba(6, 7, 13, 0.82) 26%,
+          rgba(6, 7, 13, 0.55) 46%,
+          rgba(6, 7, 13, 0.22) 64%,
+          transparent 78%
+        );
+  }
+}
+
+/* Reduced motion: freeze the weather, drop smooth scroll */
+/* Lenis smooth-scroll: it drives scrolling, so disable native smoothing */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+  html {
+    scroll-behavior: auto;
+  }
+  .star,
+  .cloud,
+  .steam,
+  .cat-tail,
+  .text-sunset {
+    animation: none;
+  }
+  .steam {
+    opacity: 0.5;
   }
 }

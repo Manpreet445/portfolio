@@ -77,6 +77,7 @@ export default function Doodle({
       aria-hidden
       initial="hidden"
       animate={play ? "show" : "hidden"}
+      style={{ filter: "url(#rough)" }}
     >
       <motion.path
         d={d}
@@ -87,7 +88,6 @@ export default function Doodle({
         fill={fill ? color : "none"}
         variants={drawPath}
         transition={{ delay }}
-        style={{ filter: "drop-shadow(0 1px 0 rgba(0,0,0,0.04))" }}
       />
     </motion.svg>
   );
