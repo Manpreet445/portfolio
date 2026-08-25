@@ -288,6 +288,8 @@ export type Experience = {
   year: string;
   problem: string;
   lead: string;
+  /** shown in place of detail this engagement cannot disclose */
+  nda?: string;
   areas: ExperienceArea[];
   stack: string[];
 };
@@ -304,6 +306,7 @@ export const experiences: Experience[] = [
     problem:
       "A document and approvals platform for engineering consultancies — one system of record in place of scattered email threads and spreadsheets.",
     lead: "I owned three areas: authentication, document storage, and billing.",
+    nda: "Under NDA — implementation specifics are kept deliberately brief. Happy to talk through the engineering in an interview.",
     areas: [
       {
         title: "Authentication",

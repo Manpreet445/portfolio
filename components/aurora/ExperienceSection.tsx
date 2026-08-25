@@ -70,6 +70,11 @@ export default function ExperienceSection() {
                 {job.problem}
               </p>
               <p className="mt-4 font-display text-lg text-fog">{job.lead}</p>
+              {job.nda && (
+                <p className="mt-3 max-w-2xl border-l-2 border-ember/50 pl-3 text-sm leading-relaxed text-dust">
+                  {job.nda}
+                </p>
+              )}
 
               {/* what I owned */}
               <RevealGroup className="mt-8 grid grid-cols-1 items-start gap-5 md:grid-cols-3">
