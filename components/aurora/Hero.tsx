@@ -89,14 +89,14 @@ export default function Hero() {
       {/* Mobile stacks everything into the upper half, over the empty sky, so
           the rooftop, the figure and the cat stay visible underneath. Desktop
           ignores this flow entirely and positions both clusters absolutely. */}
-      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-start gap-6 px-6 pt-24 pb-10 md:block md:gap-0 md:py-0">
+      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-start justify-start gap-3 px-6 pt-24 pb-8 md:block md:gap-0 md:py-0">
         {/* TOP-LEFT — a light identity mark */}
         <motion.div
           style={reduce ? undefined : { x: tlX, y: tlY, opacity: textOpacity }}
           initial="hidden"
           animate="shown"
           transition={{ staggerChildren: 0.08, delayChildren: 0.15 }}
-          className="max-w-xs md:absolute md:top-28 md:left-6"
+          className="max-w-[19rem] md:absolute md:top-28 md:left-6"
         >
           <motion.p
             variants={riseVariants}
@@ -118,11 +118,11 @@ export default function Hero() {
           initial="hidden"
           animate="shown"
           transition={{ staggerChildren: 0.08, delayChildren: 0.35 }}
-          className="flex max-w-2xl flex-col items-start gap-5 md:absolute md:right-6 md:bottom-14 md:items-end md:text-right"
+          className="flex max-w-[19rem] flex-col items-start gap-3 md:max-w-2xl md:absolute md:right-6 md:bottom-14 md:items-end md:gap-5 md:text-right"
         >
           <motion.h1
             variants={riseVariants}
-            className="px-shadow-strong font-display text-[clamp(1.6rem,4.4vw,3.4rem)] leading-[1.06] font-semibold text-fog"
+            className="px-shadow-strong font-display text-[clamp(1.45rem,4.4vw,3.4rem)] leading-[1.06] font-semibold text-fog"
           >
             {/* the space matters: below md the break is hidden, and without
                 it the two text nodes collide into "appsthat" */}
@@ -133,7 +133,7 @@ export default function Hero() {
 
           <motion.p
             variants={riseVariants}
-            className="px-shadow-sm max-w-md text-[15px] leading-relaxed text-fog/90"
+            className="px-shadow-sm max-w-md text-[14px] leading-relaxed text-fog/90 md:text-[15px]"
           >
             End to end — from the first sketch to the production deploy.
           </motion.p>
@@ -143,12 +143,12 @@ export default function Hero() {
               thin mono text needs to stay up in the darkened zone. */}
           <motion.div
             variants={riseVariants}
-            className="order-last flex flex-wrap gap-3 md:order-none md:justify-end"
+            className="order-last flex flex-nowrap gap-2 md:order-none md:flex-wrap md:gap-3 md:justify-end"
           >
             <Magnetic>
               <a
                 href="#work"
-                className="btn-pixel bg-ember px-5 py-3 text-sm font-bold text-abyss"
+                className="btn-pixel bg-ember px-4 py-2.5 text-[13px] font-bold text-abyss md:px-5 md:py-3 md:text-sm"
               >
                 View selected work
               </a>
@@ -156,7 +156,7 @@ export default function Hero() {
             <Magnetic>
               <a
                 href="#contact"
-                className="btn-pixel bg-raised px-5 py-3 text-sm font-bold text-fog"
+                className="btn-pixel bg-raised px-4 py-2.5 text-[13px] font-bold text-fog md:px-5 md:py-3 md:text-sm"
               >
                 Get in touch
               </a>
