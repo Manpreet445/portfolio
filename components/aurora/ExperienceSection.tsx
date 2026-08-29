@@ -8,7 +8,6 @@ import {
   RevealItem,
   SectionHeading,
 } from "@/components/aurora/Reveal";
-import Disclosure from "@/components/aurora/Disclosure";
 
 /** BAETT mark — rebuilt as vector so it stays crisp at any size. */
 function BaettMark({ className = "" }: { className?: string }) {
@@ -77,40 +76,24 @@ export default function ExperienceSection() {
               )}
 
               {/* what I owned */}
-              <RevealGroup className="mt-8 grid grid-cols-1 items-start gap-5 md:grid-cols-3">
+              <RevealGroup
+                as="ul"
+                className="mt-8 grid grid-cols-1 items-start gap-5 md:grid-cols-3"
+              >
                 {job.areas.map((area, i) => (
-                  <RevealItem key={area.title} direction="up">
-                    <Disclosure
-                      className="border-2 border-line bg-abyss/40 p-5"
-                      label={area.title}
-                      lead={
-                        <span className="block font-mono text-sm text-ember-bright">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                      }
-                    >
-                      <p className="text-sm leading-relaxed text-mist">
-                        {area.body}
-                      </p>
-                    </Disclosure>
+                  <RevealItem key={area} as="li" direction="up">
+                    <div className="border-2 border-line bg-abyss/40 p-5">
+                      <span className="block font-mono text-sm text-ember-bright">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h4 className="mt-1 font-display text-lg font-semibold text-fog">
+                        {area}
+                      </h4>
+                    </div>
                   </RevealItem>
                 ))}
               </RevealGroup>
 
-              {/* stack */}
-              <ul
-                aria-label="Built with"
-                className="mt-8 flex flex-wrap gap-2 border-t-2 border-line-soft pt-6"
-              >
-                {job.stack.map((tech) => (
-                  <li
-                    key={tech}
-                    className="border-2 border-line px-2 py-0.5 font-mono text-sm text-dust"
-                  >
-                    {tech}
-                  </li>
-                ))}
-              </ul>
             </article>
           </Reveal>
         ))}

@@ -92,12 +92,20 @@ export function Reveal({
 export function RevealGroup({
   children,
   className,
+  as = "div",
+  "aria-label": ariaLabel,
 }: {
   children: ReactNode;
   className?: string;
+  /** render as a semantic list when the children really are a list */
+  as?: "div" | "ul";
+  /** forwarded so a list can name itself for screen readers */
+  "aria-label"?: string;
 }) {
+  const Tag = as === "ul" ? motion.ul : motion.div;
   return (
-    <motion.div
+    <Tag
+      aria-label={ariaLabel}
       className={className}
       initial="hidden"
       whileInView="shown"
@@ -105,7 +113,7 @@ export function RevealGroup({
       transition={{ staggerChildren: 0.07 }}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 }
 
@@ -114,15 +122,18 @@ export function RevealItem({
   children,
   className,
   direction = "up",
+  as = "div",
 }: {
   children: ReactNode;
   className?: string;
   direction?: keyof typeof DIRECTION_OFFSET;
+  as?: "div" | "li";
 }) {
+  const Tag = as === "li" ? motion.li : motion.div;
   return (
-    <motion.div className={className} custom={direction} variants={directionVariants}>
+    <Tag className={className} custom={direction} variants={directionVariants}>
       {children}
-    </motion.div>
+    </Tag>
   );
 }
 
@@ -130,14 +141,17 @@ export function RevealItem({
 export function PopItem({
   children,
   className,
+  as = "div",
 }: {
   children: ReactNode;
   className?: string;
+  as?: "div" | "li";
 }) {
+  const Tag = as === "li" ? motion.li : motion.div;
   return (
-    <motion.div className={className} variants={popVariants}>
+    <Tag className={className} variants={popVariants}>
       {children}
-    </motion.div>
+    </Tag>
   );
 }
 

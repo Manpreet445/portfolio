@@ -121,7 +121,9 @@ export default function Hero() {
             variants={riseVariants}
             className="px-shadow-strong font-display text-[clamp(1.6rem,4.4vw,3.4rem)] leading-[1.06] font-semibold text-fog"
           >
-            I build web and mobile apps
+            {/* the space matters: below md the break is hidden, and without
+                it the two text nodes collide into "appsthat" */}
+            I build web and mobile apps{" "}
             <br className="hidden md:block" />
             that <span className="text-ember-bright">ship</span> — and hold up.
           </motion.h1>

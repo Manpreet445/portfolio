@@ -25,12 +25,21 @@ const vt323 = VT323({
   display: "swap",
 });
 
+/* Canonical origin. Set NEXT_PUBLIC_SITE_URL once a custom domain exists;
+   until then Vercel supplies VERCEL_URL for every deployment, so Open Graph
+   tags and the sitemap point somewhere real instead of a placeholder. */
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000");
+
 const SITE = {
   name: "Manpreet Singh — Full-Stack Developer",
   title: "Manpreet Singh · Full-Stack Developer",
   description:
     "Portfolio of Manpreet Singh, a full-stack developer in Calgary building TypeScript-first web apps and cross-platform mobile apps with Next.js, React Native, Supabase and Firebase.",
-  url: "https://example.com",
+  url: SITE_URL,
 };
 
 export const metadata: Metadata = {

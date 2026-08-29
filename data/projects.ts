@@ -71,6 +71,9 @@ export const profile = {
   location: "Canada · remote or on-site",
   /** natural form for running sentences */
   locationProse: "Based in Canada, open to both remote and on-site",
+  /** a few real photos for the About section — drop files in /public/photos
+      and list them here; the section hides itself while this is empty */
+  photos: [] as { src: string; alt: string }[],
   email: "manpreetzandu45@gmail.com",
   socials: [
     { label: "GitHub", href: "https://github.com/Manpreet445" },
@@ -230,16 +233,16 @@ export const milestones: Milestone[] = [
     status: "in-production",
   },
   {
-    title: "AWS Cloud Practitioner",
-    note: "Certification in progress alongside the diploma, deepening the cloud side.",
+    title: "Graduated from SAIT",
+    note: "Finished the Software Development diploma on 20 August 2026.",
     year: "2026",
-    status: "concept",
+    status: "completed",
   },
   {
-    title: "Graduating & hiring",
-    note: "Diploma completes September 2026. Open to full-time roles — PGWP eligible, no sponsorship needed.",
+    title: "Open to full-time roles",
+    note: "Available now for full-time work — Calgary, remote or on-site.",
     year: "2026",
-    status: "concept",
+    status: "in-production",
   },
 ];
 
@@ -272,11 +275,6 @@ export const statusMeta: Record<
    I owned, and the engineering decisions inside each one.
  * ------------------------------------------------------------------ */
 
-export type ExperienceArea = {
-  title: string;
-  body: string;
-};
-
 export type Experience = {
   company: string;
   product: string;
@@ -290,8 +288,8 @@ export type Experience = {
   lead: string;
   /** shown in place of detail this engagement cannot disclose */
   nda?: string;
-  areas: ExperienceArea[];
-  stack: string[];
+  /** the areas I owned — labels only, no detail */
+  areas: string[];
 };
 
 export const experiences: Experience[] = [
@@ -303,35 +301,9 @@ export const experiences: Experience[] = [
     context: "SAIT Capstone · Team of 5",
     duration: "4 months",
     year: "2026",
-    problem:
-      "A document and approvals platform for engineering consultancies — one system of record in place of scattered email threads and spreadsheets.",
-    lead: "I owned three areas: authentication, document storage, and billing.",
-    nda: "Under NDA — implementation specifics are kept deliberately brief. Happy to talk through the engineering in an interview.",
-    areas: [
-      {
-        title: "Authentication",
-        body: "Moved the platform onto a managed identity provider with organization membership and admin-assigned roles, so every session maps to a named person and authorization fails closed.",
-      },
-      {
-        title: "Document storage",
-        body: "Direct-to-storage uploads through server-generated presigned URLs, with versioned deliverables so earlier revisions stay retrievable.",
-      },
-      {
-        title: "Billing",
-        body: "Subscription plans with metered usage, where each plan limit is enforced atomically in the database so concurrent requests cannot overspend it.",
-      },
-    ],
-    stack: [
-      "Next.js 16",
-      "TypeScript",
-      "Prisma",
-      "PostgreSQL",
-      "Clerk",
-      "Stripe",
-      "Cloudflare R2",
-      "Docker",
-      "Azure",
-      "Vitest",
-    ],
+    problem: "An EMS system for engineering consultancies.",
+    lead: "I owned three areas of the build.",
+    nda: "Under NDA — implementation specifics are kept deliberately brief.",
+    areas: ["Authentication", "Document storage", "Billing"],
   },
 ];

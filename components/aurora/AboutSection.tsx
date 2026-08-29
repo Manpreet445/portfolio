@@ -2,7 +2,7 @@
 
 /* Chapter 3 — how I think. Bio + capability bento. */
 
-import { skills, type Skill } from "@/data/projects";
+import { profile, skills, type Skill } from "@/data/projects";
 import {
   PopItem,
   Reveal,
@@ -29,6 +29,96 @@ const ICONS: Record<Skill["icon"], (p: SVGProps<SVGSVGElement>) => React.JSX.Ele
   code: Code,
 };
 
+/* Placeholder photos, drawn rather than imported: pixel polaroids taped to
+   the page, each with its own tiny scene. They hold the layout (and the
+   room-full-of-taped-photos feeling) until real photos land in
+   profile.photos, at which point they are replaced automatically. */
+const PHOTO_SLOTS = [
+  { caption: "calgary", tilt: "-2.5deg", tape: "var(--color-ember)" },
+  { caption: "the desk", tilt: "1.5deg", tape: "var(--color-orchid)" },
+  { caption: "off duty", tilt: "-1deg", tape: "var(--color-blush)" },
+] as const;
+
+function SlotScene({ index }: { index: number }) {
+  const common = { className: "pixel-art h-full w-full", shapeRendering: "crispEdges" as const };
+  if (index === 0)
+    // skyline at night
+    return (
+      <svg viewBox="0 0 30 40" {...common}>
+        <rect width="30" height="40" fill="#1b1530" />
+        <rect x="13" y="6" width="2" height="12" fill="#4a3f6b" />
+        <rect x="12" y="17" width="4" height="18" fill="#5b4d80" />
+        <rect x="3" y="20" width="6" height="15" fill="#463a63" />
+        <rect x="19" y="23" width="7" height="12" fill="#42375d" />
+        <rect x="0" y="35" width="30" height="5" fill="#120e22" />
+        {[[4,23],[7,27],[20,26],[23,30],[13,21],[14,26]].map(([x,y],k)=>(
+          <rect key={k} x={x} y={y} width="1" height="1" fill="#ffb454" />
+        ))}
+      </svg>
+    );
+  if (index === 1)
+    // desk + lamp glow
+    return (
+      <svg viewBox="0 0 30 40" {...common}>
+        <rect width="30" height="40" fill="#20182f" />
+        <circle cx="8" cy="14" r="6" fill="#ffb454" opacity="0.16" />
+        <rect x="6" y="11" width="4" height="2" fill="#ffb454" />
+        <rect x="7" y="13" width="2" height="7" fill="#6b5a3a" />
+        <rect x="4" y="20" width="8" height="1" fill="#8d6a3f" />
+        <rect x="15" y="14" width="11" height="7" fill="#3a3157" />
+        <rect x="16" y="15" width="9" height="5" fill="#7fd8a4" opacity="0.5" />
+        <rect x="2" y="24" width="26" height="2" fill="#7a5330" />
+        <rect x="0" y="26" width="30" height="14" fill="#191227" />
+      </svg>
+    );
+  // cat curled up
+  return (
+    <svg viewBox="0 0 30 40" {...common}>
+      <rect width="30" height="40" fill="#1d1730" />
+      <rect x="4" y="26" width="22" height="8" fill="#3b2f5c" />
+      <ellipse cx="15" cy="24" rx="8" ry="5" fill="#c9762f" />
+      <rect x="19" y="18" width="7" height="6" fill="#d98436" />
+      <rect x="19" y="17" width="2" height="1" fill="#d98436" />
+      <rect x="24" y="17" width="2" height="1" fill="#d98436" />
+      <rect x="20" y="20" width="1" height="1" fill="#14101f" />
+      <rect x="24" y="20" width="1" height="1" fill="#14101f" />
+      <rect x="5" y="22" width="4" height="1" fill="#b5682a" />
+    </svg>
+  );
+}
+
+function PolaroidSlot({
+  caption,
+  tilt,
+  tape,
+  index,
+}: {
+  caption: string;
+  tilt: string;
+  tape: string;
+  index: number;
+}) {
+  return (
+    <div
+      aria-hidden
+      style={{ transform: `rotate(${tilt})` }}
+      className="group relative bg-fog p-1.5 pb-5 shadow-[3px_3px_0_rgba(15,12,28,0.55)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0"
+    >
+      {/* a strip of tape holding it to the page */}
+      <span
+        className="absolute -top-2 left-1/2 h-3 w-9 -translate-x-1/2 -rotate-2 opacity-70"
+        style={{ background: tape }}
+      />
+      <div className="aspect-[3/4] w-full overflow-hidden bg-abyss">
+        <SlotScene index={index} />
+      </div>
+      <span className="absolute inset-x-0 bottom-0.5 text-center font-mono text-[11px] tracking-[0.1em] text-ink/70">
+        {caption}
+      </span>
+    </div>
+  );
+}
+
 export default function AboutSection() {
   return (
     <section id="about" aria-labelledby="about-title" className="relative">
@@ -43,10 +133,10 @@ export default function AboutSection() {
             <Reveal delay={0.1}>
               <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-mist">
                 <p>
-                  I&apos;m a full-stack developer in Calgary, finishing my
-                  Software Development diploma at SAIT in September 2026. I
+                  I&apos;m a full-stack developer in Calgary. I finished my
+                  Software Development diploma at SAIT in August 2026, and I
                   work TypeScript-first — Next.js on the web, React Native and
-                  Expo on mobile — and I like owning the whole path: the
+                  Expo on mobile — with a habit of owning the whole path: the
                   schema, the API, the interface, the deploy.
                 </p>
                 <p>
@@ -56,12 +146,36 @@ export default function AboutSection() {
                   the feature ships, and unit tests around the maths that
                   actually matters. Simple on the surface, rigorous underneath.
                 </p>
-                <p className="text-dust">
-                  Eligible for a Canadian PGWP — no LMIA or sponsorship
-                  required.
-                </p>
               </div>
             </Reveal>
+
+            {/* Real photos once profile.photos is filled in; until then the
+                same grid holds empty frames so the layout is visible. */}
+            <RevealGroup
+              as="ul"
+              className="mt-8 grid grid-cols-3 gap-3"
+              aria-label="Photos"
+            >
+              {profile.photos.length > 0
+                ? profile.photos.map((photo) => (
+                    <PopItem key={photo.src} as="li">
+                      {/* eslint-disable-next-line @next/next/no-img-element --
+                          decorative portrait; next/image adds no value here */}
+                      <img
+                        src={photo.src}
+                        alt={photo.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="aspect-[3/4] w-full border-2 border-ink object-cover shadow-[3px_3px_0_rgba(15,12,28,0.55)]"
+                      />
+                    </PopItem>
+                  ))
+                : PHOTO_SLOTS.map((slot, i) => (
+                    <PopItem key={slot.caption} as="li">
+                      <PolaroidSlot {...slot} index={i} />
+                    </PopItem>
+                  ))}
+            </RevealGroup>
           </div>
 
           <RevealGroup className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:col-span-3">
