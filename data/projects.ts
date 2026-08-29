@@ -72,8 +72,24 @@ export const profile = {
   /** natural form for running sentences */
   locationProse: "Based in Canada, open to both remote and on-site",
   /** a few real photos for the About section — drop files in /public/photos
-      and list them here; the section hides itself while this is empty */
-  photos: [] as { src: string; alt: string }[],
+      and list them here; drawn pixel polaroids stand in while this is empty */
+  photos: [
+    {
+      src: "/photos/desk.webp",
+      alt: "Manpreet at a monitor mid-build, headphones on",
+      caption: "heads down",
+    },
+    {
+      src: "/photos/portrait.webp",
+      alt: "Portrait of Manpreet Singh",
+      caption: "portrait",
+    },
+    {
+      src: "/photos/street.webp",
+      alt: "Manpreet outside a stone building in the evening",
+      caption: "after hours",
+    },
+  ] as { src: string; alt: string; caption: string }[],
   email: "manpreetzandu45@gmail.com",
   socials: [
     { label: "GitHub", href: "https://github.com/Manpreet445" },

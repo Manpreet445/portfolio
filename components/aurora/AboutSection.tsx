@@ -87,20 +87,26 @@ function SlotScene({ index }: { index: number }) {
   );
 }
 
-function PolaroidSlot({
+/* The polaroid itself — frame, tape and caption. Real photos and the drawn
+   placeholders share it, so swapping one for the other changes the picture
+   and nothing else. Only the drawn version is aria-hidden: a real photo of
+   me is content, a decorative pixel sketch is not. */
+function Polaroid({
   caption,
   tilt,
   tape,
-  index,
+  decorative,
+  children,
 }: {
   caption: string;
   tilt: string;
   tape: string;
-  index: number;
+  decorative?: boolean;
+  children: React.ReactNode;
 }) {
   return (
     <div
-      aria-hidden
+      aria-hidden={decorative}
       style={{ transform: `rotate(${tilt})` }}
       className="group relative bg-fog p-1.5 pb-5 shadow-[3px_3px_0_rgba(15,12,28,0.55)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0 active:scale-[0.97] active:rotate-0"
     >
@@ -110,7 +116,7 @@ function PolaroidSlot({
         style={{ background: tape }}
       />
       <div className="aspect-[3/4] w-full overflow-hidden bg-abyss">
-        <SlotScene index={index} />
+        {children}
       </div>
       <span className="absolute inset-x-0 bottom-0.5 text-center font-mono text-[11px] tracking-[0.1em] text-ink/70">
         {caption}
@@ -157,22 +163,32 @@ export default function AboutSection() {
               aria-label="Photos"
             >
               {profile.photos.length > 0
-                ? profile.photos.map((photo) => (
+                ? profile.photos.map((photo, i) => (
                     <PopItem key={photo.src} as="li">
-                      {/* eslint-disable-next-line @next/next/no-img-element --
-                          decorative portrait; next/image adds no value here */}
-                      <img
-                        src={photo.src}
-                        alt={photo.alt}
-                        loading="lazy"
-                        decoding="async"
-                        className="aspect-[3/4] w-full border-2 border-ink object-cover shadow-[3px_3px_0_rgba(15,12,28,0.55)]"
-                      />
+                      <Polaroid
+                        caption={photo.caption}
+                        tilt={PHOTO_SLOTS[i % PHOTO_SLOTS.length].tilt}
+                        tape={PHOTO_SLOTS[i % PHOTO_SLOTS.length].tape}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element --
+                            fixed-size decorative crop; next/image adds no value */}
+                        <img
+                          src={photo.src}
+                          alt={photo.alt}
+                          width={600}
+                          height={800}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover"
+                        />
+                      </Polaroid>
                     </PopItem>
                   ))
                 : PHOTO_SLOTS.map((slot, i) => (
                     <PopItem key={slot.caption} as="li">
-                      <PolaroidSlot {...slot} index={i} />
+                      <Polaroid {...slot} decorative>
+                        <SlotScene index={i} />
+                      </Polaroid>
                     </PopItem>
                   ))}
             </RevealGroup>
