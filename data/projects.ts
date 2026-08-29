@@ -301,7 +301,7 @@ export const experiences: Experience[] = [
     context: "SAIT Capstone · Team of 5",
     duration: "4 months",
     year: "2026",
-    problem: "An EMS system for engineering consultancies.",
+    problem: "An EMS system.",
     lead: "I owned three areas of the build.",
     nda: "Under NDA — implementation specifics are kept deliberately brief.",
     areas: ["Authentication", "Document storage", "Billing"],

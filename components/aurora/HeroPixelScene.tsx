@@ -18,6 +18,8 @@
 import { useEffect, useRef, useState } from "react";
 
 const VIDEO_SRC = "/hero-pixel-scene.mp4";
+const VIDEO_SRC_PORTRAIT = "/hero-pixel-scene-portrait.mp4";
+const POSTER_PORTRAIT = "/hero-pixel-scene-portrait.webp";
 
 const FPS = 7;
 const TICKS = 36; // 36 ticks @ 7fps ≈ 5.1s
@@ -88,9 +90,15 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = useState(false);
   const [reduced, setReduced] = useState(false);
+  /* poster has to match whichever <source> the browser will choose */
+  const [portrait, setPortrait] = useState(false);
 
   useEffect(() => {
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const mq = window.matchMedia("(max-aspect-ratio: 3/4)");
+    const sync = () => setPortrait(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
     /* Respect Data Saver and slow links: the loop is ~800KB of decoration,
        so on a metered or 2g/3g connection show the 49KB still instead. */
     const conn = (
@@ -101,6 +109,7 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
     if (conn?.saveData || /2g|3g/.test(conn?.effectiveType ?? "")) {
       setVideoFailed(true);
     }
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   /* Some browsers ignore the autoPlay attribute until nudged; retry when
@@ -167,8 +176,7 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
     return (
       <video
         ref={videoRef}
-        src={VIDEO_SRC}
-        poster={SCENE.src}
+        poster={portrait ? POSTER_PORTRAIT : SCENE.src}
         autoPlay
         muted
         loop
@@ -176,7 +184,13 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
         aria-hidden
         onError={() => setVideoFailed(true)}
         className={`pixel-art h-full w-full object-cover ${className}`}
-      />
+      >
+        {/* A phone cropped ~74% of the landscape cut away, so portrait
+            screens get a scene composed for them instead. The browser picks
+            the first matching source, so this must come before the wide one. */}
+        <source src={VIDEO_SRC_PORTRAIT} media="(max-aspect-ratio: 3/4)" />
+        <source src={VIDEO_SRC} />
+      </video>
     );
   }
 
