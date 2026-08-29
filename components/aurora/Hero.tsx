@@ -118,7 +118,7 @@ export default function Hero() {
           initial="hidden"
           animate="shown"
           transition={{ staggerChildren: 0.08, delayChildren: 0.35 }}
-          className="flex max-w-[19rem] flex-col items-start gap-3 md:max-w-2xl md:absolute md:right-6 md:bottom-14 md:items-end md:gap-5 md:text-right"
+          className="flex max-w-[19rem] flex-col items-start gap-3 max-md:[transform:none]! max-md:[will-change:auto]! md:max-w-2xl md:absolute md:right-6 md:bottom-14 md:items-end md:gap-5 md:text-right"
         >
           <motion.h1
             variants={riseVariants}
@@ -138,12 +138,14 @@ export default function Hero() {
             End to end — from the first sketch to the production deploy.
           </motion.p>
 
-          {/* On mobile the buttons drop below the stack line: they carry solid
-              fills so they stay legible over the bright skyline, whereas the
-              thin mono text needs to stay up in the darkened zone. */}
+          {/* On mobile the buttons leave the copy block entirely and pin to
+              the bottom of the hero, at thumb height, clear of the corner
+              text. Solid fills keep them legible over the lit rooftop. The
+              absolute resolves against the stage rather than this cluster,
+              because the cluster drops its transform below md. */}
           <motion.div
             variants={riseVariants}
-            className="order-last flex flex-nowrap gap-2 md:order-none md:flex-wrap md:gap-3 md:justify-end"
+            className="absolute bottom-[calc(2.25rem+env(safe-area-inset-bottom))] left-6 flex flex-nowrap gap-2 md:static md:flex-wrap md:justify-end md:gap-3"
           >
             <Magnetic>
               <a
