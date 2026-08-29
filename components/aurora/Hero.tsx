@@ -86,7 +86,10 @@ export default function Hero() {
 
       {/* content stage: split top-left / bottom-right on desktop, stacked on
           mobile */}
-      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-between px-6 py-24 md:block md:py-0">
+      {/* Mobile stacks everything into the upper half, over the empty sky, so
+          the rooftop, the figure and the cat stay visible underneath. Desktop
+          ignores this flow entirely and positions both clusters absolutely. */}
+      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-start gap-6 px-6 pt-24 pb-10 md:block md:gap-0 md:py-0">
         {/* TOP-LEFT — a light identity mark */}
         <motion.div
           style={reduce ? undefined : { x: tlX, y: tlY, opacity: textOpacity }}
@@ -135,9 +138,12 @@ export default function Hero() {
             End to end — from the first sketch to the production deploy.
           </motion.p>
 
+          {/* On mobile the buttons drop below the stack line: they carry solid
+              fills so they stay legible over the bright skyline, whereas the
+              thin mono text needs to stay up in the darkened zone. */}
           <motion.div
             variants={riseVariants}
-            className="flex flex-wrap gap-3 md:justify-end"
+            className="order-last flex flex-wrap gap-3 md:order-none md:justify-end"
           >
             <Magnetic>
               <a

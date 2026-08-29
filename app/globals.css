@@ -374,15 +374,17 @@ body {
 /* Hero text-protection vignette. Mobile: darkens top and bottom (clusters
    stack), clear middle. Desktop: darkens the top-left and bottom-right
    corners (the diagonal split), leaving the subject + window/moon luminous. */
+/* Mobile: text now sits in the upper half over the empty sky, so darken the
+   top and leave the lower scene luminous — the figure, cat and city lights
+   are the point of the artwork and shouldn't be washed out behind copy. */
 .hero-vignette {
   background: linear-gradient(
     to bottom,
-    rgba(6, 7, 13, 0.92) 0%,
-    rgba(6, 7, 13, 0.55) 22%,
-    transparent 40%,
-    transparent 58%,
-    rgba(6, 7, 13, 0.55) 78%,
-    rgba(6, 7, 13, 0.94) 100%
+    rgba(6, 7, 13, 0.94) 0%,
+    rgba(6, 7, 13, 0.86) 32%,
+    rgba(6, 7, 13, 0.58) 48%,
+    rgba(6, 7, 13, 0.2) 60%,
+    transparent 72%
   );
 }
 @media (min-width: 768px) {

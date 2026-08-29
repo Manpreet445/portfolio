@@ -122,11 +122,15 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
     const tryPlay = () => video.play().catch(() => {});
     tryPlay();
     video.addEventListener("canplay", tryPlay);
+    /* Only fall back when the source genuinely isn't loading. Bailing merely
+       because playback hasn't begun punishes slow connections and throttled
+       devices, which would swap a perfectly good video for the canvas — so
+       check readyState: any buffered data means keep waiting. */
     const timer = window.setTimeout(() => {
-      // only a video that never started counts as blocked — a pause from
-      // the visibility observer is not a failure
-      if (video.paused && video.currentTime === 0) setVideoFailed(true);
-    }, 4000);
+      if (video.readyState === 0 && video.currentTime === 0) {
+        setVideoFailed(true);
+      }
+    }, 6000);
 
     /* The hero is sticky-pinned, so it never leaves the viewport in the
        usual sense — but once the curtain has scrolled over it (~1 screen)
