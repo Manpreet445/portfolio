@@ -50,12 +50,12 @@ export default function Disclosure({
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls={panelId}
-          className="group flex w-full items-start justify-between gap-2 text-left"
+          className="group flex w-full items-start justify-between gap-2 text-left transition-transform duration-150 active:scale-[0.99]"
         >
           <span className="min-w-0">
             {lead}
             <span
-              className={`${headingClass} block transition-colors duration-200 group-hover:text-ember-bright`}
+              className={`${headingClass} block transition-colors duration-200 group-hover:text-ember-bright group-active:text-ember-bright`}
             >
               {label}
             </span>

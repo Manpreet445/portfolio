@@ -4,6 +4,7 @@ import Nav from "@/components/aurora/Nav";
 import SmoothScroll from "@/components/aurora/SmoothScroll";
 import ScrollProgress from "@/components/aurora/ScrollProgress";
 import PixelCursor from "@/components/aurora/PixelCursor";
+import TapBurst from "@/components/aurora/TapBurst";
 import SkylineDivider from "@/components/aurora/SkylineDivider";
 import Marquee from "@/components/aurora/Marquee";
 import Hero from "@/components/aurora/Hero";
@@ -18,6 +19,7 @@ export default function Home() {
     <Providers>
       <SmoothScroll />
       <PixelCursor />
+      <TapBurst />
       <ScrollProgress />
       <Nav />
       <main id="main" className="relative">

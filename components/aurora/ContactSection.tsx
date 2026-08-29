@@ -97,7 +97,7 @@ export default function ContactSection() {
                     <a
                       href={social.href}
                       aria-label={social.label}
-                      className="btn-pixel flex h-12 w-12 items-center justify-center bg-raised text-mist hover:text-fog"
+                      className="btn-pixel flex h-12 w-12 items-center justify-center bg-raised text-mist hover:text-fog active:text-ember-bright"
                     >
                       <Icon className="h-5 w-5" />
                     </a>

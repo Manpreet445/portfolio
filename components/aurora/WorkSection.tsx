@@ -167,14 +167,14 @@ function ProjectCard({
 
   return (
     <article
-      className={`panel group relative flex h-full flex-col overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 ${
+      className={`panel press-touch group relative flex h-full flex-col overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 ${
         variant === "feature" ? "radius-organic" : "radius-organic-b"
       } ${variant === "wide" ? "md:flex-row" : ""}`}
     >
       {/* hover: ink border warms to the project hue, shadow stays hard */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-0.5 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-0.5 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-active:opacity-100"
         style={{
           border: `2px solid color-mix(in oklab, ${hue} 70%, var(--color-ink))`,
           boxShadow: `6px 6px 0 color-mix(in oklab, ${hue} 30%, transparent)`,
@@ -228,7 +228,7 @@ function ProjectCard({
                 href={project.live}
                 target="_blank"
                 rel="noreferrer"
-                className="-my-2 inline-flex min-h-11 items-center gap-1.5 py-2 font-mono text-sm uppercase tracking-[0.1em] text-ember-bright transition-colors duration-200 hover:text-fog"
+                className="-my-2 inline-flex min-h-11 items-center gap-1.5 py-2 font-mono text-sm uppercase tracking-[0.1em] text-ember-bright transition-colors duration-200 hover:text-fog active:text-ember-bright"
               >
                 Live site
                 <ArrowUpRight className="h-3.5 w-3.5" />
@@ -239,7 +239,7 @@ function ProjectCard({
                 href={project.repo}
                 target="_blank"
                 rel="noreferrer"
-                className="-my-2 inline-flex min-h-11 items-center gap-1.5 py-2 font-mono text-sm uppercase tracking-[0.1em] text-mist transition-colors duration-200 hover:text-fog"
+                className="-my-2 inline-flex min-h-11 items-center gap-1.5 py-2 font-mono text-sm uppercase tracking-[0.1em] text-mist transition-colors duration-200 hover:text-fog active:text-ember-bright"
               >
                 <GitHub className="h-3.5 w-3.5" />
                 Source

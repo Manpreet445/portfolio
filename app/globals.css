@@ -271,6 +271,45 @@ html.has-pixel-cursor [contenteditable] {
    Mobile foundations
  * ------------------------------------------------------------------ */
 
+/* Tap burst — touch gets its own flourish, since hover effects never fire.
+   steps() keeps the particles reading as sprite frames, not smooth motion. */
+.tap-burst {
+  position: fixed;
+  z-index: 90;
+  pointer-events: none;
+}
+.tap-spark {
+  position: absolute;
+  display: block;
+  animation: tap-spark 420ms steps(6) forwards;
+}
+@keyframes tap-spark {
+  from {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--dx), var(--dy));
+    opacity: 0;
+  }
+}
+
+/* Touch press feedback. Cards and tiles are built around :hover, which a
+   finger never fires — so on touch the press itself carries the response. */
+@media (hover: none) {
+  .panel,
+  .press-touch {
+    transition:
+      transform 120ms var(--ease-glide),
+      filter 120ms var(--ease-glide);
+  }
+  .panel:active,
+  .press-touch:active {
+    transform: translate(1px, 1px);
+    filter: brightness(1.12);
+  }
+}
+
 /* Keep fixed chrome clear of the notch / dynamic island */
 .safe-top {
   padding-top: env(safe-area-inset-top, 0px);

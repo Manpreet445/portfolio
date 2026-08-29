@@ -102,7 +102,7 @@ function PolaroidSlot({
     <div
       aria-hidden
       style={{ transform: `rotate(${tilt})` }}
-      className="group relative bg-fog p-1.5 pb-5 shadow-[3px_3px_0_rgba(15,12,28,0.55)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0"
+      className="group relative bg-fog p-1.5 pb-5 shadow-[3px_3px_0_rgba(15,12,28,0.55)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0 active:scale-[0.97] active:rotate-0"
     >
       {/* a strip of tape holding it to the page */}
       <span
@@ -184,7 +184,7 @@ export default function AboutSection() {
               return (
                 <PopItem key={skill.label}>
                   <Disclosure
-                    className="panel p-5"
+                    className="panel press-touch p-5"
                     label={skill.label}
                     headingClass="font-display text-base font-semibold text-fog"
                     lead={
