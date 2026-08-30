@@ -99,14 +99,21 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
     const sync = () => setPortrait(mq.matches);
     sync();
     mq.addEventListener("change", sync);
-    /* Respect Data Saver and slow links: the loop is ~800KB of decoration,
-       so on a metered or 2g/3g connection show the 49KB still instead. */
+    /* Respect Data Saver and genuinely slow links: the loop is decoration,
+       so show the 49KB still instead of spending the bandwidth.
+
+       Deliberately narrow. effectiveType is a rolling estimate from observed
+       RTT and throughput, not the radio technology, and ordinary phones on
+       LTE — or on wifi behind a slow first byte — routinely report "3g".
+       Treating that as slow meant most phones never saw the video at all.
+       Only the two genuinely unusable buckets opt out. */
     const conn = (
       navigator as Navigator & {
         connection?: { saveData?: boolean; effectiveType?: string };
       }
     ).connection;
-    if (conn?.saveData || /2g|3g/.test(conn?.effectiveType ?? "")) {
+    const tooSlow = conn?.effectiveType === "slow-2g" || conn?.effectiveType === "2g";
+    if (conn?.saveData || tooSlow) {
       setVideoFailed(true);
     }
     return () => mq.removeEventListener("change", sync);
@@ -122,6 +129,17 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
     const tryPlay = () => video.play().catch(() => {});
     tryPlay();
     video.addEventListener("canplay", tryPlay);
+    video.addEventListener("loadeddata", tryPlay);
+
+    /* iOS in Low Power Mode refuses autoplay outright, even muted and
+       inline, and the rejection is silent — the poster just sits there
+       looking like a broken loop. A muted video is allowed to start from
+       any user gesture, so take the first touch anywhere on the page as
+       permission. Harmless everywhere else: by then it is already playing
+       and play() on a playing video is a no-op. */
+    const onGesture = () => tryPlay();
+    window.addEventListener("pointerdown", onGesture, { passive: true });
+    window.addEventListener("touchstart", onGesture, { passive: true });
     /* Only fall back when the source genuinely isn't loading. Bailing merely
        because playback hasn't begun punishes slow connections and throttled
        devices, which would swap a perfectly good video for the canvas — so
@@ -155,6 +173,9 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
 
     return () => {
       video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("loadeddata", tryPlay);
+      window.removeEventListener("pointerdown", onGesture);
+      window.removeEventListener("touchstart", onGesture);
       window.clearTimeout(timer);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
