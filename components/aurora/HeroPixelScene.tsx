@@ -98,7 +98,16 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
     const mq = window.matchMedia("(max-aspect-ratio: 3/4)");
     const sync = () => setPortrait(mq.matches);
     sync();
+    /* Belt and braces. Safari has a long history of not firing change for
+       aspect-ratio queries on rotation, and a phone's viewport also shifts
+       whenever the URL bar collapses. pageshow covers a restore from the
+       back/forward cache, where the device may have been rotated while the
+       page was frozen. Each handler only reads a boolean, so the extra
+       listeners cost nothing. */
     mq.addEventListener("change", sync);
+    window.addEventListener("resize", sync, { passive: true });
+    window.addEventListener("orientationchange", sync, { passive: true });
+    window.addEventListener("pageshow", sync);
     /* Respect Data Saver and genuinely slow links: the loop is decoration,
        so show the 49KB still instead of spending the bandwidth.
 
@@ -116,8 +125,31 @@ export default function HeroPixelScene({ className = "" }: { className?: string 
     if (conn?.saveData || tooSlow) {
       setVideoFailed(true);
     }
-    return () => mq.removeEventListener("change", sync);
+    return () => {
+      mq.removeEventListener("change", sync);
+      window.removeEventListener("resize", sync);
+      window.removeEventListener("orientationchange", sync);
+      window.removeEventListener("pageshow", sync);
+    };
   }, []);
+
+  /* A browser evaluates the media attribute on <source> exactly once, when
+     it first picks a source, and never revisits it. So a phone that loaded
+     the page in landscape — or was rotated afterwards — keeps whichever cut
+     it chose then, and lands on the wide desk scene in portrait. Reload the
+     element when what is loaded disagrees with the current orientation.
+
+     Guarded on currentSrc rather than run on every change: the parse-time
+     pick is already right in the common case, and calling load() there
+     would throw away a perfectly good buffer and start the loop over. */
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || videoFailed || reduced || !video.currentSrc) return;
+    const wanted = portrait ? VIDEO_SRC_PORTRAIT : VIDEO_SRC;
+    if (new URL(video.currentSrc, location.href).pathname === wanted) return;
+    video.load();
+    video.play().catch(() => {});
+  }, [portrait, videoFailed, reduced]);
 
   /* Some browsers ignore the autoPlay attribute until nudged; retry when
      the video reports it can play, and only if playback is still blocked
