@@ -77,19 +77,13 @@ export const profile = {
     {
       src: "/photos/desk.webp",
       alt: "Manpreet at a monitor mid-build, headphones on",
-      caption: "heads down",
     },
-    {
-      src: "/photos/portrait.webp",
-      alt: "Portrait of Manpreet Singh",
-      caption: "portrait",
-    },
+    { src: "/photos/portrait.webp", alt: "Portrait of Manpreet Singh" },
     {
       src: "/photos/street.webp",
       alt: "Manpreet outside a stone building in the evening",
-      caption: "after hours",
     },
-  ] as { src: string; alt: string; caption: string }[],
+  ] as { src: string; alt: string }[],
   email: "manpreetzandu45@gmail.com",
   socials: [
     { label: "GitHub", href: "https://github.com/Manpreet445" },

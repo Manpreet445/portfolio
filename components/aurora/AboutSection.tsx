@@ -2,6 +2,7 @@
 
 /* Chapter 3 — how I think. Bio + capability bento. */
 
+import { motion, useReducedMotion } from "motion/react";
 import { profile, skills, type Skill } from "@/data/projects";
 import {
   PopItem,
@@ -34,9 +35,9 @@ const ICONS: Record<Skill["icon"], (p: SVGProps<SVGSVGElement>) => React.JSX.Ele
    room-full-of-taped-photos feeling) until real photos land in
    profile.photos, at which point they are replaced automatically. */
 const PHOTO_SLOTS = [
-  { caption: "calgary", tilt: "-2.5deg", tape: "var(--color-ember)" },
-  { caption: "the desk", tilt: "1.5deg", tape: "var(--color-orchid)" },
-  { caption: "off duty", tilt: "-1deg", tape: "var(--color-blush)" },
+  { id: "calgary", tilt: "-2.5deg", tape: "var(--color-ember)" },
+  { id: "the-desk", tilt: "1.5deg", tape: "var(--color-orchid)" },
+  { id: "off-duty", tilt: "-1deg", tape: "var(--color-blush)" },
 ] as const;
 
 function SlotScene({ index }: { index: number }) {
@@ -87,23 +88,27 @@ function SlotScene({ index }: { index: number }) {
   );
 }
 
-/* The polaroid itself — frame, tape and caption. Real photos and the drawn
+/* The polaroid itself — frame, tape and the flash. Real photos and the drawn
    placeholders share it, so swapping one for the other changes the picture
    and nothing else. Only the drawn version is aria-hidden: a real photo of
-   me is content, a decorative pixel sketch is not. */
+   me is content, a decorative pixel sketch is not.
+
+   The wide bottom border stays even with no caption on it: that margin is
+   what reads as a polaroid rather than a bordered photo. */
 function Polaroid({
-  caption,
   tilt,
   tape,
+  index,
   decorative,
   children,
 }: {
-  caption: string;
   tilt: string;
   tape: string;
+  index: number;
   decorative?: boolean;
   children: React.ReactNode;
 }) {
+  const reduce = useReducedMotion();
   return (
     <div
       aria-hidden={decorative}
@@ -118,9 +123,27 @@ function Polaroid({
       <div className="aspect-[3/4] w-full overflow-hidden bg-abyss">
         {children}
       </div>
-      <span className="absolute inset-x-0 bottom-0.5 text-center font-mono text-[11px] tracking-[0.1em] text-ink/70">
-        {caption}
-      </span>
+
+      {/* The flash: the shot going off as each photo arrives. Blows out fast
+          and falls away slowly, the way a bulb actually behaves, and fires
+          once. Staggered so the three read as three exposures, not one
+          strobe. Skipped entirely under reduced motion — a full-bleed white
+          blink is exactly what that setting exists to prevent. */}
+      {!reduce && (
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-white"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: [0, 0.85, 0] }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{
+            duration: 0.6,
+            times: [0, 0.06, 1],
+            ease: "easeOut",
+            delay: 0.1 + index * 0.14,
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -166,7 +189,7 @@ export default function AboutSection() {
                 ? profile.photos.map((photo, i) => (
                     <PopItem key={photo.src} as="li">
                       <Polaroid
-                        caption={photo.caption}
+                        index={i}
                         tilt={PHOTO_SLOTS[i % PHOTO_SLOTS.length].tilt}
                         tape={PHOTO_SLOTS[i % PHOTO_SLOTS.length].tape}
                       >
@@ -185,8 +208,8 @@ export default function AboutSection() {
                     </PopItem>
                   ))
                 : PHOTO_SLOTS.map((slot, i) => (
-                    <PopItem key={slot.caption} as="li">
-                      <Polaroid {...slot} decorative>
+                    <PopItem key={slot.id} as="li">
+                      <Polaroid tilt={slot.tilt} tape={slot.tape} index={i} decorative>
                         <SlotScene index={i} />
                       </Polaroid>
                     </PopItem>
