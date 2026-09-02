@@ -63,7 +63,7 @@ export default function ContactSection() {
             />
 
             <p className="relative font-mono text-base uppercase tracking-[0.18em] text-ember-bright">
-              05 · Contact
+              06 · Contact
             </p>
             <h2
               id="contact-title"

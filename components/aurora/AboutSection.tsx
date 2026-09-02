@@ -1,34 +1,16 @@
 "use client";
 
-/* Chapter 3 — how I think. Bio + capability bento. */
+/* Chapter 3 — who I am. Bio on the left, photographs on the right.
+   The capability bento that used to sit here now has its own section. */
 
 import { motion, useReducedMotion } from "motion/react";
-import { profile, skills, type Skill } from "@/data/projects";
+import { profile } from "@/data/projects";
 import {
   PopItem,
   Reveal,
   RevealGroup,
   SectionHeading,
 } from "@/components/aurora/Reveal";
-import Disclosure from "@/components/aurora/Disclosure";
-import {
-  Bolt,
-  Code,
-  Layout,
-  Pen,
-  Spark,
-  Stack,
-} from "@/components/aurora/icons";
-import type { SVGProps } from "react";
-
-const ICONS: Record<Skill["icon"], (p: SVGProps<SVGSVGElement>) => React.JSX.Element> = {
-  layout: Layout,
-  stack: Stack,
-  pen: Pen,
-  bolt: Bolt,
-  spark: Spark,
-  code: Code,
-};
 
 /* Placeholder photos, drawn rather than imported: pixel polaroids taped to
    the page, each with its own tiny scene. They hold the layout (and the
@@ -178,11 +160,14 @@ export default function AboutSection() {
               </div>
             </Reveal>
 
-            {/* Real photos once profile.photos is filled in; until then the
-                same grid holds empty frames so the layout is visible. */}
+          </div>
+
+          {/* Real photos once profile.photos is filled in; until then the
+              same grid holds drawn frames so the layout is visible. */}
+          <div className="lg:col-span-3">
             <RevealGroup
               as="ul"
-              className="mt-8 grid grid-cols-3 gap-3"
+              className="grid grid-cols-3 gap-4 sm:gap-6"
               aria-label="Photos"
             >
               {profile.photos.length > 0
@@ -217,29 +202,6 @@ export default function AboutSection() {
             </RevealGroup>
           </div>
 
-          <RevealGroup className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:col-span-3">
-            {skills.map((skill) => {
-              const Icon = ICONS[skill.icon];
-              return (
-                <PopItem key={skill.label}>
-                  <Disclosure
-                    className="panel press-touch p-5"
-                    label={skill.label}
-                    headingClass="font-display text-base font-semibold text-fog"
-                    lead={
-                      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center border-2 border-line text-ember-bright">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                    }
-                  >
-                    <p className="text-sm leading-relaxed text-mist">
-                      {skill.blurb}
-                    </p>
-                  </Disclosure>
-                </PopItem>
-              );
-            })}
-          </RevealGroup>
         </div>
       </div>
     </section>

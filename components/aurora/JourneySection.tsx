@@ -27,7 +27,7 @@ export default function JourneySection() {
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-36">
         <SectionHeading
           id="journey-title"
-          eyebrow="04 · Journey"
+          eyebrow="05 · Journey"
           title={"Where I've been,\nwhere this is *going.*"}
         />
 

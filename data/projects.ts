@@ -47,11 +47,15 @@ export const accentHex: Record<ProjectAccent, { base: string; deep: string }> = 
   tangerine: { base: "#ff8a3d", deep: "#e2701f" },
 };
 
-export type Skill = {
+/* A skills area: the vendor names stay visible so the section is scannable,
+   and the points underneath say what was actually understood rather than
+   just which logo was touched. Deliberately written as capability — what I
+   know how to build — and never tied back to whose system it was built in. */
+export type SkillArea = {
   label: string;
-  blurb: string;
-  /** which self-drawing line icon to render */
-  icon: "code" | "layout" | "spark" | "stack" | "pen" | "bolt";
+  /** scannable keywords — the row a recruiter reads first */
+  tags: string[];
+  points: string[];
 };
 
 export type Milestone = {
@@ -172,42 +176,91 @@ export const projects: Project[] = [
   },
 ];
 
-export const skills: Skill[] = [
+export const skillAreas: SkillArea[] = [
   {
-    label: "Front-end craft",
-    blurb:
-      "React 19, Next.js App Router and TypeScript, styled in Tailwind and moved with Framer Motion.",
-    icon: "layout",
+    label: "Frontend & language",
+    tags: ["TypeScript", "React", "Next.js 16", "Tailwind"],
+    points: [
+      "TypeScript throughout, on the App Router with server actions.",
+      "Interfaces built to the last pixel, then moved with intent rather than decoration.",
+    ],
+  },
+  {
+    label: "Authentication & access",
+    tags: ["Clerk", "RBAC", "Svix"],
+    points: [
+      "A hosted identity provider for sign-in, sessions and organizations.",
+      "Role-based access that fails closed: an unknown role gets nothing, not a default.",
+      "Route protection on the server, not UI hidden on the client — and why the difference matters.",
+      "Webhook signatures verified against the raw body before the payload is trusted.",
+    ],
+  },
+  {
+    label: "Payments",
+    tags: ["Stripe", "Elements", "Webhooks"],
+    points: [
+      "Subscriptions and checkout end to end, including customer and plan modelling.",
+      "Signature-verified webhooks.",
+      "Usage metered against a plan allowance with an atomic conditional update, so concurrent requests cannot overspend it.",
+    ],
+  },
+  {
+    label: "Database",
+    tags: ["PostgreSQL", "Prisma", "Neon"],
+    points: [
+      "Schema design and migrations run as a deploy step, not by hand.",
+      "Multi-tenant isolation enforced at the query layer rather than trusted to application code.",
+    ],
+  },
+  {
+    label: "Cloud storage",
+    tags: ["Cloudflare R2", "S3 API", "Presigned URLs"],
+    points: [
+      "Direct-to-storage uploads through presigned URLs and the SigV4 signing model.",
+      "Including the sharp edge that content type is not signed unless you declare it.",
+      "Immutable version history instead of overwriting in place.",
+    ],
+  },
+  {
+    label: "Testing & QA",
+    tags: ["Vitest", "Postgres in CI", "Defect triage"],
+    points: [
+      "Unit and integration tests with mocking, run against a real Postgres in CI rather than a stub.",
+      "Test cases written from requirements; defects tracked by severity and priority, with Pareto analysis.",
+      "Unit, functional, regression and performance testing treated as distinct activities.",
+    ],
+  },
+  {
+    label: "DevOps",
+    tags: ["Docker", "GitHub Actions"],
+    points: [
+      "Multi-stage container builds.",
+      "CI gating every push on lint, type-check, test and build.",
+      "Container deploys with environment and secret management.",
+    ],
   },
   {
     label: "Cross-platform mobile",
-    blurb:
-      "React Native and Expo — one codebase shipping to iOS, Android and the web.",
-    icon: "code",
-  },
-  {
-    label: "Data & backend",
-    blurb:
-      "Supabase/PostgreSQL, Cloud Firestore and SQLite — schemas, auth and security rules.",
-    icon: "stack",
+    tags: ["React Native", "Expo", "Firestore"],
+    points: [
+      "One codebase shipping to iOS, Android and the web.",
+      "Realtime listeners pushing state to every device the moment it changes — no polling.",
+    ],
   },
   {
     label: "AI integration",
-    blurb:
-      "Gemini with schema-enforced JSON output and typed fallbacks, so the UI never breaks.",
-    icon: "spark",
+    tags: ["Gemini API", "Zod"],
+    points: [
+      "Schema-enforced model output with typed fallbacks, so the interface holds when the model does not.",
+    ],
   },
   {
-    label: "Testing & rigor",
-    blurb:
-      "Vitest unit suites, OOP and UML modelling, SDLC discipline from design through deploy.",
-    icon: "bolt",
-  },
-  {
-    label: "Design & ship",
-    blurb:
-      "UI/UX in Figma, then out to Vercel, Firebase or GCP — happy owning the whole path.",
-    icon: "pen",
+    label: "Engineering practice",
+    tags: ["Git", "Code review", "UML"],
+    points: [
+      "Git in a five-person repository: branches, pull requests, review, merge conflicts.",
+      "Reading and extending code you did not write.",
+    ],
   },
 ];
 

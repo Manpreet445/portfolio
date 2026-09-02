@@ -11,6 +11,7 @@ import Hero from "@/components/aurora/Hero";
 import WorkSection from "@/components/aurora/WorkSection";
 import ExperienceSection from "@/components/aurora/ExperienceSection";
 import AboutSection from "@/components/aurora/AboutSection";
+import SkillsSection from "@/components/aurora/SkillsSection";
 import JourneySection from "@/components/aurora/JourneySection";
 import ContactSection from "@/components/aurora/ContactSection";
 
@@ -36,6 +37,7 @@ export default function Home() {
               <WorkSection />
               <ExperienceSection />
               <AboutSection />
+              <SkillsSection />
               <JourneySection />
               <SkylineDivider />
               <ContactSection />
