@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito, Pixelify_Sans, VT323 } from "next/font/google";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 /* Body / UI sans — round and cozy, stays readable at length */
@@ -24,15 +25,6 @@ const vt323 = VT323({
   weight: "400",
   display: "swap",
 });
-
-/* Canonical origin. Set NEXT_PUBLIC_SITE_URL once a custom domain exists;
-   until then Vercel supplies VERCEL_URL for every deployment, so Open Graph
-   tags and the sitemap point somewhere real instead of a placeholder. */
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
 
 const SITE = {
   name: "Manpreet Singh — Full-Stack Developer",
