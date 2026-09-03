@@ -4,7 +4,14 @@
    reading at speed sees the vendor names without clicking anything. The
    points underneath are the slower read, and say what was actually
    understood rather than which logo was touched — which is the difference
-   between having used a thing and being able to build with it. */
+   between having used a thing and being able to build with it.
+
+   Laid out in columns rather than a grid. These areas have genuinely
+   different amounts to say — eight tags and no commentary in one, three
+   tags and four points in another — and a grid stretches every card in a
+   row to match its tallest neighbour, which padded the short ones with
+   dead space and left a single orphan on the last row. Columns let each
+   card end where its content ends. */
 
 import { skillAreas } from "@/data/projects";
 import { PopItem, RevealGroup, SectionHeading } from "@/components/aurora/Reveal";
@@ -21,25 +28,27 @@ export default function SkillsSection() {
 
         <RevealGroup
           as="ul"
-          className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+          className="mt-12 columns-1 gap-5 md:columns-2 xl:columns-3"
           aria-label="Skill areas"
         >
           {skillAreas.map((area) => (
-            <PopItem key={area.label} as="li">
-              <article className="panel press-touch flex h-full flex-col p-5">
-                <h3 className="font-display text-base font-semibold text-fog">
+            <PopItem key={area.label} as="li" className="mb-5 break-inside-avoid">
+              <article className="panel press-touch p-5">
+                {/* the rule gives the eye somewhere to land before the tags */}
+                <h3 className="border-b-2 border-line/60 pb-3 font-display text-lg font-semibold text-fog">
                   {area.label}
                 </h3>
 
-                {/* the scannable row */}
+                {/* the scannable row — filled rather than outlined, because
+                    66 hard-bordered chips across the section read as noise */}
                 <ul
                   aria-label={`${area.label} technologies`}
-                  className="mt-3 flex flex-wrap gap-1.5"
+                  className="mt-4 flex flex-wrap gap-1.5"
                 >
                   {area.tags.map((tag) => (
                     <li
                       key={tag}
-                      className="border-2 border-line px-2 py-0.5 font-mono text-[11px] tracking-[0.06em] text-ember-bright"
+                      className="border-2 border-ember/25 bg-ember/10 px-2 py-1 font-mono text-xs tracking-[0.04em] text-ember-bright"
                     >
                       {tag}
                     </li>
@@ -47,13 +56,16 @@ export default function SkillsSection() {
                 </ul>
 
                 {area.points && (
-                  <ul className="mt-4 space-y-2">
+                  <ul className="mt-4 space-y-2.5">
                     {area.points.map((point) => (
                       <li
                         key={point}
-                        className="flex gap-2 text-[13px] leading-relaxed text-mist"
+                        className="flex gap-2.5 text-sm leading-relaxed text-mist"
                       >
-                        <span aria-hidden className="mt-[7px] h-1 w-1 shrink-0 bg-ember" />
+                        <span
+                          aria-hidden
+                          className="mt-2 h-1 w-1 shrink-0 bg-ember"
+                        />
                         <span>{point}</span>
                       </li>
                     ))}
