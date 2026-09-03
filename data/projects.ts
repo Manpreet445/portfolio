@@ -55,7 +55,10 @@ export type SkillArea = {
   label: string;
   /** scannable keywords — the row a recruiter reads first */
   tags: string[];
-  points: string[];
+  /** optional: some areas are a list of names and nothing more, and padding
+      those out with invented commentary would only dilute the ones that
+      genuinely have something to say */
+  points?: string[];
 };
 
 export type Milestone = {
@@ -179,112 +182,127 @@ export const projects: Project[] = [
 export const skillAreas: SkillArea[] = [
   {
     label: "Languages",
-    tags: ["TypeScript", "C#", "JavaScript", "SQL", "Python", "Java", "HTML", "CSS"],
+    tags: ["TypeScript", "JavaScript", "Python", "C#", "Java", "SQL", "HTML", "CSS"],
+  },
+  {
+    label: "Web & mobile",
+    tags: [
+      "Next.js 16",
+      "React",
+      "React Native",
+      "Expo",
+      "Tailwind CSS",
+      "Framer Motion",
+      ".NET",
+      ".NET MAUI",
+      "Blazor Hybrid",
+    ],
+    points: ["App Router with server actions."],
+  },
+  {
+    label: "Backend & data",
+    tags: [
+      "Node.js",
+      "Prisma ORM",
+      "PostgreSQL",
+      "Neon",
+      "Supabase",
+      "Azure Cosmos DB",
+      "Cloud Firestore",
+      "SQLite",
+    ],
     points: [
-      "Strongest in C# and TypeScript; Python and Java from object-oriented coursework.",
+      "Schema design, and migrations run as a deploy step.",
+      "Multi-tenant isolation enforced at the query layer.",
+      "REST API design.",
     ],
   },
   {
-    label: "Web & frontend",
-    tags: ["React", "Next.js 16", "Tailwind", "Responsive UI"],
+    label: "Auth & authorization",
+    tags: ["Clerk", "RBAC", "Firestore security rules"],
     points: [
-      "The App Router with server actions, typed end to end.",
-      "Interfaces built to the last pixel, then moved with intent rather than decoration.",
-    ],
-  },
-  {
-    label: "Microsoft & .NET",
-    tags: [".NET", ".NET MAUI", "Blazor Hybrid", "Visual Studio"],
-    points: [
-      "Cross-platform desktop and mobile from a single .NET codebase.",
-      "Microsoft Learn certified in Blazor Hybrid and .NET MAUI.",
-    ],
-  },
-  {
-    label: "Backend & APIs",
-    tags: ["Node.js", "REST", "Server actions", "MVC"],
-    points: [
-      "REST API design and integration against schema-enforced data contracts.",
-      "Separation of concerns kept real rather than aspirational.",
-    ],
-  },
-  {
-    label: "Authentication & access",
-    tags: ["Clerk", "RBAC", "Svix"],
-    points: [
-      "A hosted identity provider for sign-in, sessions and organizations.",
-      "Role-based access that fails closed: an unknown role gets nothing, not a default.",
-      "Route protection on the server, not UI hidden on the client — and why the difference matters.",
-      "Webhook signatures verified against the raw body before the payload is trusted.",
+      "Hosted sign-in, sessions and organizations.",
+      "Role-based access control, designed to fail closed.",
+      "Server-side route protection rather than client-side hiding.",
     ],
   },
   {
     label: "Payments",
-    tags: ["Stripe", "Elements", "Webhooks"],
+    tags: ["Stripe", "Stripe Elements", "Subscriptions"],
     points: [
-      "Subscriptions and checkout end to end, including customer and plan modelling.",
-      "Usage metered against a plan allowance with an atomic conditional update, so concurrent requests cannot overspend it.",
+      "Checkout, with customer and plan modelling.",
+      "Usage metering against plan allowances.",
+      "An atomic conditional UPDATE to prevent double-spend under concurrency.",
     ],
   },
   {
-    label: "Databases",
-    tags: ["PostgreSQL", "SQL Server", "SQLite", "Prisma", "Neon"],
+    label: "Webhooks",
+    tags: ["Svix", "Stripe", "Signature verification"],
     points: [
-      "Relational schema design, query writing and optimization.",
-      "Migrations run as a deploy step, not by hand.",
-      "Multi-tenant isolation enforced at the query layer rather than trusted to application code.",
+      "Validating against the raw body before trusting a payload.",
     ],
   },
   {
     label: "Cloud & storage",
-    tags: ["Azure", "Cloudflare R2", "S3 API", "Vercel", "Firebase"],
+    tags: [
+      "Azure",
+      "Azure AI Agent Service",
+      "Cloudflare R2",
+      "S3-compatible",
+      "Firebase",
+      "Google Cloud",
+      "Vercel",
+      "AWS",
+    ],
     points: [
-      "Direct-to-storage uploads through presigned URLs and the SigV4 signing model.",
-      "Including the sharp edge that content type is not signed unless you declare it.",
-      "Immutable version history instead of overwriting in place.",
+      "Presigned URLs and the SigV4 signing model, including that content type is unsigned unless declared.",
+      "Immutable version history.",
+      "Firebase across Firestore, Auth and Storage.",
+      "AWS Cloud Practitioner in progress.",
     ],
   },
   {
-    label: "DevOps & CI",
+    label: "AI",
+    tags: ["Google Gemini API", "Structured JSON", "Agents"],
+    points: [
+      "responseSchema-enforced structured output.",
+      "Typed fallback paths, so the interface holds when the model does not.",
+      "Agent decision logic.",
+    ],
+  },
+  {
+    label: "DevOps",
     tags: ["Docker", "GitHub Actions", "CI/CD"],
     points: [
       "Multi-stage container builds.",
       "CI gating every push on lint, type-check, test and build.",
-      "Container deploys with environment and secret management.",
+      "Container deployment to a cloud host, with environment and secret management.",
     ],
   },
   {
     label: "Testing & QA",
-    tags: ["Vitest", "Postgres in CI", "Defect triage"],
+    tags: ["Vitest", "Mocking", "Postgres in CI"],
     points: [
-      "Unit and integration tests with mocking, run against a real Postgres in CI rather than a stub.",
+      "Unit and integration tests, run against a real Postgres instance rather than a stub.",
       "Test cases written from requirements; defects tracked by severity and priority, with Pareto analysis.",
       "Unit, functional, regression and performance testing treated as distinct activities.",
     ],
   },
   {
-    label: "Cross-platform mobile",
-    tags: ["React Native", "Expo", "Firestore", ".NET MAUI"],
+    label: "Engineering practice",
+    tags: ["Git", "Code review", "OOP", "UML", "SDLC", "Agile"],
     points: [
-      "One codebase shipping to iOS, Android and the web.",
-      "Realtime listeners pushing state to every device the moment it changes — no polling.",
+      "Branches, pull requests, review and merge conflicts in a shared repository.",
+      "Reading and extending code you did not write.",
     ],
   },
   {
-    label: "AI integration",
-    tags: ["Gemini API", "Zod"],
-    points: [
-      "Schema-enforced model output with typed fallbacks, so the interface holds when the model does not.",
-    ],
+    label: "Tools",
+    tags: ["VS Code", "Visual Studio", "Android Studio", "Figma", "GitHub"],
   },
   {
-    label: "Practice & collaboration",
-    tags: ["Git", "Agile", "Code review", "UML", "Documentation"],
-    points: [
-      "Git in a five-person repository: branches, pull requests, review, merge conflicts.",
-      "Domain modelled in UML before implementation.",
-      "Reading and extending code you did not write, and documenting it for whoever maintains it.",
-    ],
+    label: "Libraries",
+    tags: ["Zod", "react-native-maps", "Leaflet", "CSV data handling"],
   },
 ];
 

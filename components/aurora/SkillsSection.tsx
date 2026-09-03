@@ -46,17 +46,19 @@ export default function SkillsSection() {
                   ))}
                 </ul>
 
-                <ul className="mt-4 space-y-2">
-                  {area.points.map((point) => (
-                    <li
-                      key={point}
-                      className="flex gap-2 text-[13px] leading-relaxed text-mist"
-                    >
-                      <span aria-hidden className="mt-[7px] h-1 w-1 shrink-0 bg-ember" />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
+                {area.points && (
+                  <ul className="mt-4 space-y-2">
+                    {area.points.map((point) => (
+                      <li
+                        key={point}
+                        className="flex gap-2 text-[13px] leading-relaxed text-mist"
+                      >
+                        <span aria-hidden className="mt-[7px] h-1 w-1 shrink-0 bg-ember" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </article>
             </PopItem>
           ))}
