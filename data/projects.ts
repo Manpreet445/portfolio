@@ -178,11 +178,34 @@ export const projects: Project[] = [
 
 export const skillAreas: SkillArea[] = [
   {
-    label: "Frontend & language",
-    tags: ["TypeScript", "React", "Next.js 16", "Tailwind"],
+    label: "Languages",
+    tags: ["TypeScript", "C#", "JavaScript", "SQL", "Python", "Java", "HTML", "CSS"],
     points: [
-      "TypeScript throughout, on the App Router with server actions.",
+      "Strongest in C# and TypeScript; Python and Java from object-oriented coursework.",
+    ],
+  },
+  {
+    label: "Web & frontend",
+    tags: ["React", "Next.js 16", "Tailwind", "Responsive UI"],
+    points: [
+      "The App Router with server actions, typed end to end.",
       "Interfaces built to the last pixel, then moved with intent rather than decoration.",
+    ],
+  },
+  {
+    label: "Microsoft & .NET",
+    tags: [".NET", ".NET MAUI", "Blazor Hybrid", "Visual Studio"],
+    points: [
+      "Cross-platform desktop and mobile from a single .NET codebase.",
+      "Microsoft Learn certified in Blazor Hybrid and .NET MAUI.",
+    ],
+  },
+  {
+    label: "Backend & APIs",
+    tags: ["Node.js", "REST", "Server actions", "MVC"],
+    points: [
+      "REST API design and integration against schema-enforced data contracts.",
+      "Separation of concerns kept real rather than aspirational.",
     ],
   },
   {
@@ -200,25 +223,34 @@ export const skillAreas: SkillArea[] = [
     tags: ["Stripe", "Elements", "Webhooks"],
     points: [
       "Subscriptions and checkout end to end, including customer and plan modelling.",
-      "Signature-verified webhooks.",
       "Usage metered against a plan allowance with an atomic conditional update, so concurrent requests cannot overspend it.",
     ],
   },
   {
-    label: "Database",
-    tags: ["PostgreSQL", "Prisma", "Neon"],
+    label: "Databases",
+    tags: ["PostgreSQL", "SQL Server", "SQLite", "Prisma", "Neon"],
     points: [
-      "Schema design and migrations run as a deploy step, not by hand.",
+      "Relational schema design, query writing and optimization.",
+      "Migrations run as a deploy step, not by hand.",
       "Multi-tenant isolation enforced at the query layer rather than trusted to application code.",
     ],
   },
   {
-    label: "Cloud storage",
-    tags: ["Cloudflare R2", "S3 API", "Presigned URLs"],
+    label: "Cloud & storage",
+    tags: ["Azure", "Cloudflare R2", "S3 API", "Vercel", "Firebase"],
     points: [
       "Direct-to-storage uploads through presigned URLs and the SigV4 signing model.",
       "Including the sharp edge that content type is not signed unless you declare it.",
       "Immutable version history instead of overwriting in place.",
+    ],
+  },
+  {
+    label: "DevOps & CI",
+    tags: ["Docker", "GitHub Actions", "CI/CD"],
+    points: [
+      "Multi-stage container builds.",
+      "CI gating every push on lint, type-check, test and build.",
+      "Container deploys with environment and secret management.",
     ],
   },
   {
@@ -231,17 +263,8 @@ export const skillAreas: SkillArea[] = [
     ],
   },
   {
-    label: "DevOps",
-    tags: ["Docker", "GitHub Actions"],
-    points: [
-      "Multi-stage container builds.",
-      "CI gating every push on lint, type-check, test and build.",
-      "Container deploys with environment and secret management.",
-    ],
-  },
-  {
     label: "Cross-platform mobile",
-    tags: ["React Native", "Expo", "Firestore"],
+    tags: ["React Native", "Expo", "Firestore", ".NET MAUI"],
     points: [
       "One codebase shipping to iOS, Android and the web.",
       "Realtime listeners pushing state to every device the moment it changes — no polling.",
@@ -255,11 +278,12 @@ export const skillAreas: SkillArea[] = [
     ],
   },
   {
-    label: "Engineering practice",
-    tags: ["Git", "Code review", "UML"],
+    label: "Practice & collaboration",
+    tags: ["Git", "Agile", "Code review", "UML", "Documentation"],
     points: [
       "Git in a five-person repository: branches, pull requests, review, merge conflicts.",
-      "Reading and extending code you did not write.",
+      "Domain modelled in UML before implementation.",
+      "Reading and extending code you did not write, and documenting it for whoever maintains it.",
     ],
   },
 ];
