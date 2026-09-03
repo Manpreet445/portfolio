@@ -15,7 +15,10 @@
   /* Text — AA-checked against --color-night */
   --color-fog: #f3edda; /* warm cream */
   --color-mist: #bdb3d6; /* lavender gray */
-  --color-dust: #8d81ad; /* faint meta */
+  /* Lightened from #8d81ad, which measured 4.31:1 on raised panels and so
+     missed WCAG AA for body text. It cleared AA on the darker page ground
+     but not on the panels, which is where most of the 31 uses of it sit. */
+  --color-dust: #9a8ebb; /* faint meta — 5.7:1 on night, 5.1:1 on panels */
 
   /* Cozy accents */
   --color-ember: #ffb454; /* lamp-glow amber — primary */
@@ -160,6 +163,19 @@ body {
   background-clip: text;
   color: transparent;
   animation: sunset-shimmer 7s linear infinite;
+}
+/* In forced-colors mode the browser replaces backgrounds, which strips the
+   gradient and leaves `color: transparent` painting nothing — the accented
+   word in every section heading would simply vanish. Hand the text back to
+   the system palette. `-webkit-text-fill-color` has to be reset too: it
+   wins over `color` where it is supported. */
+@media (forced-colors: active) {
+  .text-sunset {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+    animation: none;
+  }
 }
 @keyframes sunset-shimmer {
   to {

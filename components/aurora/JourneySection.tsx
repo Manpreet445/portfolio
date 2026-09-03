@@ -36,8 +36,7 @@ export default function JourneySection() {
           <GrowLine className="absolute top-1 bottom-1 left-[4px] w-[2px] bg-[linear-gradient(180deg,var(--color-ember)_0%,var(--color-ember)_35%,var(--color-orchid)_35%,var(--color-orchid)_70%,var(--color-dust)_70%)] opacity-50" />
           <ol className="space-y-10">
             {milestones.map((milestone) => (
-              <RevealItem key={milestone.title}>
-                <li className="relative pl-10">
+              <RevealItem key={milestone.title} as="li" className="relative pl-10">
                   <PopItem className="absolute top-1.5 left-0">
                     <span
                       aria-hidden
@@ -55,7 +54,6 @@ export default function JourneySection() {
                   <p className="mt-1.5 max-w-prose text-[15px] leading-relaxed text-mist">
                     {milestone.note}
                   </p>
-                </li>
               </RevealItem>
             ))}
           </ol>

@@ -72,7 +72,10 @@ export default function Nav() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-mist transition-colors duration-200 hover:text-fog active:text-ember-bright"
+                /* py-1.5 takes the hit area from 20px to 28px tall: WCAG 2.2
+                   asks for 24px, and these sat under it on their text height
+                   alone */
+                className="-my-1.5 py-1.5 text-sm text-mist transition-colors duration-200 hover:text-fog active:text-ember-bright"
               >
                 {link.label}
               </a>
