@@ -30,7 +30,7 @@ const SITE = {
   name: "Manpreet Singh — Full-Stack Developer",
   title: "Manpreet Singh · Full-Stack Developer",
   description:
-    "Portfolio of Manpreet Singh, a full-stack developer in Calgary building TypeScript-first web apps and cross-platform mobile apps with Next.js, React Native, Supabase and Firebase.",
+    "Manpreet Singh, a recent SAIT Software Development graduate in Calgary, Alberta. Web, mobile, and cloud projects using TypeScript, React, Next.js, Python, and Azure. Available for full-time junior developer roles.",
   url: SITE_URL,
 };
 

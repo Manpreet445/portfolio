@@ -14,7 +14,8 @@ const SNAP = { stiffness: 420, damping: 32, mass: 0.45 };
 const PAD = 8; // breathing room around a snapped target
 const DOT = 12; // idle size
 
-const TARGETS = 'a[href], button, [role="button"], [data-cursor="snap"]';
+const TARGETS = 'a[href], button, summary, [role="button"], [data-cursor="snap"]';
+const NO_SNAP = '[data-cursor="none"]';
 
 export default function PixelCursor() {
   const reduce = useReducedMotion();
@@ -82,6 +83,15 @@ export default function PixelCursor() {
 
     const onOver = (e: PointerEvent) => {
       const el = (e.target as HTMLElement)?.closest?.(TARGETS);
+      /* Opt-out: some links are big pieces of artwork, and snapping a bracket
+         around a whole screenshot reads as the cursor grabbing the picture
+         rather than pointing at a control. Those mark themselves and keep the
+         plain dot — released, not just skipped, so the bracket does not stay
+         stuck on whatever was hovered before. */
+      if (el?.closest(NO_SNAP)) {
+        if (targetRef.current) release();
+        return;
+      }
       if (!el || el === targetRef.current) return;
       cancelAnimationFrame(rafRef.current);
       targetRef.current = el;

@@ -1,5 +1,4 @@
-/* Chapter 3 — experience. Deeper than a project card: the problem, the
-   areas I owned, and the engineering decision inside each one. */
+/* Industry-partner capstone; contribution labels preserve NDA confidentiality. */
 
 import { experiences } from "@/data/projects";
 import {
@@ -53,13 +52,13 @@ export default function ExperienceSection() {
                     </p>
                   </div>
                 </div>
-                <div className="font-mono text-sm text-dust md:text-right">
+                <div className="text-sm leading-relaxed text-dust md:text-right">
                   <p className="text-mist">{job.role}</p>
                   <p className="mt-1 text-ember-bright/90">
-                    {job.employment} · {job.duration}
+                    {job.employment}
                   </p>
                   <p className="mt-0.5">
-                    {job.context} · {job.year}
+                    {job.context} · {job.dates}
                   </p>
                 </div>
               </div>

@@ -1,95 +1,66 @@
-/* ------------------------------------------------------------------ *
-   Typed content for The Sketchbook.
-   Placeholder copy for now — swap in real projects / images last.
- * ------------------------------------------------------------------ */
-
-export type ProjectStatus = "concept" | "in-production" | "completed";
-
-/** A taped-in image. Leave `src` undefined to render a procedural mockup. */
-export type ProjectImage = {
-  alt: string;
-  /** real image path under /public, e.g. "/art/project-1.webp" */
-  src?: string;
-  /** procedural placeholder kind, used when `src` is absent */
-  mockup?: "web" | "mobile" | "dashboard" | "chart";
-  /** accent token name for the placeholder ("coral" | "sun" | "sky" | "leaf") */
-  tone?: "coral" | "sun" | "sky" | "leaf";
-  /** hand-placed rotation in degrees */
-  rotate?: number;
-};
-
+/** Public portfolio content. Experience copy intentionally stays NDA-safe. */
+export type ProjectStatus = "live" | "in-development" | "completed";
 export type ProjectAccent = "coral" | "sky" | "leaf" | "sun" | "tangerine";
+
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption: string;
+};
 
 export type Project = {
   slug: string;
   title: string;
   description: string;
+  detail?: string;
   role: string;
+  context?: string;
   year: string;
   images: ProjectImage[];
   tags: string[];
   status: ProjectStatus;
-  /** cover hue for this project's sketchbook in the stack */
   accent: ProjectAccent;
-  /** a short handwritten margin note */
-  note?: string;
-  /** public source */
+  secondary?: boolean;
   repo?: string;
-  /** deployed app */
   live?: string;
 };
 
-export const accentHex: Record<ProjectAccent, { base: string; deep: string }> = {
-  coral: { base: "#ff5a4d", deep: "#e2473b" },
-  sky: { base: "#4d9de0", deep: "#357ec0" },
-  leaf: { base: "#2bb673", deep: "#1f9e63" },
-  sun: { base: "#ffc93c", deep: "#e6ab1f" },
-  tangerine: { base: "#ff8a3d", deep: "#e2701f" },
-};
-
-/* A skills area: the vendor names stay visible so the section is scannable,
-   and the points underneath say what was actually understood rather than
-   just which logo was touched. Deliberately written as capability — what I
-   know how to build — and never tied back to whose system it was built in. */
+export type SkillCategory = "interface" | "systems" | "cloud" | "quality";
 export type SkillArea = {
-  label: string;
-  /** scannable keywords — the row a recruiter reads first */
-  tags: string[];
-  /** optional: some areas are a list of names and nothing more, and padding
-      those out with invented commentary would only dilute the ones that
-      genuinely have something to say */
-  points?: string[];
+ label: string;
+ category: SkillCategory;
+ symbol: string;
+ tags: string[];
+ capabilities: string[];
+ learning?: string;
 };
 
+export type MilestoneStatus = "completed" | "in-development" | "available";
 export type Milestone = {
   title: string;
   note: string;
   year: string;
-  status: ProjectStatus;
+  status: MilestoneStatus;
 };
+
+export const BAETT_DATES = "May–August 2026";
 
 export const profile = {
   name: "Manpreet",
   fullName: "Manpreet Singh",
   role: "Full-Stack Developer",
-  tagline:
-    "I build TypeScript-first web apps and cross-platform mobile apps — from the data model to the last pixel.",
-  /** compact form for mono/meta chips */
-  location: "Canada · remote or on-site",
-  /** natural form for running sentences */
-  locationProse: "Based in Canada, open to both remote and on-site",
-  /** a few real photos for the About section — drop files in /public/photos
-      and list them here; drawn pixel polaroids stand in while this is empty */
+  location: "Calgary, Alberta",
+  tagline: "I build web and mobile applications with TypeScript, React, and Next.js.",
+  summary: "Recent SAIT Software Development graduate with experience in team-based development, cloud integrations, and automated testing. Available for full-time roles in Calgary and across Alberta.",
+  locationProse: "Based in Calgary, Alberta, open to remote and on-site work",
+  // Set only after adding the actual file under public/. No empty download links.
+  resume: { href: "/resume/Manpreet_Singh_Resume.pdf", fileName: "Manpreet_Singh_Resume.pdf" } as { href: string; fileName: string } | null,
   photos: [
-    {
-      src: "/photos/desk.webp",
-      alt: "Manpreet at a monitor mid-build, headphones on",
-    },
+    { src: "/photos/desk.webp", alt: "Manpreet at a monitor mid-build, headphones on" },
     { src: "/photos/portrait.webp", alt: "Portrait of Manpreet Singh" },
-    {
-      src: "/photos/street.webp",
-      alt: "Manpreet outside a stone building in the evening",
-    },
+    { src: "/photos/street.webp", alt: "Manpreet outside a stone building in the evening" },
   ] as { src: string; alt: string }[],
   email: "manpreetzandu45@gmail.com",
   socials: [
@@ -103,312 +74,330 @@ export const projects: Project[] = [
   {
     slug: "recepie",
     title: "Recepie",
-    description:
-      "An AI meal-planning platform that turns your goals into a week of food. Gemini writes the recipes against a strict JSON schema, a Mifflin-St Jeor calculator sizes every macro, and a typed fallback keeps the app usable even when the AI is down.",
-    role: "Full-stack · Solo",
+    description: "A pantry-first cooking app: match recipes to ingredients on hand, create multi-day AI meal plans, and combine missing ingredients into one shopping list.",
+    detail: "Gemini returns schema-constrained JSON validated with Zod. Transient failures trigger retries and fallback models; exhausted attempts show an error. Vitest covers ingredient matching, nutrition calculations, and generation responses.",
+    role: "Full-stack developer · Solo",
     year: "2026",
-    images: [
-      {
-        alt: "Recepie meal planner interface",
-        src: "/art/recepie.webp",
-        mockup: "web",
-        tone: "sun",
-      },
-    ],
-    tags: [
-      "Next.js 16",
-      "TypeScript",
-      "React 19",
-      "Tailwind v4",
-      "Gemini API",
-      "Supabase",
-      "Zod",
-      "Vitest",
-    ],
-    status: "completed",
+    images: [{
+      src: "/projects/recepie-live.webp",
+      alt: "Recepie’s live home page with pantry ingredient matching and multi-day meal planning entry points.",
+      width: 1270,
+      height: 893,
+      caption: "Live application · Pantry-first cooking and meal planning",
+    }],
+    tags: ["TypeScript", "Next.js", "React", "Gemini API", "Supabase", "Zod", "Vitest"],
+    status: "live",
     accent: "sun",
     repo: "https://github.com/Manpreet445/Recepie",
-    live: "https://recepie-app-gilt.vercel.app",
+    live: "https://recepie-app-gilt.vercel.app/",
   },
   {
     slug: "studyspot",
     title: "StudySpot",
-    description:
-      "A real-time campus study-spot finder. Firestore listeners push crowd levels to every device the moment they change — no polling, no refresh — with native Google Maps on mobile and Leaflet on web from one shared codebase.",
-    role: "Mobile + web · Solo",
+    description: "A campus study-spot finder in development, built with React Native and Expo. Uses Firestore listeners for crowd-level updates, native maps on mobile, and Leaflet on web.",
+    role: "Mobile and web developer · Solo",
     year: "2026",
-    images: [
-      {
-        alt: "StudySpot map and spot list",
-        src: "/art/studyspot.webp",
-        mockup: "mobile",
-        tone: "sky",
-      },
-    ],
-    tags: [
-      "React Native",
-      "Expo SDK 55",
-      "Firebase",
-      "Firestore",
-      "react-native-maps",
-      "Leaflet",
-    ],
-    status: "in-production",
+    images: [],
+    tags: ["React Native", "Expo", "Firebase", "Firestore", "Leaflet"],
+    status: "in-development",
     accent: "sky",
     repo: "https://github.com/Manpreet445/StudySpot",
   },
   {
+    slug: "conveyor",
+    title: "Automated Conveyor Sorting System",
+    context: "Emergex · SAIT INTP302",
+    role: "Cloud and Data Lead · Team of 2",
+    year: "August 2026",
+    description: "Led the cloud and data work for a two-person conveyor sorting project. Built an Azure backend to ingest classification events from a Raspberry Pi rig, designed the Cosmos DB data model, and implemented agent decision logic to turn sensor readings into sorting actions. Presented the project to industry guests at the SAIT INTP302 showcase.",
+    images: [{
+      src: "/projects/conveyor-rig.webp",
+      alt: "The conveyor project’s physical sorting rig, showing its Raspberry Pi, camera, breadboard wiring, and motor-driven sorting arm.",
+      width: 750,
+      height: 1344,
+      caption: "Project hardware · Raspberry Pi sorting rig",
+    }],
+    tags: ["Azure", "Azure Functions", "Cosmos DB", "Azure AI Agent Service", "Python"],
+    status: "completed",
+    accent: "leaf",
+  },
+  {
     slug: "movies",
     title: "Movie Booking System",
-    description:
-      "An OOP-first booking engine in Python: CRUD across movies, customers and bookings, modelled in UML and split into clean model, service and CLI layers.",
+    description: "A Python command-line booking system with movie, customer, and booking management. Modelled in UML and organized into model, service, and CLI layers.",
     role: "Solo · Coursework",
     year: "2025",
-    images: [
-      {
-        alt: "Cinema seat booking screen",
-        src: "/art/movie-booking.webp",
-        mockup: "web",
-        tone: "leaf",
-      },
-    ],
+    images: [],
     tags: ["Python", "OOP", "UML", "CLI"],
     status: "completed",
     accent: "leaf",
+    secondary: true,
     repo: "https://github.com/Manpreet445/Movies-System-",
   },
 ];
 
 export const skillAreas: SkillArea[] = [
   {
-    label: "Languages",
-    tags: ["TypeScript", "JavaScript", "Python", "C#", "Java", "SQL", "HTML", "CSS"],
+    "label": "Languages",
+    "category": "interface",
+    "symbol": "</>",
+    "tags": [
+      "TypeScript",
+      "JavaScript",
+      "Python",
+      "SQL",
+      "C#",
+      "Java",
+      "HTML",
+      "CSS"
+    ],
+    "capabilities": [
+      "Typed application code and object-oriented programming.",
+      "Semantic HTML, responsive CSS, and relational queries."
+    ]
   },
   {
-    label: "Web & mobile",
-    tags: [
-      "Next.js 16",
+    "label": "Web interfaces",
+    "category": "interface",
+    "symbol": "{ }",
+    "tags": [
       "React",
+      "Next.js 16",
+      "Tailwind CSS",
+      "Framer Motion"
+    ],
+    "capabilities": [
+      "App Router, server actions, and reusable React components.",
+      "Responsive layouts and purposeful interface animation."
+    ]
+  },
+  {
+    "label": "Mobile & cross-platform",
+    "category": "interface",
+    "symbol": "[ ]",
+    "tags": [
       "React Native",
       "Expo",
-      "Tailwind CSS",
-      "Framer Motion",
-      ".NET",
       ".NET MAUI",
       "Blazor Hybrid",
+      "react-native-maps",
+      "Leaflet"
     ],
-    points: ["App Router with server actions."],
+    "capabilities": [
+      "Shared mobile and web interfaces, including native maps.",
+      "Cross-platform development with React and .NET."
+    ]
   },
   {
-    label: "Backend & data",
-    tags: [
+    "label": "Backend & databases",
+    "category": "systems",
+    "symbol": "DB",
+    "tags": [
       "Node.js",
-      "Prisma ORM",
+      ".NET",
+      "Prisma",
       "PostgreSQL",
       "Neon",
       "Supabase",
-      "Azure Cosmos DB",
-      "Cloud Firestore",
-      "SQLite",
+      "Cosmos DB",
+      "Firestore",
+      "SQLite"
     ],
-    points: [
-      "Schema design, and migrations run as a deploy step.",
-      "Multi-tenant isolation enforced at the query layer.",
-      "REST API design.",
-    ],
+    "capabilities": [
+      "REST API design, schema modelling, and database migrations.",
+      "Multi-tenant query isolation and real-time data listeners."
+    ]
   },
   {
-    label: "Auth & authorization",
-    tags: ["Clerk", "RBAC", "Firestore security rules"],
-    points: [
-      "Hosted sign-in, sessions and organizations.",
-      "Role-based access control, designed to fail closed.",
-      "Server-side route protection rather than client-side hiding.",
+    "label": "Authentication & permissions",
+    "category": "systems",
+    "symbol": "KEY",
+    "tags": [
+      "Clerk",
+      "Firebase Auth",
+      "RBAC",
+      "Firestore rules"
     ],
+    "capabilities": [
+      "Hosted sign-in, sessions, organizations, and admin-managed roles.",
+      "Fail-closed authorization and server-side route protection."
+    ]
   },
   {
-    label: "Payments",
-    tags: ["Stripe", "Stripe Elements", "Subscriptions"],
-    points: [
-      "Checkout, with customer and plan modelling.",
-      "Usage metering against plan allowances.",
-      "An atomic conditional UPDATE to prevent double-spend under concurrency.",
+    "label": "Payments & webhooks",
+    "category": "systems",
+    "symbol": "↔",
+    "tags": [
+      "Stripe",
+      "Stripe Elements",
+      "Svix"
     ],
+    "capabilities": [
+      "Subscriptions, checkout, plan allowances, and usage metering.",
+      "Concurrency-safe balance updates and raw-body signature verification."
+    ]
   },
   {
-    label: "Webhooks",
-    tags: ["Svix", "Stripe", "Signature verification"],
-    points: [
-      "Validating against the raw body before trusting a payload.",
+    "label": "AI integrations",
+    "category": "systems",
+    "symbol": "AI",
+    "tags": [
+      "Gemini API",
+      "Zod",
+      "Azure AI Agent Service"
     ],
+    "capabilities": [
+      "Schema-constrained JSON, validation, retries, and typed error paths.",
+      "Agent decision logic that turns input data into application actions."
+    ]
   },
   {
-    label: "Cloud & storage",
-    tags: [
+    "label": "Cloud & storage",
+    "category": "cloud",
+    "symbol": "↑",
+    "tags": [
       "Azure",
-      "Azure AI Agent Service",
+      "Azure Functions",
       "Cloudflare R2",
-      "S3-compatible",
-      "Firebase",
+      "Firebase Storage",
       "Google Cloud",
-      "Vercel",
-      "AWS",
+      "Vercel"
     ],
-    points: [
-      "Presigned URLs and the SigV4 signing model, including that content type is unsigned unless declared.",
-      "Immutable version history.",
-      "Firebase across Firestore, Auth and Storage.",
-      "AWS Cloud Practitioner in progress.",
+    "capabilities": [
+      "Cloud integrations and S3-compatible object storage.",
+      "Presigned uploads, request signing, and immutable file versions."
     ],
+    "learning": "AWS Cloud Practitioner — in progress"
   },
   {
-    label: "AI",
-    tags: ["Google Gemini API", "Structured JSON", "Agents"],
-    points: [
-      "responseSchema-enforced structured output.",
-      "Typed fallback paths, so the interface holds when the model does not.",
-      "Agent decision logic.",
+    "label": "Delivery & automation",
+    "category": "cloud",
+    "symbol": ">_",
+    "tags": [
+      "Git",
+      "GitHub Actions",
+      "Docker"
     ],
+    "capabilities": [
+      "Multi-stage containers and cloud-hosted deployment.",
+      "CI gates for lint, type checks, tests, and builds; environment and secret management."
+    ]
   },
   {
-    label: "DevOps",
-    tags: ["Docker", "GitHub Actions", "CI/CD"],
-    points: [
-      "Multi-stage container builds.",
-      "CI gating every push on lint, type-check, test and build.",
-      "Container deployment to a cloud host, with environment and secret management.",
+    "label": "Testing & QA",
+    "category": "quality",
+    "symbol": "✓",
+    "tags": [
+      "Vitest",
+      "Unit testing",
+      "Integration testing",
+      "Mocking"
     ],
+    "capabilities": [
+      "Database-backed integration tests and CI with PostgreSQL.",
+      "Requirements-based test cases, regression checks, defect prioritization, and Pareto analysis."
+    ]
   },
   {
-    label: "Testing & QA",
-    tags: ["Vitest", "Mocking", "Postgres in CI"],
-    points: [
-      "Unit and integration tests, run against a real Postgres instance rather than a stub.",
-      "Test cases written from requirements; defects tracked by severity and priority, with Pareto analysis.",
-      "Unit, functional, regression and performance testing treated as distinct activities.",
+    "label": "Engineering practice",
+    "category": "quality",
+    "symbol": "//",
+    "tags": [
+      "Code review",
+      "Pull requests",
+      "OOP",
+      "UML",
+      "SDLC",
+      "Agile"
     ],
+    "capabilities": [
+      "Shared repositories, branch workflows, and merge conflict resolution.",
+      "Reading and extending existing code; modelling systems before implementation."
+    ]
   },
   {
-    label: "Engineering practice",
-    tags: ["Git", "Code review", "OOP", "UML", "SDLC", "Agile"],
-    points: [
-      "Branches, pull requests, review and merge conflicts in a shared repository.",
-      "Reading and extending code you did not write.",
+    "label": "Development tools",
+    "category": "quality",
+    "symbol": "⌘",
+    "tags": [
+      "VS Code",
+      "Visual Studio",
+      "Android Studio",
+      "Figma",
+      "GitHub"
     ],
-  },
-  {
-    label: "Tools",
-    tags: ["VS Code", "Visual Studio", "Android Studio", "Figma", "GitHub"],
-  },
-  {
-    label: "Libraries",
-    tags: ["Zod", "react-native-maps", "Leaflet", "CSV data handling"],
-  },
+    "capabilities": [
+      "Web and mobile development environments and collaborative design handoff.",
+      "CSV parsing and structured data handling."
+    ]
+  }
 ];
 
 export const milestones: Milestone[] = [
   {
     title: "Started at SAIT",
-    note: "Began the Software Development diploma in Calgary — OOP, databases, web and UI/UX.",
-    year: "2025",
-    status: "completed",
+    note: "Began the Software Development diploma in Calgary: OOP, databases, web development, and UI/UX.",
+    year: "2025", status: "completed",
   },
   {
     title: "Movie Booking System",
-    note: "First OOP build: a UML-modelled Python booking engine split into clean service layers.",
-    year: "2025",
-    status: "completed",
+    note: "Built a UML-modelled Python booking system with separate service and CLI layers.",
+    year: "2025", status: "completed",
   },
   {
     title: "StudySpot",
-    note: "Real-time React Native + Firebase app — live crowd levels shared across mobile and web.",
-    year: "2026",
-    status: "in-production",
+    note: "Developing a campus study-spot finder with React Native, Expo, and Firebase.",
+    year: "2026", status: "in-development",
   },
   {
     title: "Recepie",
-    note: "Shipped an AI meal planner on Next.js, Gemini and Supabase — live on Vercel.",
-    year: "2026",
-    status: "completed",
+    note: "Built a pantry-first cooking app with ingredient matching, AI meal plans, and a consolidated shopping list.",
+    year: "2026", status: "completed",
   },
   {
-    title: "BAETT-EMS contract",
-    note: "Four-month part-time contract with BAETT — owned auth, document storage and billing on a five-person build.",
-    year: "2026",
-    status: "in-production",
+    title: "BAETT-EMS · SAIT capstone",
+    note: "Worked with industry partner BAETT on a five-person team. Contributed authentication and role-based permissions, document storage, and subscription billing.",
+    year: BAETT_DATES, status: "completed",
+  },
+  {
+    title: "Automated Conveyor Sorting System",
+    note: "Cloud and Data Lead on a two-person project, presented at the SAIT INTP302 industry showcase.",
+    year: "August 2026", status: "completed",
   },
   {
     title: "Graduated from SAIT",
     note: "Finished the Software Development diploma on 20 August 2026.",
-    year: "2026",
-    status: "completed",
+    year: "August 2026", status: "completed",
   },
   {
-    title: "Open to full-time roles",
-    note: "Available now for full-time work — Calgary, remote or on-site.",
-    year: "2026",
-    status: "in-production",
+    title: "Open to junior software developer roles",
+    note: "Available for full-time roles in Calgary and across Alberta, remote or on-site.",
+    year: "2026", status: "available",
   },
 ];
-
-export const statusMeta: Record<
-  ProjectStatus,
-  { label: string; tone: string; ring: string; fill: string }
-> = {
-  concept: {
-    label: "Concept",
-    tone: "text-ink-faint",
-    ring: "border-ink-faint/60",
-    fill: "bg-transparent",
-  },
-  "in-production": {
-    label: "In Production",
-    tone: "text-tangerine",
-    ring: "border-tangerine",
-    fill: "bg-tangerine/10",
-  },
-  completed: {
-    label: "Completed",
-    tone: "text-leaf",
-    ring: "border-leaf",
-    fill: "bg-leaf/10",
-  },
-};
-
-/* ------------------------------------------------------------------ *
-   Work experience — richer than a project card: the problem, the areas
-   I owned, and the engineering decisions inside each one.
- * ------------------------------------------------------------------ */
 
 export type Experience = {
   company: string;
   product: string;
   role: string;
-  /** engagement type, e.g. Contract - Part-time */
   employment: string;
   context: string;
-  duration: string;
-  year: string;
+  dates: string;
   problem: string;
   lead: string;
-  /** shown in place of detail this engagement cannot disclose */
-  nda?: string;
-  /** the areas I owned — labels only, no detail */
+  nda: string;
   areas: string[];
 };
 
-export const experiences: Experience[] = [
-  {
-    company: "BAETT",
-    product: "BAETT-EMS",
-    role: "Full-Stack Developer · Authentication & Billing",
-    employment: "Contract · Part-time",
-    context: "SAIT Capstone · Team of 5",
-    duration: "4 months",
-    year: "2026",
-    problem: "An EMS system.",
-    lead: "I owned three areas of the build.",
-    nda: "Under NDA — implementation specifics are kept deliberately brief.",
-    areas: ["Authentication", "Document storage", "Billing"],
-  },
-];
+export const experiences: Experience[] = [{
+  company: "BAETT",
+  product: "BAETT-EMS",
+  role: "Full-Stack Developer",
+  employment: "SAIT capstone · Industry partner",
+  context: "Team of 5",
+  dates: BAETT_DATES,
+  problem: "An EMS system for engineering consultancies.",
+  lead: "My contributions",
+  nda: "Project under NDA. Implementation details are confidential.",
+  areas: ["Authentication & role-based permissions", "Document storage", "Subscription billing"],
+}];

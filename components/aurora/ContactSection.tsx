@@ -8,6 +8,7 @@ import { profile } from "@/data/projects";
 import { GLIDE, PopItem, RevealGroup } from "@/components/aurora/Reveal";
 import { Magnetic } from "@/components/aurora/Interactive";
 import { ArrowUpRight, GitHub, LinkedIn, Mail } from "@/components/aurora/icons";
+import ResumeLink from "@/components/aurora/ResumeLink";
 import { PixelCat } from "@/components/aurora/PixelArt";
 
 const SOCIAL_ICON: Record<string, typeof GitHub> = {
@@ -49,17 +50,14 @@ export default function ContactSection() {
                 transition: { duration: 0.75, ease: GLIDE, times: [0, 0.7, 1] },
               },
             }}
-            className="panel relative overflow-hidden p-8 text-center md:p-16"
+            className="panel relative overflow-hidden p-5 text-center sm:p-8 md:p-16"
           >
-            {/* warm lamp glow — ambient light, not UI blur */}
+            {/* Was a blurred radial lamp glow. Replaced with a flat ember
+                band pinned to the top edge — the light still reads as coming
+                from above, but with a hard edge and no blur. */}
             <div
               aria-hidden
-              className="absolute -top-1/2 left-1/2 h-[120%] w-[80%] -translate-x-1/2 rounded-full opacity-[0.1]"
-              style={{
-                background:
-                  "radial-gradient(closest-side, var(--color-ember), transparent 70%)",
-                filter: "blur(60px)",
-              }}
+              className="absolute inset-x-0 top-0 h-[3px] bg-ember opacity-40"
             />
 
             <p className="relative font-mono text-base uppercase tracking-[0.18em] text-ember-bright">
@@ -73,7 +71,7 @@ export default function ContactSection() {
               <span className="text-sunset">solid</span> together.
             </h2>
             <p className="relative mx-auto mt-5 max-w-md text-mist">
-              Open to full-time roles and select freelance work.{" "}
+              Open to full-time junior software developer roles in Calgary and across Alberta.{" "}
               {profile.locationProse}.
             </p>
 
@@ -81,12 +79,13 @@ export default function ContactSection() {
               <Magnetic strength={0.4}>
                 <a
                   href={`mailto:${profile.email}`}
-                  className="btn-pixel inline-flex items-center gap-2 bg-ember px-7 py-4 font-bold text-abyss"
+                  className="btn-pixel inline-flex min-h-11 max-w-full items-center justify-center gap-2 bg-ember px-3 py-3 text-sm font-bold text-abyss sm:px-6 sm:text-base"
                 >
-                  {profile.email}
+                  <span className="break-all">{profile.email}</span>
                   <ArrowUpRight className="h-4 w-4" />
                 </a>
               </Magnetic>
+              <ResumeLink />
             </div>
 
             <RevealGroup className="relative mt-10 flex items-center justify-center gap-4">

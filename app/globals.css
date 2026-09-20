@@ -149,40 +149,15 @@ body {
   border-radius: 2px;
 }
 
-/* One gradient phrase per view, max — dusk sunset ramp, slowly shimmering */
+/* The accented phrase in a section heading. Was a shimmering gradient clipped
+   to the text; now a flat ember with a hard offset shadow behind it, which is
+   what the rest of the type already does. Solid colour also means the word no
+   longer needs a forced-colors escape hatch — it was invisible in that mode
+   because clipped text has to set `color: transparent` to work at all. */
 .text-sunset {
-  background: linear-gradient(
-    92deg,
-    var(--color-ember-bright) 0%,
-    var(--color-blush) 35%,
-    var(--color-orchid-bright) 60%,
-    var(--color-ember-bright) 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: sunset-shimmer 7s linear infinite;
+  color: var(--color-ember-bright);
+  text-shadow: 2px 2px 0 rgba(6, 7, 13, 0.9);
 }
-/* In forced-colors mode the browser replaces backgrounds, which strips the
-   gradient and leaves `color: transparent` painting nothing — the accented
-   word in every section heading would simply vanish. Hand the text back to
-   the system palette. `-webkit-text-fill-color` has to be reset too: it
-   wins over `color` where it is supported. */
-@media (forced-colors: active) {
-  .text-sunset {
-    background: none;
-    color: CanvasText;
-    -webkit-text-fill-color: CanvasText;
-    animation: none;
-  }
-}
-@keyframes sunset-shimmer {
-  to {
-    background-position: 220% 0;
-  }
-}
-
 /* ------------------------------------------------------------------ *
    Animated pixel weather — steps() only, frozen under reduced motion
  * ------------------------------------------------------------------ */
@@ -382,49 +357,25 @@ body {
 }
 
 /* Video thins out into the page at its bottom edge — no colored wash */
+/* Stepped, not smooth: each stop repeats its own colour so the mask drops in
+   four hard bands instead of a ramp. Same job — the video stops dead at the
+   page edge otherwise — but it dissolves like a sprite rather than fading. */
 .fade-bottom {
-  mask-image: linear-gradient(180deg, black 80%, transparent 100%);
-  -webkit-mask-image: linear-gradient(180deg, black 80%, transparent 100%);
+  --fade-steps: linear-gradient(
+    180deg,
+    #000 0%, #000 82%,
+    rgba(0, 0, 0, 0.72) 82%, rgba(0, 0, 0, 0.72) 88%,
+    rgba(0, 0, 0, 0.4) 88%, rgba(0, 0, 0, 0.4) 93%,
+    rgba(0, 0, 0, 0.15) 93%, rgba(0, 0, 0, 0.15) 97%,
+    transparent 97%
+  );
+  mask-image: var(--fade-steps);
+  -webkit-mask-image: var(--fade-steps);
 }
 
-/* Hero text-protection vignette. Mobile: darkens top and bottom (clusters
-   stack), clear middle. Desktop: darkens the top-left and bottom-right
-   corners (the diagonal split), leaving the subject + window/moon luminous. */
-/* Mobile: text now sits in the upper half over the empty sky, so darken the
-   top and leave the lower scene luminous — the figure, cat and city lights
-   are the point of the artwork and shouldn't be washed out behind copy. */
-.hero-vignette {
-  background: linear-gradient(
-    to bottom,
-    rgba(6, 7, 13, 0.94) 0%,
-    rgba(6, 7, 13, 0.86) 32%,
-    rgba(6, 7, 13, 0.58) 48%,
-    rgba(6, 7, 13, 0.2) 60%,
-    transparent 72%
-  );
-}
-@media (min-width: 768px) {
-  .hero-vignette {
-    background:
-      /* top-left: light — just a small identity mark lives here */
-      linear-gradient(
-        to bottom right,
-        rgba(6, 7, 13, 0.82) 0%,
-        rgba(6, 7, 13, 0.35) 12%,
-        transparent 28%
-      ),
-      /* bottom-right: strong and tall — the headline sits over the bright
-         window here, so this reaches high and dark to keep it legible */
-        linear-gradient(
-          to top left,
-          rgba(6, 7, 13, 0.96) 0%,
-          rgba(6, 7, 13, 0.82) 26%,
-          rgba(6, 7, 13, 0.55) 46%,
-          rgba(6, 7, 13, 0.22) 64%,
-          transparent 78%
-        );
-  }
-}
+/* The hero vignette now lives with the other responsive hero rules further
+   down: a max-width:767 rule and a min-width:768 rule that between them
+   cover every width, which made the pair that used to sit here dead code. */
 
 /* Reduced motion: freeze the weather, drop smooth scroll */
 /* Lenis smooth-scroll: it drives scrolling, so disable native smoothing */
@@ -456,4 +407,156 @@ html.lenis body {
   .steam {
     opacity: 0.5;
   }
+}
+
+
+/* Cinematic composition: art stays open; copy has a deliberate right-hand axis. */
+.hero-shell { position: relative; }
+.hero-stage {
+  min-height: 100svh; display: flex; flex-direction: column; align-items: flex-start;
+  padding-top: max(6.5rem, calc(5rem + env(safe-area-inset-top)));
+  padding-bottom: max(1.75rem, calc(1.25rem + env(safe-area-inset-bottom)));
+}
+.hero-identity { max-width: 35rem; }
+.hero-copy { width: 100%; max-width: 35rem; margin-top: 2.25rem; }
+.hero-heading { font-size: clamp(2.25rem, 8.2vw, 3.4rem); line-height: 1.04; letter-spacing: -.025em; }
+.hero-overline { display: block; font-size: .47em; font-weight: 500; line-height: 1.5; letter-spacing: 0; margin-bottom: .2rem; }
+.hero-highlight { position: relative; }
+.hero-period { color: var(--color-fog); }
+.hero-stack { display: block; font-family: var(--font-body); font-size: .9rem; line-height: 1.6; font-weight: 700; letter-spacing: 0; margin-top: 1rem; color: var(--color-fog); }
+.hero-summary { margin-top: 1rem; max-width: 29rem; font-size: .875rem; line-height: 1.65; color: var(--color-fog); }
+.hero-availability { margin-top: .8rem; max-width: 29rem; color: var(--color-ember-bright); font-size: .875rem; line-height: 1.6; font-weight: 700; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: auto; padding-top: 4.5rem; }
+.hero-scroll { display: none; }
+@media (min-width: 768px) {
+  .hero-stage { min-height: max(100svh, 48rem); padding-top: 7rem; padding-bottom: 3.5rem; }
+  .hero-copy { max-width: 36rem; margin-left: auto; margin-top: auto; padding-top: 3rem; text-align: right; }
+  .hero-heading { font-size: clamp(3.25rem, 5.4vw, 4.75rem); }
+  .hero-stack { font-size: 1rem; margin-top: 1.25rem; }
+  .hero-summary, .hero-availability { margin-left: auto; }
+  .hero-summary { font-size: 1rem; }
+  .hero-actions { margin-top: 1.5rem; margin-left: auto; padding-top: 0; justify-content: flex-end; }
+  .hero-scroll { display: inline-flex; align-items: center; gap: .7rem; position: absolute; bottom: 3.5rem; left: 1.5rem; min-height: 44px; font-family: var(--font-mono); font-size: .9rem; color: var(--color-fog); text-shadow: 1px 2px #14101f; }
+  .scroll-track { height: 38px; width: 2px; background: var(--color-line); overflow: hidden; }
+  .scroll-track > span { display: block; height: 12px; width: 2px; background: var(--color-ember); transition: transform 240ms var(--ease-glide); }
+  .hero-scroll:is(:hover,:focus-visible) .scroll-track > span { transform: translateY(26px); }
+  .hero-vignette { background: linear-gradient(to right,rgba(6,7,13,.18) 0%,rgba(6,7,13,.18) 38%,rgba(6,7,13,.46) 38%,rgba(6,7,13,.46) 56%,rgba(6,7,13,.68) 56%,rgba(6,7,13,.68) 74%,rgba(6,7,13,.85) 74%),linear-gradient(to bottom,rgba(6,7,13,.5) 0%,rgba(6,7,13,.5) 20%,rgba(6,7,13,.24) 20%,rgba(6,7,13,.24) 34%,transparent 34%,transparent 76%,rgba(6,7,13,.22) 76%); }
+}
+@media (min-width: 768px) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
+  .hero-shell { position: sticky; top: 0; }
+}
+@media (max-width: 767px) {
+  .hero-vignette { background: linear-gradient(to bottom,rgba(6,7,13,.88) 0%,rgba(6,7,13,.88) 34%,rgba(6,7,13,.74) 34%,rgba(6,7,13,.74) 48%,rgba(6,7,13,.44) 48%,rgba(6,7,13,.44) 60%,rgba(6,7,13,.20) 60%,rgba(6,7,13,.20) 72%,rgba(6,7,13,.52) 72%,rgba(6,7,13,.52) 86%,rgba(6,7,13,.74) 86%); }
+  .hero-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+  .hero-actions > * { min-width: 0; }
+  .hero-actions > :first-child { grid-column: 1 / -1; }
+  .hero-actions a { width: 100%; padding-inline: .6rem; font-size: .8rem; }
+}
+
+/* Short, event-driven tactile effects; no ambient render loops. */
+.action-link { position: relative; gap: .5rem; }
+.action-link svg { flex-shrink: 0; transition: transform 200ms var(--ease-glide); }
+.action-link:is(:hover,:focus-visible) svg { transform: translate(2px,-2px); }
+.action-link[href="#work"]:is(:hover,:focus-visible) svg { transform: translateY(3px); }
+/* Was a soft white sheen sweeping across on hover. Now a solid ember bar
+   that wipes through in hard steps — the same stepped cadence the pixel
+   artwork moves on, rather than a glossy highlight. */
+.btn-pixel.action-link { overflow: hidden; }
+.btn-pixel.action-link::after { content:""; position:absolute; top:0; bottom:0; left:-8px; width:8px; background:var(--color-ember-bright); opacity:0; transition:left 260ms steps(6),opacity 120ms var(--ease-glide); pointer-events:none; }
+.btn-pixel.action-link:is(:hover,:focus-visible)::after { left:100%; opacity:.5; }
+
+.section-intro { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:1.5rem 3rem; }
+/* Hover reads as the card lifting off the page and being framed, not
+   outlined. An amber rectangle around the whole card was too loud and too
+   flat — it made every card look like a validation error. Instead the
+   surface itself lifts a step (night to raised), a hard shadow snaps out
+   behind it, and two ember brackets close in on opposite corners: the same
+   targeting-reticle language the pixel cursor already speaks, at a fraction
+   of the visual weight. The border only warms a touch. */
+.reactive-surface { position:relative; isolation:isolate; overflow:hidden; background:var(--color-night); border:2px solid var(--color-line); box-shadow:0 0 0 rgba(6,7,13,0); transition:background-color 160ms var(--ease-glide),border-color 160ms var(--ease-glide),box-shadow 160ms var(--ease-glide),transform 160ms var(--ease-glide); }
+.reactive-surface:is(:hover,:focus-within) { background:var(--color-raised); border-color:rgba(243,237,218,.26); box-shadow:5px 5px 0 rgba(6,7,13,.8); transform:translate(-2px,-2px); }
+.reactive-surface:active { box-shadow:1px 1px 0 rgba(6,7,13,.8); transform:translate(0,0); }
+/* top-left bracket; .surface-corner is the bottom-right one */
+.reactive-surface::before { content:""; position:absolute; z-index:2; top:7px; left:7px; width:10px; height:10px; border-top:2px solid var(--color-ember); border-left:2px solid var(--color-ember); opacity:0; transform:translate(-5px,-5px); transition:opacity 160ms var(--ease-glide),transform 160ms var(--ease-glide); pointer-events:none; }
+.reactive-surface:is(:hover,:focus-within)::before { opacity:1; transform:translate(0,0); }
+.surface-corner { position:absolute; z-index:2; pointer-events:none; bottom:7px; right:7px; width:10px; height:10px; border-right:2px solid var(--color-ember); border-bottom:2px solid var(--color-ember); opacity:0; transform:translate(5px,5px); transition:opacity 160ms var(--ease-glide),transform 160ms var(--ease-glide); }
+.reactive-surface:is(:hover,:focus-within) > .surface-corner { opacity:1; transform:translate(0,0); }
+.tech-chip { display:inline-flex; align-items:center; border:1px solid var(--color-line); background:rgba(20,16,31,.55); padding:.3rem .55rem; font-size:.75rem; line-height:1.45; color:var(--color-mist); transition:border-color 180ms,color 180ms; }
+.tech-chip:hover { border-color:var(--color-ember); color:var(--color-ember-bright); }
+
+/* Wide lead story, two unequal supporting stories, compact earlier work. */
+.work-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:1.25rem; }
+.work-slot { min-width:0; }
+.project-surface, .project-card { height:100%; }
+.project-card { display:flex; flex-direction:column; min-width:0; }
+.project-body { display:flex; flex:1; flex-direction:column; gap:1.25rem; padding:1.5rem; min-width:0; }
+.project-meta { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; font-family:var(--font-mono); font-size:.875rem; color:var(--color-dust); }
+.project-title-row { display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+.project-title { font-family:var(--font-display); font-size:clamp(1.5rem,2.6vw,2rem); line-height:1.12; color:var(--color-fog); font-weight:600; text-wrap:balance; }
+.project-number { flex-shrink:0; font-family:var(--font-mono); font-size:1.25rem; color:var(--color-dust); transition:color 200ms; }
+.project-surface:is(:hover,:focus-within) .project-number { color:var(--color-ember); }
+.project-media { min-width:0; background:rgba(20,16,31,.6); display:flex; flex-direction:column; }
+.project-media > a { position:relative; display:block; overflow:hidden; }
+.project-media img { display:block; width:100%; height:auto; transition:transform 280ms var(--ease-glide); }
+.project-media > a:is(:hover,:focus-visible) img { transform:scale(1.025); }
+.project-media figcaption { padding:.7rem 1rem; font-size:.7rem; line-height:1.5; color:var(--color-mist); border-top:1px solid var(--color-line); }
+.media-expand { position:absolute; bottom:.75rem; right:.75rem; display:grid; place-items:center; width:32px; height:32px; background:var(--color-abyss); color:var(--color-fog); border:1px solid var(--color-line); transition:background 200ms,color 200ms; }
+.project-media a:is(:hover,:focus-visible) .media-expand { background:var(--color-ember); color:var(--color-abyss); }
+.project-links { display:flex; flex-wrap:wrap; gap:.5rem 1.5rem; margin-top:auto; padding-top:.25rem; }
+.project-links a { display:inline-flex; align-items:center; min-height:44px; font-size:.875rem; font-weight:700; }
+.project-links a:hover { color:var(--color-fog); }
+.project-detail { border-top:1px solid var(--color-line); border-bottom:1px solid var(--color-line); padding:.25rem 0; }
+.project-detail summary { display:flex; align-items:center; justify-content:space-between; min-height:44px; font-size:.875rem; font-weight:700; color:var(--color-ember-bright); cursor:pointer; list-style:none; }
+.project-detail summary::-webkit-details-marker { display:none; }
+.project-detail summary span { font-size:1.35rem; transition:transform 200ms; }
+.project-detail[open] summary span { transform:rotate(45deg); }
+.project-detail[open] p { padding-bottom:1rem; }
+.project-description-row { min-width:0; }
+.project-hardware { float:right; width:36%; margin:0 0 .5rem 1rem; border:1px solid var(--color-line); }
+.project-hardware img { max-height:200px; object-fit:contain; }
+.project-hardware figcaption { padding:.4rem .5rem; font-size:.65rem; }
+.project-movies .project-title { font-size:1.5rem; }
+@media(min-width:768px) {
+  .work-grid { grid-template-columns:repeat(12,minmax(0,1fr)); }
+  .work-slot-recepie,.work-slot-movies { grid-column:1 / -1; }
+  .work-slot-studyspot { grid-column:span 5; }
+  .work-slot-conveyor { grid-column:span 7; }
+  .project-recepie .project-card { display:grid; grid-template-columns:1.12fr 1fr; }
+  .project-recepie .project-media { border-right:1px solid var(--color-line); justify-content:center; padding:1.5rem; gap:1.25rem; background:var(--color-abyss); }
+  .project-recepie .project-media > a { border:1px solid var(--color-line); box-shadow:var(--shadow-pixel); }
+  .project-recepie .project-media figcaption { border:0; padding:0; }
+  .project-recepie .project-title { font-size:2.75rem; }
+  .project-movies .project-body { display:grid; grid-template-columns:1fr 1.5fr; align-items:start; gap:1rem 2rem; }
+  .project-movies .project-meta { grid-column:1 / -1; }
+  .project-movies .project-links { justify-content:flex-end; padding:0; }
+}
+@media(min-width:1024px) { .project-body { padding:2rem; } }
+
+/* A detailed, filterable toolkit. All detail is readable without hovering. */
+.skills-toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; margin:2.5rem 0 1.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--color-line); }
+.skill-filters { display:flex; flex-wrap:wrap; gap:.5rem; }
+.skill-filter { position:relative; min-height:44px; padding:.6rem .85rem; border:1px solid var(--color-line); font-size:.8rem; font-weight:700; color:var(--color-mist); transition:background 180ms,color 180ms,border-color 180ms,transform 180ms; cursor:pointer; }
+.skill-filter:hover { border-color:var(--color-orchid); color:var(--color-fog); transform:translateY(-2px); }
+.skill-filter[aria-pressed="true"] { background:var(--color-ember); border-color:var(--color-ember); color:var(--color-abyss); }
+.skill-filter:active { transform:translateY(1px); }
+.skill-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:1rem; }
+.skill-grid > li { min-width:0; }
+.skill-card { padding:1.5rem; }
+.skill-symbol { font-family:var(--font-mono); font-size:1.25rem; color:var(--color-ember-bright); transition:transform 200ms var(--ease-glide); }
+.reactive-surface:hover .skill-symbol { transform:translateX(4px); }
+.skill-capabilities { margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--color-line); display:flex; flex-direction:column; gap:.75rem; }
+.skill-capabilities li { position:relative; padding-left:1rem; font-size:.875rem; line-height:1.65; color:var(--color-mist); }
+.skill-capabilities li::before { content:""; position:absolute; left:0; top:.6em; width:4px; height:4px; background:var(--color-orchid); }
+.skill-learning { margin-top:1rem; border-left:2px solid var(--color-orchid); padding-left:.75rem; font-size:.8rem; line-height:1.6; color:var(--color-ember-bright); }
+@media(min-width:640px) { .skill-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(min-width:1024px) { .skill-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(hover:none) { .reactive-surface:active::before, .reactive-surface:active > .surface-corner { opacity:1; transform:translate(0,0); } .skill-filter:hover { transform:none; } }
+.polaroid-photo { transform:rotate(var(--photo-tilt)); }
+.polaroid-photo:hover { transform:rotate(0) translateY(-5px); }
+.polaroid-photo:active { transform:rotate(0) scale(.97); }
+#work, #experience, #about, #skills, #journey, #contact { scroll-margin-top:7rem; }
+header:focus-within { transform:translateY(0); }
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+  .project-media a:is(:hover,:focus-visible) img,.action-link:is(:hover,:focus-visible) svg,.polaroid-photo:hover,.skill-filter:hover { transform:none; }
 }

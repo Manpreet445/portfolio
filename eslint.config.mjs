@@ -12,6 +12,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "**/.*/*", // Local tools and caches are outside the application.
   ]),
 ]);
 

@@ -1,6 +1,6 @@
 /* Chapter 4 — the journey. A quiet vertical timeline, recruiter-skimmable. */
 
-import { milestones, type ProjectStatus } from "@/data/projects";
+import { milestones, type MilestoneStatus } from "@/data/projects";
 import {
   GrowLine,
   PopItem,
@@ -9,16 +9,16 @@ import {
   SectionHeading,
 } from "@/components/aurora/Reveal";
 
-const DOT: Record<ProjectStatus, string> = {
+const DOT: Record<MilestoneStatus, string> = {
   completed: "bg-mint",
-  "in-production": "bg-ember",
-  concept: "border-2 border-dust bg-transparent",
+  "in-development": "bg-ember",
+  available: "bg-orchid",
 };
 
-const STATUS_LABEL: Record<ProjectStatus, string> = {
-  completed: "done",
-  "in-production": "now",
-  concept: "next",
+const STATUS_LABEL: Record<MilestoneStatus, string> = {
+  completed: "completed",
+  "in-development": "in development",
+  available: "available",
 };
 
 export default function JourneySection() {

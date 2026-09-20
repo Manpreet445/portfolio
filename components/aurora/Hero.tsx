@@ -1,36 +1,16 @@
 "use client";
 
-/* Chapter 1 — arrival. A diagonal editorial split: identity + statement
-   anchored top-left (where the eye enters), the call to action bottom-right
-   (where it exits). The subject and the window/moon breathe through the open
-   diagonal between them. Pinned while the content curtain slides over it. */
-
 import { useEffect, useState } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { profile } from "@/data/projects";
 import { riseVariants } from "@/components/aurora/Reveal";
 import { Magnetic } from "@/components/aurora/Interactive";
-import { ArrowDown } from "@/components/aurora/icons";
+import { ArrowDown, ArrowUpRight } from "@/components/aurora/icons";
 import HeroPixelScene from "@/components/aurora/HeroPixelScene";
-
-const CORE_STACK = [
-  "TypeScript",
-  "Next.js",
-  "React Native",
-  "Supabase",
-  "Firebase",
-];
+import ResumeLink from "@/components/aurora/ResumeLink";
 
 export default function Hero() {
   const reduce = useReducedMotion();
-  /* The hero is `sticky` directly in <main>, so it stays pinned to the
-     viewport while the opaque content curtain slides up and over it. These
-     effects play over the first viewport of scroll — the curtain's travel. */
   const { scrollY } = useScroll();
   const [vh, setVh] = useState(900);
   useEffect(() => {
@@ -39,153 +19,56 @@ export default function Hero() {
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, []);
-  const videoScale = useTransform(scrollY, [0, vh], [1, 1.09], { clamp: true });
-  const dim = useTransform(scrollY, [0, vh * 0.92], [0, 0.6], { clamp: true });
-  const textOpacity = useTransform(scrollY, [0, vh * 0.5], [1, 0], {
-    clamp: true,
-  });
-  /* on scroll the two clusters drift apart along the diagonal */
-  const tlY = useTransform(scrollY, [0, vh * 0.6], [0, -80], { clamp: true });
-  const tlX = useTransform(scrollY, [0, vh * 0.6], [0, -24], { clamp: true });
-  const brY = useTransform(scrollY, [0, vh * 0.6], [0, 70], { clamp: true });
-  const brX = useTransform(scrollY, [0, vh * 0.6], [0, 24], { clamp: true });
+  const videoScale = useTransform(scrollY, [0, vh], [1, 1.06]);
+  const dim = useTransform(scrollY, [0, vh * 0.92], [0, 0.6]);
 
   return (
-    <section
-      id="top"
-      aria-label="Intro"
-      className={`${
-        reduce ? "relative" : "sticky top-0"
-      } h-dvh overflow-hidden`}
-    >
-      {/* the scene */}
-      <motion.div
-        aria-hidden
-        className="fade-bottom absolute inset-0"
-        style={
-          reduce ? undefined : { scale: videoScale, willChange: "transform" }
-        }
-      >
+    <section id="top" aria-label="Introduction" className="hero-shell overflow-clip">
+      <motion.div aria-hidden className="fade-bottom absolute inset-0" style={reduce ? undefined : { scale: videoScale }}>
         <HeroPixelScene />
       </motion.div>
+      <div aria-hidden className="hero-vignette pointer-events-none absolute inset-0" />
+      <motion.div aria-hidden className="pointer-events-none absolute inset-0 bg-abyss" style={reduce ? { opacity: 0 } : { opacity: dim }} />
 
-      {/* diagonal vignette — darkens only the top-left and bottom-right
-          corners where the two text clusters sit; the subject and the
-          window/moon between them stay luminous. Not a box: fades to nothing */}
-      <div
-        aria-hidden
-        className="hero-vignette pointer-events-none absolute inset-0"
-      />
-
-      {/* darkens only as you scroll away */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-abyss"
-        style={reduce ? { opacity: 0 } : { opacity: dim }}
-      />
-
-      {/* content stage: split top-left / bottom-right on desktop, stacked on
-          mobile */}
-      {/* Mobile stacks everything into the upper half, over the empty sky, so
-          the rooftop, the figure and the cat stay visible underneath. Desktop
-          ignores this flow entirely and positions both clusters absolutely. */}
-      <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col items-start justify-start gap-3 px-6 pt-24 pb-8 md:block md:gap-0 md:py-0">
-        {/* TOP-LEFT — a light identity mark */}
-        <motion.div
-          style={reduce ? undefined : { x: tlX, y: tlY, opacity: textOpacity }}
-          initial="hidden"
-          animate="shown"
-          transition={{ staggerChildren: 0.08, delayChildren: 0.15 }}
-          className="max-w-[19rem] md:absolute md:top-28 md:left-6"
-        >
-          <motion.p
-            variants={riseVariants}
-            className="px-shadow-sm font-mono text-base uppercase tracking-[0.18em] text-ember-bright"
-          >
-            {profile.role}
-          </motion.p>
-          <motion.p
-            variants={riseVariants}
-            className="px-shadow-sm mt-2 font-mono text-sm uppercase tracking-[0.14em] text-mist"
-          >
-            {profile.location}
-          </motion.p>
-        </motion.div>
-
-        {/* BOTTOM-RIGHT — statement + the ask (the heavy anchor) */}
-        <motion.div
-          style={reduce ? undefined : { x: brX, y: brY, opacity: textOpacity }}
-          initial="hidden"
-          animate="shown"
-          transition={{ staggerChildren: 0.08, delayChildren: 0.35 }}
-          className="flex max-w-[19rem] flex-col items-start gap-3 max-md:[transform:none]! max-md:[will-change:auto]! md:max-w-2xl md:absolute md:right-6 md:bottom-14 md:items-end md:gap-5 md:text-right"
-        >
-          <motion.h1
-            variants={riseVariants}
-            className="px-shadow-strong font-display text-[clamp(1.45rem,4.4vw,3.4rem)] leading-[1.06] font-semibold text-fog"
-          >
-            {/* the space matters: below md the break is hidden, and without
-                it the two text nodes collide into "appsthat" */}
-            I build web and mobile apps{" "}
-            <br className="hidden md:block" />
-            that <span className="text-ember-bright">ship</span> — and hold up.
+      <div className="hero-stage relative z-10 mx-auto max-w-6xl px-6">
+        <div className="hero-identity">
+          <p className="px-shadow-sm font-display text-2xl font-semibold text-fog">{profile.fullName}</p>
+          <p className="px-shadow-sm mt-2 text-sm font-semibold leading-relaxed text-ember-bright">
+            {profile.role} · {profile.location}
+          </p>
+        </div>
+        <motion.div initial={reduce ? false : "hidden"} animate="shown" transition={{ staggerChildren: 0.07 }} className="hero-copy">
+          <motion.h1 variants={riseVariants} aria-label={profile.tagline} className="hero-heading px-shadow-strong font-display font-semibold text-fog">
+            <span aria-hidden className="hero-overline">I build</span>
+            <span aria-hidden className="block">web and mobile</span>
+            <span aria-hidden className="hero-highlight block text-ember-bright">applications<span className="hero-period">.</span></span>
+            <span aria-hidden className="hero-stack">with TypeScript, React, and Next.js.</span>
           </motion.h1>
-
-          <motion.p
-            variants={riseVariants}
-            className="px-shadow-sm max-w-md text-[14px] leading-relaxed text-fog/90 md:text-[15px]"
-          >
-            End to end — from the first sketch to the production deploy.
+          <motion.p variants={riseVariants} className="hero-summary px-shadow-sm">
+            Recent SAIT Software Development graduate with experience in team-based development, cloud integrations, and automated testing.
           </motion.p>
-
-          {/* On mobile the buttons leave the copy block entirely and pin to
-              the bottom of the hero, at thumb height, clear of the corner
-              text. Solid fills keep them legible over the lit rooftop. The
-              absolute resolves against the stage rather than this cluster,
-              because the cluster drops its transform below md. */}
-          <motion.div
-            variants={riseVariants}
-            className="absolute bottom-[calc(2.25rem+env(safe-area-inset-bottom))] left-6 flex flex-nowrap gap-2 md:static md:flex-wrap md:justify-end md:gap-3"
-          >
-            <Magnetic>
-              <a
-                href="#work"
-                className="btn-pixel bg-ember px-4 py-2.5 text-[13px] font-bold text-abyss md:px-5 md:py-3 md:text-sm"
-              >
-                View selected work
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a
-                href="#contact"
-                className="btn-pixel bg-raised px-4 py-2.5 text-[13px] font-bold text-fog md:px-5 md:py-3 md:text-sm"
-              >
-                Get in touch
-              </a>
-            </Magnetic>
-          </motion.div>
-
-          <motion.div
-            variants={riseVariants}
-            className="flex flex-col gap-1.5 md:items-end"
-          >
-            {/* location lives in the top-left mark — no need to repeat it */}
-            <p className="px-shadow-sm font-mono text-sm tracking-[0.1em] text-dust">
-              {CORE_STACK.join("  ·  ")}
-            </p>
-          </motion.div>
+          <motion.p variants={riseVariants} className="hero-availability px-shadow-sm">
+            Available for full-time roles in Calgary and across Alberta.
+          </motion.p>
         </motion.div>
-
-        {/* BOTTOM-LEFT accent — scroll cue, fills the open corner (desktop) */}
-        <motion.a
-          href="#work"
-          aria-label="Scroll to selected work"
-          style={reduce ? undefined : { opacity: textOpacity }}
-          className="px-shadow-sm hidden items-center gap-2 font-mono text-sm uppercase tracking-[0.14em] text-dust transition-colors duration-200 hover:text-ember-bright md:absolute md:bottom-14 md:left-6 md:flex"
-        >
-          Scroll
-          <ArrowDown className="h-4 w-4 motion-safe:animate-bounce" />
-        </motion.a>
+        <div className="hero-actions">
+          <Magnetic strength={0.15}>
+            <a href="#work" className="btn-pixel action-link inline-flex min-h-12 items-center justify-center gap-2 bg-ember px-4 py-3 text-sm font-bold text-abyss">
+              View projects <ArrowDown className="h-4 w-4" />
+            </a>
+          </Magnetic>
+          <ResumeLink className="action-link" />
+          <Magnetic strength={0.15}>
+            <a href="#contact" className="btn-pixel action-link inline-flex min-h-12 items-center justify-center gap-2 bg-raised px-4 py-3 text-sm font-bold text-fog">
+              Contact me <ArrowUpRight className="h-4 w-4" />
+            </a>
+          </Magnetic>
+        </div>
+        <a href="#work" className="hero-scroll action-link" aria-label="Explore selected work">
+          <span className="scroll-track" aria-hidden><span /></span>
+          <span>Scroll to explore</span>
+          <ArrowDown className="h-4 w-4" />
+        </a>
       </div>
     </section>
   );

@@ -4,8 +4,8 @@
    into a pixel drawer behind a menu button, so the section list is reachable
    on small screens instead of desktop-only. */
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import { profile } from "@/data/projects";
 import { GLIDE } from "@/components/aurora/Reveal";
 
@@ -21,6 +21,7 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let last = window.scrollY;
@@ -40,7 +41,11 @@ export default function Nav() {
   /* Escape closes the drawer; a tap on a link closes it too (below). */
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      menuButton.current?.focus();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
@@ -67,7 +72,7 @@ export default function Nav() {
           </a>
 
           {/* desktop links */}
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="hidden items-center gap-4 lg:gap-8 md:flex">
             {LINKS.map((link) => (
               <a
                 key={link.href}
@@ -75,7 +80,7 @@ export default function Nav() {
                 /* py-1.5 takes the hit area from 20px to 28px tall: WCAG 2.2
                    asks for 24px, and these sat under it on their text height
                    alone */
-                className="-my-1.5 py-1.5 text-sm text-mist transition-colors duration-200 hover:text-fog active:text-ember-bright"
+                className="-my-1.5 inline-flex min-h-11 items-center py-1.5 text-sm text-mist transition-colors duration-200 hover:text-fog active:text-ember-bright"
               >
                 {link.label}
               </a>
@@ -92,6 +97,7 @@ export default function Nav() {
 
             {/* menu button — phones only */}
             <button
+              ref={menuButton}
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
@@ -121,7 +127,7 @@ export default function Nav() {
         </div>
 
         {/* mobile drawer */}
-        <AnimatePresence initial={false}>
+
           {open && (
             <motion.div
               id="mobile-nav"
@@ -147,7 +153,7 @@ export default function Nav() {
               </ul>
             </motion.div>
           )}
-        </AnimatePresence>
+
       </nav>
     </header>
   );

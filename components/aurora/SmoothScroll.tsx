@@ -36,13 +36,21 @@ export default function SmoothScroll() {
       const link = (e.target as HTMLElement)?.closest?.(
         'a[href^="#"]',
       ) as HTMLAnchorElement | null;
-      if (!link) return;
+      if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const id = link.getAttribute("href");
       if (!id || id === "#") return;
-      const el = document.querySelector(id);
+      const el = document.getElementById(id.slice(1));
       if (!el) return;
       e.preventDefault();
-      lenis.scrollTo(el as HTMLElement, { offset: -8 });
+      // Keep keyboard navigation at the destination, just like a native link.
+      if (!el.hasAttribute("tabindex")) {
+        el.setAttribute("tabindex", "-1");
+        el.addEventListener("blur", () => el.removeAttribute("tabindex"), { once: true });
+      }
+      el.focus({ preventScroll: true });
+      const offset = -(parseFloat(getComputedStyle(el).scrollMarginTop) || 8);
+      lenis.scrollTo(el, { offset });
+      if (window.location.hash !== id) history.pushState(null, "", id);
     };
     document.addEventListener("click", onClick);
 

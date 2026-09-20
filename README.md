@@ -5,7 +5,7 @@ viewport while the rest of the page rises over it like a curtain; the artwork
 animates on a stepped, sprite-sheet cadence while the interface itself moves
 smoothly.
 
-**Live:** _add your Vercel URL here_
+**Live:** https://portfolio-manpreet-kappa.vercel.app/
 
 ## Stack
 
@@ -64,3 +64,9 @@ public/              pixel artwork (WebP) and the hero loop
 ```
 
 Content is data-driven: edit `data/projects.ts` and the sections follow.
+
+## Content
+
+Projects show real screenshots or hardware photos where one exists, and a
+text card otherwise. Skills are grouped into five filterable areas, and the
+résumé downloads from the hero and the contact section.

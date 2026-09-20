@@ -94,8 +94,8 @@ function Polaroid({
   return (
     <div
       aria-hidden={decorative}
-      style={{ transform: `rotate(${tilt})` }}
-      className="group relative bg-fog p-1.5 pb-5 shadow-[3px_3px_0_rgba(15,12,28,0.55)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0 active:scale-[0.97] active:rotate-0"
+      style={{ "--photo-tilt": tilt } as React.CSSProperties}
+      className="polaroid-photo group relative bg-fog p-1.5 pb-5 shadow-[3px_3px_0_rgba(15,12,28,0.55)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0 active:scale-[0.97] active:rotate-0"
     >
       {/* a strip of tape holding it to the page */}
       <span
@@ -152,8 +152,8 @@ export default function AboutSection() {
                 </p>
                 <p>
                   My bias is toward software that holds up under pressure.
-                  That means schema-enforced AI responses with typed fallbacks
-                  so nothing breaks mid-outage, Firestore rules written before
+                  That means schema-validated AI responses
+                  with clear error handling, Firestore rules written before
                   the feature ships, and unit tests around the maths that
                   actually matters. Simple on the surface, rigorous underneath.
                 </p>
