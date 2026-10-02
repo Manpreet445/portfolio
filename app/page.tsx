@@ -29,7 +29,7 @@ export default function Home() {
 
         {/* the curtain: skyline crown, then opaque night sky content */}
         <div className="relative z-10">
-          <SkylineDivider />
+          <SkylineDivider id="skyline-crown" />
           <div className="relative overflow-clip bg-night">
             <AuroraBackdrop />
             <div className="relative">
@@ -39,7 +39,7 @@ export default function Home() {
               <AboutSection />
               <SkillsSection />
               <JourneySection />
-              <SkylineDivider />
+              <SkylineDivider id="skyline-contact" />
               <ContactSection />
             </div>
           </div>

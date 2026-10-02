@@ -1,8 +1,8 @@
 /* Industry-partner capstone; contribution labels preserve NDA confidentiality. */
 
+import ScrollScene from "@/components/aurora/ScrollScene";
 import { experiences } from "@/data/projects";
 import {
-  Reveal,
   RevealGroup,
   RevealItem,
   SectionHeading,
@@ -29,7 +29,7 @@ function BaettMark({ className = "" }: { className?: string }) {
 export default function ExperienceSection() {
   return (
     <section id="experience" aria-labelledby="experience-title" className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-6 py-14 md:py-32">
         <SectionHeading
           id="experience-title"
           eyebrow="02 · Experience"
@@ -37,7 +37,7 @@ export default function ExperienceSection() {
         />
 
         {experiences.map((job) => (
-          <Reveal key={job.product} delay={0.1}>
+          <ScrollScene key={job.product} variant="panel">
             <article className="panel mt-12 p-6 md:p-10">
               {/* masthead */}
               <div className="flex flex-wrap items-start justify-between gap-6 border-b-2 border-line-soft pb-6">
@@ -47,7 +47,7 @@ export default function ExperienceSection() {
                     <h3 className="font-display text-2xl font-semibold text-fog">
                       {job.product}
                     </h3>
-                    <p className="mt-0.5 font-mono text-sm uppercase tracking-[0.12em] text-ember-bright">
+                    <p className="mt-0.5 font-mono text-xs font-medium uppercase tracking-[0.12em] text-ember-bright">
                       {job.company}
                     </p>
                   </div>
@@ -82,7 +82,7 @@ export default function ExperienceSection() {
                 {job.areas.map((area, i) => (
                   <RevealItem key={area} as="li" direction="up">
                     <div className="border-2 border-line bg-abyss/40 p-5">
-                      <span className="block font-mono text-sm text-ember-bright">
+                      <span className="block font-mono text-xs text-ember-bright">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <h4 className="mt-1 font-display text-lg font-semibold text-fog">
@@ -94,7 +94,7 @@ export default function ExperienceSection() {
               </RevealGroup>
 
             </article>
-          </Reveal>
+          </ScrollScene>
         ))}
       </div>
     </section>

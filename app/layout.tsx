@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito, Pixelify_Sans, VT323 } from "next/font/google";
+import { JetBrains_Mono, Nunito, Tomorrow } from "next/font/google";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -10,19 +10,20 @@ const nunito = Nunito({
   display: "swap",
 });
 
-/* Display headings — chunky pixel face */
-const pixelify = Pixelify_Sans({
+/* Display headings: squared, retro-tech letterforms that keep the pixel
+   room's character without making headings work to read */
+const tomorrow = Tomorrow({
   variable: "--ff-display",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-/* Meta labels, tags, timestamps — terminal pixel mono */
-const vt323 = VT323({
+/* Meta labels, tags, timestamps: a terminal mono built for small sizes */
+const jetbrains = JetBrains_Mono({
   variable: "--ff-mono",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -87,7 +88,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${nunito.variable} ${pixelify.variable} ${vt323.variable}`}
+      className={`${nunito.variable} ${tomorrow.variable} ${jetbrains.variable}`}
     >
       <body className="scanlines min-h-dvh antialiased">
         <a href="#main" className="skip-link">

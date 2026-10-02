@@ -24,7 +24,7 @@ const STATUS_LABEL: Record<MilestoneStatus, string> = {
 export default function JourneySection() {
   return (
     <section id="journey" aria-labelledby="journey-title" className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:py-36">
+      <div className="mx-auto max-w-6xl px-6 py-14 md:py-36">
         <SectionHeading
           id="journey-title"
           eyebrow="05 · Journey"
@@ -44,7 +44,7 @@ export default function JourneySection() {
                     />
                   </PopItem>
                   <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <span className="font-mono text-base text-dust">
+                    <span className="font-mono text-xs text-dust">
                       {milestone.year} · {STATUS_LABEL[milestone.status]}
                     </span>
                     <h3 className="font-display text-lg font-semibold text-fog">

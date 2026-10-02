@@ -78,12 +78,12 @@ export default function Marquee() {
       className="overflow-hidden border-y-2 border-ink bg-abyss/60 py-3"
     >
       {reduce ? (
-        <div className="flex w-max gap-8 font-mono text-sm tracking-[0.18em] whitespace-nowrap text-dust uppercase">
+        <div className="flex w-max gap-8 font-mono text-xs tracking-[0.18em] whitespace-nowrap text-dust uppercase">
           <Row />
         </div>
       ) : (
         <motion.div
-          className="flex w-max gap-8 font-mono text-sm tracking-[0.18em] whitespace-nowrap text-dust uppercase"
+          className="flex w-max gap-8 font-mono text-xs tracking-[0.18em] whitespace-nowrap text-dust uppercase"
           style={{ x: xPercent }}
         >
           <Row />

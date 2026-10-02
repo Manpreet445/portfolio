@@ -37,12 +37,13 @@ Functional colors always pair with a label, never color alone.
 
 ## Typography
 
-- **Display:** Pixelify Sans 400–700 — chunky pixel face, no negative tracking.
+- **Display:** Tomorrow 400–700 — squared, retro-tech letterforms that echo
+  the pixel art while staying easy to read; slight negative tracking on the hero.
   Hero: `clamp(2.4rem, 6.5vw, 5rem)`. Section titles: `clamp(1.9rem, 4vw, 3rem)`.
 - **Body:** Nunito 400/700, 16–18px, line-height 1.6–1.75 — round and cozy,
-  carries all long-form reading (pixel faces are display-only).
-- **Meta/labels:** VT323, 16px minimum (it renders small), uppercase,
-  tracking +0.14em.
+  carries all long-form reading.
+- **Meta/labels:** JetBrains Mono 400/500, 12px minimum, uppercase eyebrows
+  tracked +0.12–0.18em.
 - Gradient text `.text-sunset` (ember → blush → orchid) on one phrase per view.
 
 ## Space, shape, depth
@@ -100,4 +101,4 @@ Functional colors always pair with a label, never color alone.
 
 Next.js 16 (App Router) · Tailwind v4 (`@theme` tokens) · `motion` (Framer)
 for reveals & micro-interactions · fonts via `next/font`
-(Pixelify Sans / Nunito / VT323).
+(Tomorrow / Nunito / JetBrains Mono).

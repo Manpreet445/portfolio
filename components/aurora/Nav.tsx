@@ -144,7 +144,7 @@ export default function Nav() {
                     <a
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className="block py-3 font-mono text-base uppercase tracking-[0.14em] text-mist transition-colors duration-200 hover:text-ember-bright active:text-fog"
+                      className="block py-3 font-mono text-sm uppercase tracking-[0.14em] text-mist transition-colors duration-200 hover:text-ember-bright active:text-fog"
                     >
                       {link.label}
                     </a>

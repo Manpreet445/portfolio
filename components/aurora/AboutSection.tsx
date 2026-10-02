@@ -4,6 +4,7 @@
    The capability bento that used to sit here now has its own section. */
 
 import { motion, useReducedMotion } from "motion/react";
+import ScrollScene from "@/components/aurora/ScrollScene";
 import { profile } from "@/data/projects";
 import {
   PopItem,
@@ -133,7 +134,7 @@ function Polaroid({
 export default function AboutSection() {
   return (
     <section id="about" aria-labelledby="about-title" className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:py-36">
+      <div className="mx-auto max-w-6xl px-6 py-14 md:py-36">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
           <div className="lg:col-span-2">
             <SectionHeading
@@ -173,6 +174,7 @@ export default function AboutSection() {
               {profile.photos.length > 0
                 ? profile.photos.map((photo, i) => (
                     <PopItem key={photo.src} as="li">
+                      <ScrollScene variant="photo" index={i}>
                       <Polaroid
                         index={i}
                         tilt={PHOTO_SLOTS[i % PHOTO_SLOTS.length].tilt}
@@ -190,13 +192,16 @@ export default function AboutSection() {
                           className="h-full w-full object-cover"
                         />
                       </Polaroid>
+                    </ScrollScene>
                     </PopItem>
                   ))
                 : PHOTO_SLOTS.map((slot, i) => (
                     <PopItem key={slot.id} as="li">
+                      <ScrollScene variant="photo" index={i}>
                       <Polaroid tilt={slot.tilt} tape={slot.tape} index={i} decorative>
                         <SlotScene index={i} />
                       </Polaroid>
+                    </ScrollScene>
                     </PopItem>
                   ))}
             </RevealGroup>

@@ -211,20 +211,14 @@ body {
   animation-delay: var(--steam-delay, 0s);
 }
 
-@keyframes tail-swish {
-  0%,
-  55%,
-  100% {
-    transform: rotate(0deg);
-  }
-  70%,
-  85% {
-    transform: rotate(-14deg);
-  }
+/* a z drifting up off the sleeping cat, in whole-pixel steps */
+@keyframes cat-doze {
+  0% { transform: translateY(1px); opacity: 0; }
+  30% { opacity: 0.85; }
+  100% { transform: translateY(-3px); opacity: 0; }
 }
-.cat-tail {
-  transform-origin: 10% 90%;
-  animation: tail-swish 4s steps(3, jump-none) infinite;
+.cat-z {
+  animation: cat-doze 3.2s steps(4) infinite;
 }
 
 /* Faint CRT scanlines over everything */
@@ -363,11 +357,10 @@ body {
 .fade-bottom {
   --fade-steps: linear-gradient(
     180deg,
-    #000 0%, #000 82%,
-    rgba(0, 0, 0, 0.72) 82%, rgba(0, 0, 0, 0.72) 88%,
-    rgba(0, 0, 0, 0.4) 88%, rgba(0, 0, 0, 0.4) 93%,
-    rgba(0, 0, 0, 0.15) 93%, rgba(0, 0, 0, 0.15) 97%,
-    transparent 97%
+    #000 0%, #000 78%,
+    rgba(0, 0, 0, 0.82) 86%,
+    rgba(0, 0, 0, 0.45) 93%,
+    transparent 100%
   );
   mask-image: var(--fade-steps);
   -webkit-mask-image: var(--fade-steps);
@@ -400,7 +393,7 @@ html.lenis body {
   .star,
   .cloud,
   .steam,
-  .cat-tail,
+  .cat-z,
   .text-sunset {
     animation: none;
   }
@@ -423,34 +416,88 @@ html.lenis body {
 .hero-overline { display: block; font-size: .47em; font-weight: 500; line-height: 1.5; letter-spacing: 0; margin-bottom: .2rem; }
 .hero-highlight { position: relative; }
 .hero-period { color: var(--color-fog); }
-.hero-stack { display: block; font-family: var(--font-body); font-size: .9rem; line-height: 1.6; font-weight: 700; letter-spacing: 0; margin-top: 1rem; color: var(--color-fog); }
+.hero-stack { display: block; font-family: var(--font-sans); font-size: .9rem; line-height: 1.6; font-weight: 700; letter-spacing: 0; margin-top: 1rem; color: var(--color-fog); }
 .hero-summary { margin-top: 1rem; max-width: 29rem; font-size: .875rem; line-height: 1.65; color: var(--color-fog); }
 .hero-availability { margin-top: .8rem; max-width: 29rem; color: var(--color-ember-bright); font-size: .875rem; line-height: 1.6; font-weight: 700; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: auto; padding-top: 4.5rem; }
 .hero-scroll { display: none; }
 @media (min-width: 768px) {
   .hero-stage { min-height: max(100svh, 48rem); padding-top: 7rem; padding-bottom: 3.5rem; }
-  .hero-copy { max-width: 36rem; margin-left: auto; margin-top: auto; padding-top: 3rem; text-align: right; }
+  .hero-copy { max-width: 40rem; margin-left: auto; margin-top: auto; padding-top: 3rem; text-align: right; }
   .hero-heading { font-size: clamp(3.25rem, 5.4vw, 4.75rem); }
   .hero-stack { font-size: 1rem; margin-top: 1.25rem; }
   .hero-summary, .hero-availability { margin-left: auto; }
   .hero-summary { font-size: 1rem; }
   .hero-actions { margin-top: 1.5rem; margin-left: auto; padding-top: 0; justify-content: flex-end; }
-  .hero-scroll { display: inline-flex; align-items: center; gap: .7rem; position: absolute; bottom: 3.5rem; left: 1.5rem; min-height: 44px; font-family: var(--font-mono); font-size: .9rem; color: var(--color-fog); text-shadow: 1px 2px #14101f; }
+  .hero-scroll { display: inline-flex; align-items: center; gap: .7rem; position: absolute; bottom: 3.5rem; left: 1.5rem; min-height: 44px; font-family: var(--font-mono); font-size: .75rem; color: var(--color-fog); text-shadow: 1px 2px #14101f; }
   .scroll-track { height: 38px; width: 2px; background: var(--color-line); overflow: hidden; }
   .scroll-track > span { display: block; height: 12px; width: 2px; background: var(--color-ember); transition: transform 240ms var(--ease-glide); }
   .hero-scroll:is(:hover,:focus-visible) .scroll-track > span { transform: translateY(26px); }
-  .hero-vignette { background: linear-gradient(to right,rgba(6,7,13,.18) 0%,rgba(6,7,13,.18) 38%,rgba(6,7,13,.46) 38%,rgba(6,7,13,.46) 56%,rgba(6,7,13,.68) 56%,rgba(6,7,13,.68) 74%,rgba(6,7,13,.85) 74%),linear-gradient(to bottom,rgba(6,7,13,.5) 0%,rgba(6,7,13,.5) 20%,rgba(6,7,13,.24) 20%,rgba(6,7,13,.24) 34%,transparent 34%,transparent 76%,rgba(6,7,13,.22) 76%); }
+  .hero-vignette { background: linear-gradient(to right,rgba(6,7,13,.10) 0%,rgba(6,7,13,.24) 34%,rgba(6,7,13,.46) 52%,rgba(6,7,13,.68) 70%,rgba(6,7,13,.85) 100%),linear-gradient(to bottom,rgba(6,7,13,.52) 0%,rgba(6,7,13,.30) 16%,rgba(6,7,13,.08) 30%,rgba(6,7,13,0) 44%,rgba(6,7,13,0) 70%,rgba(6,7,13,.24) 100%); }
 }
 @media (min-width: 768px) and (min-height: 820px) and (prefers-reduced-motion: no-preference) {
   .hero-shell { position: sticky; top: 0; }
 }
 @media (max-width: 767px) {
-  .hero-vignette { background: linear-gradient(to bottom,rgba(6,7,13,.88) 0%,rgba(6,7,13,.88) 34%,rgba(6,7,13,.74) 34%,rgba(6,7,13,.74) 48%,rgba(6,7,13,.44) 48%,rgba(6,7,13,.44) 60%,rgba(6,7,13,.20) 60%,rgba(6,7,13,.20) 72%,rgba(6,7,13,.52) 72%,rgba(6,7,13,.52) 86%,rgba(6,7,13,.74) 86%); }
-  .hero-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+  .hero-vignette { background: linear-gradient(to bottom,rgba(6,7,13,.90) 0%,rgba(6,7,13,.87) 26%,rgba(6,7,13,.74) 38%,rgba(6,7,13,.48) 48%,rgba(6,7,13,.22) 57%,rgba(6,7,13,.06) 65%,rgba(6,7,13,0) 72%,rgba(6,7,13,.14) 86%,rgba(6,7,13,.40) 100%); }
+  /* The phone hero was carrying eight stacked blocks — nav wordmark, name,
+     role line, four lines of headline, a summary, an availability line —
+     and left the artwork a narrow band at the bottom. The summary repeats
+     what About says almost verbatim, and the résumé button repeats Contact,
+     so both step out here. What is left is the headline, the one line that
+     says he is available, and two actions. */
+  .hero-summary { display: none; }
+  /* "Full-Stack Developer · Calgary, Alberta" and "Available for
+     full-time roles in Calgary and across Alberta" both name the same
+     city and province a few lines apart. The availability line carries
+     more (that he is looking, and for what), so the role line goes —
+     the headline underneath already says what he builds. */
+  .hero-identity p + p { display: none; }
+  .hero-copy { margin-top: 1.25rem; }
+  .hero-availability { margin-top: .9rem; }
+
+  .hero-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; padding-top: 2rem; }
   .hero-actions > * { min-width: 0; }
-  .hero-actions > :first-child { grid-column: 1 / -1; }
+  /* two buttons now, so they sit side by side in one row rather than
+     stacking into two — half the vertical cost, both within thumb reach */
+  .hero-actions > :first-child { grid-column: auto; }
   .hero-actions a { width: 100%; padding-inline: .6rem; font-size: .8rem; }
+
+  /* Phone density. The section padding above is already tightened in the
+     markup; these trim the parts that are sized for a mouse and a wide
+     column, so the page reads as laid out for a phone rather than stacked
+     down from a desktop grid. */
+  .section-intro { gap: .85rem; }
+  .section-intro > p { font-size: .95rem; }
+  .project-body { padding: 1.15rem; gap: 1rem; }
+  .skill-card { padding: 1.15rem; }
+  .skills-toolbar { margin: 1.5rem 0 1.1rem; padding-bottom: .9rem; gap: .75rem; }
+
+  /* The filters were wrapping into three ragged rows and eating a third of
+     the screen. One row that scrolls instead, breaking the page gutter so it
+     runs edge to edge — a thumb flicks through it, which is how a phone
+     expects a filter strip to behave. */
+  .skill-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    margin-inline: -1.5rem;
+    padding-inline: 1.5rem;
+  }
+  .skill-filters::-webkit-scrollbar { display: none; }
+  .skill-filter { flex: 0 0 auto; scroll-snap-align: start; }
+
+  /* The sky is 44 twinkling stars and three drifting clouds — about 47
+     elements animating on every frame inside a sticky layer that recomposites
+     as the page scrolls. Measured on a phone viewport at 4x CPU throttle,
+     that cost a full-page scroll 28fps against 40fps with them gone: the
+     single most expensive thing on the page, and more than everything else
+     combined. A third of the stars and one cloud still read as a night sky,
+     so the rest sit out below md. */
+  .star:nth-of-type(n + 15) { display: none; }
+  .cloud-extra { display: none; }
 }
 
 /* Short, event-driven tactile effects; no ambient render loops. */
@@ -490,10 +537,10 @@ html.lenis body {
 .project-surface, .project-card { height:100%; }
 .project-card { display:flex; flex-direction:column; min-width:0; }
 .project-body { display:flex; flex:1; flex-direction:column; gap:1.25rem; padding:1.5rem; min-width:0; }
-.project-meta { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; font-family:var(--font-mono); font-size:.875rem; color:var(--color-dust); }
+.project-meta { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; font-family:var(--font-mono); font-size:.75rem; color:var(--color-dust); }
 .project-title-row { display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
 .project-title { font-family:var(--font-display); font-size:clamp(1.5rem,2.6vw,2rem); line-height:1.12; color:var(--color-fog); font-weight:600; text-wrap:balance; }
-.project-number { flex-shrink:0; font-family:var(--font-mono); font-size:1.25rem; color:var(--color-dust); transition:color 200ms; }
+.project-number { flex-shrink:0; font-family:var(--font-mono); font-size:.9rem; color:var(--color-dust); transition:color 200ms; }
 .project-surface:is(:hover,:focus-within) .project-number { color:var(--color-ember); }
 .project-media { min-width:0; background:rgba(20,16,31,.6); display:flex; flex-direction:column; }
 .project-media > a { position:relative; display:block; overflow:hidden; }
@@ -542,7 +589,7 @@ html.lenis body {
 .skill-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:1rem; }
 .skill-grid > li { min-width:0; }
 .skill-card { padding:1.5rem; }
-.skill-symbol { font-family:var(--font-mono); font-size:1.25rem; color:var(--color-ember-bright); transition:transform 200ms var(--ease-glide); }
+.skill-symbol { font-family:var(--font-mono); font-size:1rem; color:var(--color-ember-bright); transition:transform 200ms var(--ease-glide); }
 .reactive-surface:hover .skill-symbol { transform:translateX(4px); }
 .skill-capabilities { margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--color-line); display:flex; flex-direction:column; gap:.75rem; }
 .skill-capabilities li { position:relative; padding-left:1rem; font-size:.875rem; line-height:1.65; color:var(--color-mist); }
@@ -559,4 +606,35 @@ header:focus-within { transform:translateY(0); }
 @media(prefers-reduced-motion:reduce) {
   *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
   .project-media a:is(:hover,:focus-visible) img,.action-link:is(:hover,:focus-visible) svg,.polaroid-photo:hover,.skill-filter:hover { transform:none; }
+}
+
+/* Block-level entrances for section content (see ScrollScene). */
+.scroll-scene { min-width:0; }
+
+/* The clip each heading line rises out of. Padded so descenders and the
+   accent word's hard 2px shadow are not shaved off, with the padding taken
+   back out of the layout so the heading's height is unchanged. */
+.heading-line { display:block; overflow:hidden; padding:0 .12em .16em 0; margin-bottom:-.16em; }
+.project-plate { display:none; }
+.plate-cursor { animation:plate-blink 1.1s steps(1) infinite; }
+@keyframes plate-blink { 50% { opacity:0; } }
+@media(min-width:1024px) {
+  /* On desktop every project card is the same object — text on the left,
+     visual on the right, one height — so the list reads as a set rather
+     than four different silhouettes. */
+  .work-grid { grid-template-columns:minmax(0,1fr); gap:1.5rem; --card-h:30rem; }
+  .work-grid > .work-slot { grid-column:1 / -1; }
+  .work-slot .project-card { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); position:relative; min-height:var(--card-h); }
+  .work-slot .project-body { grid-column:1; grid-row:1; display:flex; align-items:stretch; }
+  .work-slot .project-title { font-size:clamp(1.9rem,2.4vw,2.35rem); }
+  .work-slot .project-links { justify-content:flex-start; padding-top:.25rem; }
+  .work-slot .project-card > .project-media,
+  .work-slot .project-hardware,
+  .work-slot .project-plate { grid-column:2; grid-row:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.25rem; padding:2rem; background:var(--color-abyss); border:0; border-left:1px solid var(--color-line); }
+  /* nested inside the text column, so it is placed against the card itself */
+  .work-slot .project-hardware { position:absolute; top:0; right:0; bottom:0; width:calc(100% / 2.1); margin:0; float:none; grid-column:auto; grid-row:auto; }
+  .work-slot .project-media > a { border:1px solid var(--color-line); box-shadow:var(--shadow-pixel); }
+  .work-slot .project-hardware img { width:auto; max-width:100%; max-height:calc(var(--card-h) - 8rem); }
+  .work-slot .project-media figcaption { border:0; padding:0; font-size:.7rem; text-align:center; }
+  .plate-note { font-family:var(--font-mono); font-size:.68rem; color:var(--color-dust); text-align:center; }
 }

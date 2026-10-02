@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import { skillAreas, type SkillCategory } from "@/data/projects";
-import { GLIDE, SectionHeading } from "@/components/aurora/Reveal";
+import { SectionHeading } from "@/components/aurora/Reveal";
+import ScrollScene from "@/components/aurora/ScrollScene";
 import ReactiveSurface from "@/components/aurora/ReactiveSurface";
 
 const filters: { label: string; value: SkillCategory | "all" }[] = [
@@ -16,12 +16,11 @@ const filters: { label: string; value: SkillCategory | "all" }[] = [
 
 export default function SkillsSection() {
   const [active, setActive] = useState<SkillCategory | "all">("all");
-  const reduce = useReducedMotion();
   const visible = skillAreas.filter(area => active === "all" || area.category === active);
 
   return (
     <section id="skills" aria-labelledby="skills-title" className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-6 py-14 md:py-32">
         <div className="section-intro">
           <SectionHeading id="skills-title" eyebrow="04 · The toolkit" title={"From interface\nto *infrastructure.*"} />
           <p className="max-w-sm text-base leading-relaxed text-mist">
@@ -37,19 +36,22 @@ export default function SkillsSection() {
               </button>
             ))}
           </div>
-          <p className="font-mono text-sm text-mist" aria-live="polite" aria-atomic="true">
+          <p className="font-mono text-xs text-mist" aria-live="polite" aria-atomic="true">
             {visible.length} of {skillAreas.length} areas
           </p>
         </div>
         <ul id="skill-results" aria-label="Technical skill groups" className="skill-grid">
           {visible.map((area, index) => (
-            <motion.li key={`${active}-${area.label}`} initial={reduce ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.28, ease: GLIDE, delay: Math.min(index * 0.025, 0.12) }}>
+            /* keyed on the filter so a new selection remounts and the scene
+               replays its entrance — the list item itself no longer animates,
+               so there is exactly one thing moving each card */
+            <li key={`${active}-${area.label}`}>
+              <ScrollScene index={index} className="h-full">
               <ReactiveSurface className="h-full">
                 <div className="skill-card">
                   <div className="mb-5 flex items-center justify-between gap-3">
                     <span aria-hidden className="skill-symbol">{area.symbol}</span>
-                    <span aria-hidden className="font-mono text-sm text-dust">
+                    <span aria-hidden className="font-mono text-xs text-dust">
                       {String(skillAreas.indexOf(area) + 1).padStart(2, "0")}
                     </span>
                   </div>
@@ -63,7 +65,8 @@ export default function SkillsSection() {
                   {area.learning && <p className="skill-learning">{area.learning}</p>}
                 </div>
               </ReactiveSurface>
-            </motion.li>
+              </ScrollScene>
+            </li>
           ))}
         </ul>
       </div>

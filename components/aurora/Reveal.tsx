@@ -1,8 +1,18 @@
 "use client";
 
-/* Shared scroll-reveal primitives. One rhythm everywhere: a long expo-out
-   glide. The stepped, sprite-frame feel belongs to the pixel art itself
-   (starfield, steam, the hero video) — not to interface motion. */
+/* One scroll-reveal language for the whole site.
+
+   Content arrives once, fast, and is finished before it reaches reading
+   height: a reveal fires as the element's top crosses 88% of the viewport and
+   lands in under a second, so nothing is still moving while it is being read.
+   Every reveal shares the same distance, duration, easing and stagger — that
+   consistency is most of what makes motion read as designed rather than
+   accumulated.
+
+   Only three things are tied continuously to scroll position, because they
+   tell the story: the hero pulling back as the page rises over it, the work
+   deck, and the journey line drawing itself. Those live in their own
+   components. Everything here plays once. */
 
 import {
   motion,
@@ -13,24 +23,29 @@ import {
 } from "motion/react";
 import { useRef, type ReactNode } from "react";
 
-/* Motion split: PIXEL ART animates in steps (the sprite weather, the video),
-   but UI animates smoothly. Stepping a 40px card travel just reads as jank,
-   so interface motion uses a long expo-out glide instead. */
+/* Long expo-out. The pixel art moves in steps; the interface glides. */
 export const GLIDE = [0.16, 1, 0.3, 1] as const;
+
+/** Fire when the element's top is 12% up from the bottom edge of the screen. */
+export const REVEAL_VIEWPORT = { once: true, margin: "0px 0px -12% 0px" } as const;
+
+export const STAGGER = 0.08;
+const DISTANCE = 32;
+const DURATION = 0.9;
 
 export const riseVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   shown: (delay: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: GLIDE, delay },
+    transition: { duration: 0.75, ease: GLIDE, delay },
   }),
 };
 
 const DIRECTION_OFFSET = {
-  up: { x: 0, y: 24 },
-  left: { x: -32, y: 0 },
-  right: { x: 32, y: 0 },
+  up: { x: 0, y: DISTANCE },
+  left: { x: -40, y: 0 },
+  right: { x: 40, y: 0 },
 } as const;
 
 const directionVariants: Variants = {
@@ -42,29 +57,21 @@ const directionVariants: Variants = {
     opacity: 1,
     x: 0,
     y: 0,
-    transition: { duration: 0.7, ease: GLIDE },
+    transition: { duration: DURATION, ease: GLIDE },
   },
 };
 
 const popVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.94 },
-  shown: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.5, ease: GLIDE },
-  },
-};
-
-const wordVariants: Variants = {
-  hidden: { opacity: 0, y: "0.45em" },
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
   shown: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: GLIDE },
+    scale: 1,
+    transition: { duration: DURATION * 0.85, ease: GLIDE },
   },
 };
 
-/** Fade + rise once, when scrolled into view. */
+/** Fade and rise once, as it scrolls into view. */
 export function Reveal({
   children,
   delay = 0,
@@ -81,14 +88,14 @@ export function Reveal({
       initial="hidden"
       whileInView="shown"
       custom={delay}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={REVEAL_VIEWPORT}
     >
       {children}
     </motion.div>
   );
 }
 
-/** Parent that staggers its Reveal/Pop children by 70ms. */
+/** Parent that staggers its RevealItem / PopItem children. */
 export function RevealGroup({
   children,
   className,
@@ -109,8 +116,8 @@ export function RevealGroup({
       className={className}
       initial="hidden"
       whileInView="shown"
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ staggerChildren: 0.07 }}
+      viewport={REVEAL_VIEWPORT}
+      transition={{ staggerChildren: STAGGER }}
     >
       {children}
     </Tag>
@@ -137,7 +144,7 @@ export function RevealItem({
   );
 }
 
-/** Child of RevealGroup: soft scale pop, for tiles/chips/dots. */
+/** Child of RevealGroup: a small lift and settle, for tiles, chips and dots. */
 export function PopItem({
   children,
   className,
@@ -177,16 +184,14 @@ export function ParallaxDrift({
     <motion.div
       ref={ref}
       className={className}
-      style={
-        reduce ? undefined : { y, scale: 1.08, willChange: "transform" }
-      }
+      style={reduce ? undefined : { y, scale: 1.08, willChange: "transform" }}
     >
       {children}
     </motion.div>
   );
 }
 
-/** A vertical line that draws itself as the section scrolls into view. */
+/** A vertical line that draws itself as the section scrolls past. */
 export function GrowLine({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -204,54 +209,45 @@ export function GrowLine({ className }: { className?: string }) {
   );
 }
 
-/** Display title whose words rise one by one.
-    `text` format: "\n" breaks lines; words wrapped in *asterisks* get the
-    sunset gradient — e.g. "Calm process,\n*sharp* output." */
-export function WordRise({
-  text,
-  className,
-  id,
-}: {
-  text: string;
-  className?: string;
-  id?: string;
-}) {
-  /* words are separate spans with margin gaps and no whitespace between
-     them, so expose the real sentence to assistive tech and hide the spans */
-  const plain = text.replace(/\*/g, "").replace(/\n/g, " ");
+/* Heading choreography: the eyebrow rules in, then each line of the title
+   slides up out of its own clip, one after another. Lines, not words — words
+   fading in individually read as a text effect; lines rising out of a mask
+   read as typesetting. */
+const headingVariants: Variants = {
+  hidden: {},
+  shown: { transition: { staggerChildren: 0.11, delayChildren: 0.05 } },
+};
 
+const eyebrowVariants: Variants = {
+  hidden: { opacity: 0, x: -14 },
+  shown: { opacity: 1, x: 0, transition: { duration: 0.7, ease: GLIDE } },
+};
+
+const lineVariants: Variants = {
+  hidden: { y: "108%" },
+  shown: { y: "0%", transition: { duration: 1, ease: GLIDE } },
+};
+
+/** Render "*word*" as the ember accent. */
+function Accented({ text }: { text: string }) {
+  const parts = text.split(/(\*[^*]+\*)/g).filter(Boolean);
   return (
-    <motion.h2
-      id={id}
-      aria-label={plain}
-      className={className}
-      initial="hidden"
-      whileInView="shown"
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ staggerChildren: 0.07 }}
-    >
-      {text.split("\n").map((line, li) => (
-        <span key={li} aria-hidden className="block">
-          {line.split(" ").map((word, wi) => {
-            const sunset = word.startsWith("*") && word.endsWith("*");
-            const clean = sunset ? word.slice(1, -1) : word;
-            return (
-              <motion.span
-                key={wi}
-                variants={wordVariants}
-                className={`mr-[0.26em] inline-block ${sunset ? "text-sunset" : ""}`}
-              >
-                {clean}
-              </motion.span>
-            );
-          })}
-        </span>
-      ))}
-    </motion.h2>
+    <>
+      {parts.map((part, i) =>
+        part.startsWith("*") && part.endsWith("*") ? (
+          <span key={i} className="text-sunset">
+            {part.slice(1, -1)}
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
   );
 }
 
-/** Section heading block: mono eyebrow + word-by-word display title. */
+/** Section heading block: mono eyebrow, then a masked line-by-line title.
+    `title` uses "\n" for line breaks and *asterisks* for the accent word. */
 export function SectionHeading({
   eyebrow,
   title,
@@ -261,18 +257,36 @@ export function SectionHeading({
   title: string;
   id?: string;
 }) {
+  const plain = title.replace(/\*/g, "").replace(/\n/g, " ");
+  const lines = title.split("\n");
   return (
-    <div>
-      <Reveal>
-        <p className="font-mono text-base uppercase tracking-[0.18em] text-ember-bright">
-          {eyebrow}
-        </p>
-      </Reveal>
-      <WordRise
+    <motion.div
+      variants={headingVariants}
+      initial="hidden"
+      whileInView="shown"
+      viewport={REVEAL_VIEWPORT}
+    >
+      <motion.p
+        variants={eyebrowVariants}
+        className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-ember-bright"
+      >
+        {eyebrow}
+      </motion.p>
+      <h2
         id={id}
-        text={title}
+        aria-label={plain}
         className="mt-3 font-display text-[clamp(1.9rem,4vw,3rem)] leading-[1.12] font-semibold text-fog"
-      />
-    </div>
+      >
+        {lines.map((line, i) => (
+          /* the clip: padded so descenders and the accent's hard shadow are
+             not shaved off, with the padding taken back out of the layout */
+          <span key={i} aria-hidden className="heading-line">
+            <motion.span className="block" variants={lineVariants}>
+              <Accented text={line} />
+            </motion.span>
+          </span>
+        ))}
+      </h2>
+    </motion.div>
   );
 }

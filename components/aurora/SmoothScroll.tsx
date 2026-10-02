@@ -6,7 +6,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
-import { useReducedMotion } from "motion/react";
+import { cancelFrame, frame, useReducedMotion, type FrameData } from "motion/react";
 
 export default function SmoothScroll() {
   const reduce = useReducedMotion();
@@ -14,22 +14,25 @@ export default function SmoothScroll() {
   useEffect(() => {
     if (reduce) return;
 
+    /* lerp rather than a fixed duration: every wheel tick eases toward its
+       target at the same rate, so a long flick and a nudge feel like the same
+       surface. 0.1 is the weighted, settled glide; the old 0.9s duration was
+       shortened to save work per gesture, which no longer applies now that
+       far less is recomputed on scroll. */
     const lenis = new Lenis({
-      // a touch snappier than the default long glide — less time spent
-      // recomputing scroll-linked transforms per gesture, so it feels lighter
-      duration: 0.9,
-      easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+      lerp: 0.1,
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 1.6,
+      touchMultiplier: 1.4,
     });
 
-    let raf = 0;
-    const loop = (time: number) => {
-      lenis.raf(time);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
+    /* Drive Lenis from Motion's own frame loop instead of a separate
+       requestAnimationFrame. Two independent loops means the scroll position
+       and the scroll-linked transforms can update on different frames, which
+       shows up as the pinned deck and the hero shivering a pixel behind the
+       page. One loop keeps them in lockstep. */
+    const update = (data: FrameData) => lenis.raf(data.timestamp);
+    frame.update(update, true);
 
     // glide to in-page anchors instead of the native instant jump
     const onClick = (e: MouseEvent) => {
@@ -49,13 +52,13 @@ export default function SmoothScroll() {
       }
       el.focus({ preventScroll: true });
       const offset = -(parseFloat(getComputedStyle(el).scrollMarginTop) || 8);
-      lenis.scrollTo(el, { offset });
+      lenis.scrollTo(id === "#top" ? 0 : el, { offset: id === "#top" ? 0 : offset });
       if (window.location.hash !== id) history.pushState(null, "", id);
     };
     document.addEventListener("click", onClick);
 
     return () => {
-      cancelAnimationFrame(raf);
+      cancelFrame(update);
       document.removeEventListener("click", onClick);
       lenis.destroy();
     };

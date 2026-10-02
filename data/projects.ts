@@ -396,7 +396,7 @@ export const experiences: Experience[] = [{
   employment: "SAIT capstone · Industry partner",
   context: "Team of 5",
   dates: BAETT_DATES,
-  problem: "An EMS system for engineering consultancies.",
+  problem: "An EMS system.",
   lead: "My contributions",
   nda: "Project under NDA. Implementation details are confidential.",
   areas: ["Authentication & role-based permissions", "Document storage", "Subscription billing"],

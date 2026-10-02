@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { projects, type Project, type ProjectStatus } from "@/data/projects";
-import { RevealGroup, RevealItem, SectionHeading } from "@/components/aurora/Reveal";
+import { SectionHeading } from "@/components/aurora/Reveal";
 import { ArrowUpRight, GitHub } from "@/components/aurora/icons";
 import ReactiveSurface from "@/components/aurora/ReactiveSurface";
 
@@ -41,6 +41,55 @@ function ProjectMedia({ project }: { project: Project }) {
   );
 }
 
+/* The visual half of a deck card for projects without a screenshot yet.
+   Only shown in the desktop deck, where every card needs the same two
+   halves; elsewhere these cards are text-only and read fine that way. */
+function ProjectPlate({ project }: { project: Project }) {
+  const cli = project.tags.includes("CLI");
+  return (
+    <div aria-hidden className="project-plate">
+      {cli ? (
+        <svg className="pixel-art plate-art" width={32 * 7} height={20 * 7} viewBox="0 0 32 20">
+          <rect x="0" y="0" width="32" height="20" fill="var(--color-raised)" />
+          <rect x="1" y="3" width="30" height="16" fill="#0d0a16" />
+          <rect x="2" y="1" width="1" height="1" fill="var(--color-ember)" />
+          <rect x="4" y="1" width="1" height="1" fill="var(--color-orchid)" />
+          <rect x="6" y="1" width="1" height="1" fill="var(--color-mint)" />
+          <rect x="3" y="6" width="1" height="1" fill="var(--color-mint)" />
+          <rect x="4" y="7" width="1" height="1" fill="var(--color-mint)" />
+          <rect x="3" y="8" width="1" height="1" fill="var(--color-mint)" />
+          <rect x="6" y="7" width="9" height="1" fill="var(--color-mist)" />
+          <rect className="plate-cursor" x="16" y="6" width="2" height="3" fill="var(--color-ember-bright)" />
+          <rect x="3" y="11" width="6" height="1" fill="var(--color-dust)" />
+          <rect x="3" y="13" width="11" height="1" fill="var(--color-dust)" />
+          <rect x="3" y="15" width="8" height="1" fill="var(--color-dust)" />
+        </svg>
+      ) : (
+        <svg className="pixel-art plate-art" width={18 * 9} height={30 * 9} viewBox="0 0 18 30">
+          <rect x="0" y="0" width="18" height="30" fill="var(--color-raised)" />
+          <rect x="1" y="3" width="16" height="24" fill="#1c2a2a" />
+          <rect x="7" y="1" width="4" height="1" fill="#0d0a16" />
+          <rect x="7" y="28" width="4" height="1" fill="#0d0a16" />
+          {/* paths across the campus map */}
+          <rect x="1" y="10" width="16" height="1" fill="#2f4240" />
+          <rect x="1" y="19" width="16" height="1" fill="#2f4240" />
+          <rect x="6" y="3" width="1" height="24" fill="#2f4240" />
+          <rect x="12" y="3" width="1" height="24" fill="#2f4240" />
+          {/* study spots, by how busy they are */}
+          <rect x="3" y="6" width="2" height="2" fill="var(--color-mint)" />
+          <rect x="9" y="13" width="2" height="2" fill="var(--color-ember)" />
+          <rect x="14" y="22" width="2" height="2" fill="var(--color-mint)" />
+          <rect x="3" y="23" width="2" height="2" fill="var(--color-orchid)" />
+          <rect className="plate-cursor" x="9" y="11" width="2" height="1" fill="var(--color-ember-bright)" />
+        </svg>
+      )}
+      <p className="plate-note">
+        {cli ? "Runs in the terminal · Python" : "Screenshots when the first build ships"}
+      </p>
+    </div>
+  );
+}
+
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const status = STATUS[project.status];
   return (
@@ -73,6 +122,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </ul>
           {(project.live || project.repo) && <ProjectLinks project={project} />}
         </div>
+        {project.images.length === 0 && <ProjectPlate project={project} />}
       </article>
     </ReactiveSurface>
   );
@@ -81,20 +131,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 export default function WorkSection() {
   return (
     <section id="work" aria-labelledby="work-title" className="relative">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-6 py-14 md:py-32">
         <div className="section-intro">
           <SectionHeading id="work-title" eyebrow="01 · Selected work" title={"Different problems.\nSame *curiosity.*"} />
           <p className="max-w-sm text-base leading-relaxed text-mist">
             From a pantry-first web app to a physical sorting rig. Personal projects and team-based coursework, with my part in each.
           </p>
         </div>
-        <RevealGroup className="work-grid mt-10">
+        <div className="work-grid mt-10">
           {projects.map((project, index) => (
-            <RevealItem key={project.slug} className={`work-slot work-slot-${project.slug}`}>
+            <div key={project.slug} className={`work-slot work-slot-${project.slug}`}>
               <ProjectCard project={project} index={index} />
-            </RevealItem>
+            </div>
           ))}
-        </RevealGroup>
+        </div>
       </div>
     </section>
   );

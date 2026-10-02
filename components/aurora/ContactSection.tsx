@@ -1,15 +1,16 @@
 "use client";
 
 /* Chapter 5 — the ask. The panel lands with one stepped overshoot, then
-   the cat settles in on top of it. */
+   the lamp and the cat settle in on top of it. */
 
 import { motion } from "motion/react";
+import ScrollScene from "@/components/aurora/ScrollScene";
 import { profile } from "@/data/projects";
 import { GLIDE, PopItem, RevealGroup } from "@/components/aurora/Reveal";
 import { Magnetic } from "@/components/aurora/Interactive";
 import { ArrowUpRight, GitHub, LinkedIn, Mail } from "@/components/aurora/icons";
 import ResumeLink from "@/components/aurora/ResumeLink";
-import { PixelCat } from "@/components/aurora/PixelArt";
+import { PixelCat, PixelLamp } from "@/components/aurora/PixelArt";
 
 const SOCIAL_ICON: Record<string, typeof GitHub> = {
   GitHub: GitHub,
@@ -19,15 +20,16 @@ const SOCIAL_ICON: Record<string, typeof GitHub> = {
 
 export default function ContactSection() {
   return (
-    <section id="contact" aria-labelledby="contact-title" className="relative">
+    <section id="contact" aria-labelledby="contact-title" className="relative bg-abyss">
       <div className="mx-auto max-w-6xl px-6 pt-24 pb-10 md:pt-32">
+        <ScrollScene variant="panel">
         <motion.div
           className="relative"
           initial="hidden"
           whileInView="shown"
           viewport={{ once: true, margin: "-80px" }}
         >
-          {/* the cat arrives after the panel has landed */}
+          {/* the lamp and the cat arrive after the panel has landed */}
           <motion.div
             variants={{
               hidden: { opacity: 0 },
@@ -36,8 +38,9 @@ export default function ContactSection() {
                 transition: { duration: 0.45, ease: GLIDE, delay: 0.5 },
               },
             }}
-            className="absolute -top-[38px] right-10 z-10 md:right-16"
+            className="absolute right-10 bottom-full z-10 -mb-px flex items-end gap-1 md:right-16"
           >
+            <PixelLamp />
             <PixelCat />
           </motion.div>
 
@@ -60,7 +63,7 @@ export default function ContactSection() {
               className="absolute inset-x-0 top-0 h-[3px] bg-ember opacity-40"
             />
 
-            <p className="relative font-mono text-base uppercase tracking-[0.18em] text-ember-bright">
+            <p className="relative font-mono text-xs font-medium uppercase tracking-[0.18em] text-ember-bright">
               06 · Contact
             </p>
             <h2
@@ -107,12 +110,13 @@ export default function ContactSection() {
           </motion.div>
         </motion.div>
 
+        </ScrollScene>
         <footer className="flex flex-col items-center justify-between gap-2 py-10 text-sm text-dust sm:flex-row">
           <p>
             © {new Date().getFullYear()} {profile.fullName}. All rights
             reserved.
           </p>
-          <p className="font-mono text-base">Next.js · Tailwind · Motion</p>
+          <p className="font-mono text-xs">Next.js · Tailwind · Motion</p>
         </footer>
       </div>
     </section>
