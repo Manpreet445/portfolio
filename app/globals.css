@@ -421,6 +421,7 @@ html.lenis body {
 .hero-availability { margin-top: .8rem; max-width: 29rem; color: var(--color-ember-bright); font-size: .875rem; line-height: 1.6; font-weight: 700; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: auto; padding-top: 4.5rem; }
 .hero-scroll { display: none; }
+.resume-short { display: none; }
 @media (min-width: 768px) {
   .hero-stage { min-height: max(100svh, 48rem); padding-top: 7rem; padding-bottom: 3.5rem; }
   .hero-copy { max-width: 40rem; margin-left: auto; margin-top: auto; padding-top: 3rem; text-align: right; }
@@ -453,15 +454,26 @@ html.lenis body {
      more (that he is looking, and for what), so the role line goes —
      the headline underneath already says what he builds. */
   .hero-identity p + p { display: none; }
-  .hero-copy { margin-top: 1.25rem; }
-  .hero-availability { margin-top: .9rem; }
+  /* Sized for the smallest phones in use (320px wide, or a larger phone
+     with Display Zoom or an in-app browser's text zoom) and for the short
+     viewport left under browser toolbars. The headline scales with the
+     screen so "web and mobile" always holds one line: three lines of it
+     pushed everything else down onto the artwork. */
+  .hero-stage { padding-top: max(5.75rem, calc(4.5rem + env(safe-area-inset-top))); }
+  .hero-identity > p:first-child { font-size: 1.25rem; line-height: 1.4; }
+  .hero-copy { margin-top: 1rem; }
+  .hero-heading { font-size: clamp(1.75rem, calc((100vw - 3rem) / 8.4), 2.6rem); }
+  .hero-stack { font-size: .85rem; margin-top: .65rem; }
+  .hero-availability { margin-top: .6rem; font-size: .8rem; line-height: 1.5; }
 
-  .hero-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; padding-top: 2rem; }
+  .hero-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; padding-top: 1.5rem; }
   .hero-actions > * { min-width: 0; }
   /* two buttons now, so they sit side by side in one row rather than
      stacking into two — half the vertical cost, both within thumb reach */
   .hero-actions > :first-child { grid-column: auto; }
-  .hero-actions a { width: 100%; padding-inline: .6rem; font-size: .8rem; }
+  .hero-actions a { width: 100%; min-height: 2.75rem; padding: .6rem; font-size: .8rem; }
+  .hero-actions .resume-full { display: none; }
+  .hero-actions .resume-short { display: inline; }
 
   /* Phone density. The section padding above is already tightened in the
      markup; these trim the parts that are sized for a mouse and a wide

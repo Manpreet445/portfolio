@@ -9,9 +9,13 @@ export default function ResumeLink({ className = "" }: { className?: string }) {
     <a
       href={profile.resume.href}
       download={profile.resume.fileName}
+      aria-label="Download résumé"
       className={`btn-pixel action-link inline-flex gap-2 min-h-12 items-center justify-center bg-raised px-4 py-3 text-sm font-bold text-fog ${className}`}
     >
-      Download résumé <ArrowDown className="h-4 w-4" />
+      {/* the hero's half-width phone button only has room for the short label */}
+      <span className="resume-full">Download résumé</span>
+      <span className="resume-short">Résumé</span>
+      <ArrowDown className="h-4 w-4" />
     </a>
   );
 }
