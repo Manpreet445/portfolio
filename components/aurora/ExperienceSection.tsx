@@ -77,11 +77,11 @@ export default function ExperienceSection() {
               {/* what I owned */}
               <RevealGroup
                 as="ul"
-                className="mt-8 grid grid-cols-1 items-start gap-5 md:grid-cols-3"
+                className="mt-8 grid auto-rows-fr grid-cols-1 gap-5 md:grid-cols-3"
               >
                 {job.areas.map((area, i) => (
                   <RevealItem key={area} as="li" direction="up">
-                    <div className="border-2 border-line bg-abyss/40 p-5">
+                    <div className="h-full border-2 border-line bg-abyss/40 p-5">
                       <span className="block font-mono text-xs text-ember-bright">
                         {String(i + 1).padStart(2, "0")}
                       </span>
