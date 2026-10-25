@@ -31,15 +31,6 @@ export function ArrowDown(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function MapPin(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...base(props)}>
-      <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
-}
-
 export function Mail(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base(props)}>
@@ -68,44 +59,11 @@ export function LinkedIn(props: SVGProps<SVGSVGElement>) {
 
 /* Skill icons — mapped from data/projects.ts `icon` keys */
 
-export function Layout(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...base(props)}>
-      <rect x="3" y="4" width="18" height="16" rx="2.5" />
-      <path d="M3 9.5h18M9.5 9.5V20" />
-    </svg>
-  );
-}
-
 export function Stack(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base(props)}>
       <path d="m12 3 9 4.5-9 4.5-9-4.5L12 3Z" />
       <path d="m4.5 11.3-1.5.7 9 4.5 9-4.5-1.5-.7M4.5 15.8 3 16.5l9 4.5 9-4.5-1.5-.7" />
-    </svg>
-  );
-}
-
-export function Pen(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...base(props)}>
-      <path d="m14.5 5.5 4 4L8 20l-5 1 1-5L14.5 5.5ZM12.5 7.5l4 4M17 3l4 4" />
-    </svg>
-  );
-}
-
-export function Bolt(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...base(props)}>
-      <path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H13L13 2Z" />
-    </svg>
-  );
-}
-
-export function Spark(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...base(props)}>
-      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8" />
     </svg>
   );
 }

@@ -17,7 +17,10 @@ const LINKS = [
   { href: "#journey", label: "Journey" },
 ] as const;
 
-export default function Nav() {
+/* `linkBase` prefixes the in-page hashes. Empty on the homepage, where
+   "#work" is the section just below; "/" on a sub-route, where the same link
+   has to travel home first ("/#work") instead of resolving to nothing. */
+export default function Nav({ linkBase = "" }: { linkBase?: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -64,7 +67,7 @@ export default function Nav() {
       >
         <div className="flex items-center justify-between gap-3">
           <a
-            href="#top"
+            href={`${linkBase}#top`}
             className="-my-2 flex min-h-11 items-center py-2 font-display text-xl font-semibold text-fog"
           >
             {profile.name}
@@ -76,7 +79,7 @@ export default function Nav() {
             {LINKS.map((link) => (
               <a
                 key={link.href}
-                href={link.href}
+                href={`${linkBase}${link.href}`}
                 /* py-1.5 takes the hit area from 20px to 28px tall: WCAG 2.2
                    asks for 24px, and these sat under it on their text height
                    alone */
@@ -89,7 +92,7 @@ export default function Nav() {
 
           <div className="flex items-center gap-2">
             <a
-              href="#contact"
+              href={`${linkBase}#contact`}
               className="btn-pixel bg-ember px-3 py-2.5 text-sm font-bold text-abyss sm:px-4"
             >
               Get in touch
@@ -142,7 +145,7 @@ export default function Nav() {
                 {LINKS.map((link) => (
                   <li key={link.href}>
                     <a
-                      href={link.href}
+                      href={`${linkBase}${link.href}`}
                       onClick={() => setOpen(false)}
                       className="block py-3 font-mono text-sm uppercase tracking-[0.14em] text-mist transition-colors duration-200 hover:text-ember-bright active:text-fog"
                     >

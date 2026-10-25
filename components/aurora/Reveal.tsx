@@ -18,7 +18,6 @@ import {
   motion,
   useReducedMotion,
   useScroll,
-  useTransform,
   type Variants,
 } from "motion/react";
 import { useRef, type ReactNode } from "react";
@@ -159,35 +158,6 @@ export function PopItem({
     <Tag className={className} variants={popVariants}>
       {children}
     </Tag>
-  );
-}
-
-/** Scroll-linked vertical drift for imagery inside overflow-hidden cards.
-    Slightly scaled up so the travel never exposes gaps. */
-export function ParallaxDrift({
-  children,
-  className,
-  amount = 12,
-}: {
-  children: ReactNode;
-  className?: string;
-  amount?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [amount, -amount]);
-  return (
-    <motion.div
-      ref={ref}
-      className={className}
-      style={reduce ? undefined : { y, scale: 1.08, willChange: "transform" }}
-    >
-      {children}
-    </motion.div>
   );
 }
 

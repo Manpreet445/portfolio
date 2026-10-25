@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { projects, type Project, type ProjectStatus } from "@/data/projects";
 import { SectionHeading } from "@/components/aurora/Reveal";
 import { ArrowUpRight, GitHub } from "@/components/aurora/icons";
@@ -13,7 +14,13 @@ const STATUS: Record<ProjectStatus, { label: string; className: string }> = {
 function ProjectLinks({ project }: { project: Project }) {
   return (
     <div className="project-links">
-      {project.live && <a href={project.live} target="_blank" rel="noreferrer" className="action-link text-ember-bright">
+      {/* the only internal link on the card, so it carries the primary accent
+          and the outbound ones step back to mist */}
+      {project.caseStudy && <Link href={`/work/${project.slug}`} className="action-link text-ember-bright">
+        Read case study <ArrowUpRight className="h-4 w-4" />
+        <span className="sr-only"> — {project.title}</span>
+      </Link>}
+      {project.live && <a href={project.live} target="_blank" rel="noreferrer" className="action-link text-mist">
         Visit live app <ArrowUpRight className="h-4 w-4" />
         <span className="sr-only"> — {project.title} (opens in a new tab)</span>
       </a>}
@@ -25,15 +32,15 @@ function ProjectLinks({ project }: { project: Project }) {
   );
 }
 
-function ProjectMedia({ project }: { project: Project }) {
+function ProjectMedia({ project, hardware }: { project: Project; hardware: boolean }) {
   const image = project.images[0];
   if (!image) return null;
   return (
-    <figure className={`project-media ${project.slug === "conveyor" ? "project-hardware" : ""}`}>
+    <figure className={`project-media ${hardware ? "project-hardware" : ""}`}>
       <a href={image.src} target="_blank" rel="noreferrer" data-cursor="none"
-        aria-label={`View full-size ${project.title} ${project.slug === "conveyor" ? "hardware photo" : "screenshot"} (opens in a new tab)`}>
+        aria-label={`View full-size ${project.title} ${hardware ? "hardware photo" : "screenshot"} (opens in a new tab)`}>
         <Image src={image.src} alt={image.alt} width={image.width} height={image.height}
-          sizes={project.slug === "recepie" ? "(max-width: 767px) calc(100vw - 48px), (max-width: 1199px) 55vw, 610px" : "(max-width: 767px) 35vw, 180px"} />
+          sizes={hardware ? "(max-width: 767px) 35vw, 180px" : "(max-width: 767px) calc(100vw - 48px), (max-width: 1199px) 55vw, 610px"} />
         <span aria-hidden className="media-expand"><ArrowUpRight className="h-4 w-4" /></span>
       </a>
       <figcaption>{image.caption}</figcaption>
@@ -92,10 +99,15 @@ function ProjectPlate({ project }: { project: Project }) {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const status = STATUS[project.status];
+  /* The conveyor's image is a photo of the physical rig, which sits inline
+     beside the text. Any other image is a screenshot of the app and gets the
+     card's visual panel — so a new project only needs `images` filled in. */
+  const hardware = project.slug === "conveyor";
+  const screenshot = !hardware && project.images.length > 0;
   return (
-    <ReactiveSurface className={`project-surface project-${project.slug}`}>
+    <ReactiveSurface className={`project-surface project-${project.slug} ${screenshot ? "project-shot" : ""}`}>
       <article aria-labelledby={`project-${project.slug}`} className="project-card">
-        {project.slug === "recepie" && <ProjectMedia project={project} />}
+        {screenshot && <ProjectMedia project={project} hardware={false} />}
         <div className="project-body">
           <div className="project-meta">
             <span className={status.className}><span aria-hidden className="mr-2">/</span>{status.label}</span>
@@ -110,7 +122,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             <span aria-hidden className="project-number">{String(index + 1).padStart(2, "0")}</span>
           </div>
           <div className="project-description-row">
-            {project.slug === "conveyor" && <ProjectMedia project={project} />}
+            {hardware && <ProjectMedia project={project} hardware />}
             <p className="text-sm leading-relaxed text-mist md:text-base">{project.description}</p>
           </div>
           {project.detail && <details className="project-detail">
@@ -120,7 +132,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <ul className="flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
             {project.tags.map(tag => <li key={tag} className="tech-chip">{tag}</li>)}
           </ul>
-          {(project.live || project.repo) && <ProjectLinks project={project} />}
+          {(project.caseStudy || project.live || project.repo) && <ProjectLinks project={project} />}
         </div>
         {project.images.length === 0 && <ProjectPlate project={project} />}
       </article>

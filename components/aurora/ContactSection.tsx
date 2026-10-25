@@ -74,7 +74,7 @@ export default function ContactSection() {
               <span className="text-sunset">solid</span> together.
             </h2>
             <p className="relative mx-auto mt-5 max-w-md text-mist">
-              Open to full-time junior software developer roles in Calgary and across Alberta.{" "}
+              Open to full-time software, business systems and technical support roles in Calgary and across Alberta.{" "}
               {profile.locationProse}.
             </p>
 

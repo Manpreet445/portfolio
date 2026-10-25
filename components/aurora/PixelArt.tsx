@@ -7,37 +7,6 @@ type SpriteProps = {
   cell?: number;
 };
 
-/* A steaming mug of something warm. 12×12 grid + 3 steam pixels above. */
-export function PixelMug({ className = "", cell = 4 }: SpriteProps) {
-  return (
-    <svg
-      aria-hidden
-      className={`pixel-art ${className}`}
-      width={14 * cell}
-      height={16 * cell}
-      viewBox="0 0 14 16"
-    >
-      {/* steam */}
-      <rect className="steam" x="4" y="1" width="1" height="1" fill="var(--color-fog)" style={{ ["--steam-delay" as string]: "0s" }} />
-      <rect className="steam" x="6" y="0" width="1" height="1" fill="var(--color-fog)" style={{ ["--steam-delay" as string]: "0.8s" }} />
-      <rect className="steam" x="8" y="1" width="1" height="1" fill="var(--color-fog)" style={{ ["--steam-delay" as string]: "1.6s" }} />
-      {/* mug body */}
-      <rect x="2" y="5" width="9" height="8" fill="var(--color-ember)" />
-      <rect x="2" y="5" width="9" height="2" fill="var(--color-ember-bright)" />
-      {/* coffee */}
-      <rect x="3" y="5" width="7" height="1" fill="#6b4226" />
-      {/* handle */}
-      <rect x="11" y="7" width="2" height="1" fill="var(--color-ember)" />
-      <rect x="12" y="8" width="1" height="2" fill="var(--color-ember)" />
-      <rect x="11" y="10" width="2" height="1" fill="var(--color-ember)" />
-      {/* saucer */}
-      <rect x="1" y="13" width="11" height="1" fill="var(--color-ink)" opacity="0.8" />
-      {/* outline hint */}
-      <rect x="2" y="12" width="9" height="1" fill="#c77f2e" />
-    </svg>
-  );
-}
-
 /* Sprites drawn as character maps, so each one can be read and edited as a
    picture: one character per pixel, "." for empty. */
 function mapPixels(rows: string[], colors: Record<string, string>) {

@@ -1,6 +1,5 @@
 /** Public portfolio content. Experience copy intentionally stays NDA-safe. */
 export type ProjectStatus = "live" | "in-development" | "completed";
-export type ProjectAccent = "coral" | "sky" | "leaf" | "sun" | "tangerine";
 
 export type ProjectImage = {
   src: string;
@@ -8,6 +7,25 @@ export type ProjectImage = {
   width: number;
   height: number;
   caption: string;
+};
+
+/** One long-form section of a case study. Prose, not bullets. */
+export type CaseStudySection = {
+  /** mono eyebrow, e.g. "01 · Why I built it" */
+  eyebrow: string;
+  /** h2. Supports "*accent*" and "\n" line breaks, like SectionHeading elsewhere. */
+  title: string;
+  /** One string per paragraph. */
+  paragraphs: string[];
+};
+
+export type CaseStudy = {
+  /** <h1> on the case study page. */
+  heading: string;
+  /** One-sentence standfirst under the h1, and the meta description. */
+  standfirst: string;
+  /** Four long-form sections, in reading order. */
+  sections: CaseStudySection[];
 };
 
 export type Project = {
@@ -21,10 +39,10 @@ export type Project = {
   images: ProjectImage[];
   tags: string[];
   status: ProjectStatus;
-  accent: ProjectAccent;
-  secondary?: boolean;
   repo?: string;
   live?: string;
+  /** Present only on projects with a long-form write-up at /work/<slug>. */
+  caseStudy?: CaseStudy;
 };
 
 export type SkillCategory = "interface" | "systems" | "cloud" | "quality";
@@ -72,6 +90,26 @@ export const profile = {
 
 export const projects: Project[] = [
   {
+    slug: "payout-reconciler",
+    title: "Payout Reconciler",
+    context: "Independent project · Not affiliated with Helcim",
+    description: "Card payments reach a business's bank as lump-sum deposits that rarely match its sales one to one. This app matches each Helcim card batch to the bank deposit behind it, explains gaps caused by refunds, chargebacks and fees in plain English, and exports balanced journal entries ready for Xero or QuickBooks.",
+    detail: "Built solo in six days with Laravel and Vue, both new to me. Every batch gets one of six statuses with a reason: Matched, Explained, Flagged, Pending, Missing or Unexpected. Webhooks are verified with HMAC-SHA256 signatures, replays older than five minutes are rejected, and a unique database key makes Helcim's retries harmless. API calls run in rate-limited queued jobs that back off on HTTP 429, and money is stored as whole cents so totals always add up. About 100 PHPUnit tests run in GitLab CI on every push, and main deploys to Google Cloud Run with Cloud SQL in about four minutes.",
+    role: "Full-stack developer · Solo",
+    year: "October 2026",
+    images: [{
+      src: "/projects/payout-reconciler-dashboard.webp",
+      alt: "Payout Reconciler dashboard showing totals and a payouts table, with each batch marked Matched, Explained, Flagged, Pending, Missing or Unexpected.",
+      width: 1270,
+      height: 893,
+      caption: "Live application · Payout matching dashboard",
+    }],
+    tags: ["PHP", "Laravel", "Vue 3", "MySQL", "GitLab CI/CD", "Google Cloud Run", "PHPUnit"],
+    status: "live",
+    repo: "https://gitlab.com/Manpreet445/payout-reconciler",
+    live: "https://payout-reconciler-221041446777.us-central1.run.app",
+  },
+  {
     slug: "recepie",
     title: "Recepie",
     description: "A pantry-first cooking app: match recipes to ingredients on hand, create multi-day AI meal plans, and combine missing ingredients into one shopping list.",
@@ -87,7 +125,6 @@ export const projects: Project[] = [
     }],
     tags: ["TypeScript", "Next.js", "React", "Gemini API", "Supabase", "Zod", "Vitest"],
     status: "live",
-    accent: "sun",
     repo: "https://github.com/Manpreet445/Recepie",
     live: "https://recepie-app-gilt.vercel.app/",
   },
@@ -100,7 +137,6 @@ export const projects: Project[] = [
     images: [],
     tags: ["React Native", "Expo", "Firebase", "Firestore", "Leaflet"],
     status: "in-development",
-    accent: "sky",
     repo: "https://github.com/Manpreet445/StudySpot",
   },
   {
@@ -119,7 +155,6 @@ export const projects: Project[] = [
     }],
     tags: ["Azure", "Azure Functions", "Cosmos DB", "Azure AI Agent Service", "Python"],
     status: "completed",
-    accent: "leaf",
   },
   {
     slug: "movies",
@@ -130,8 +165,6 @@ export const projects: Project[] = [
     images: [],
     tags: ["Python", "OOP", "UML", "CLI"],
     status: "completed",
-    accent: "leaf",
-    secondary: true,
     repo: "https://github.com/Manpreet445/Movies-System-",
   },
 ];
@@ -149,7 +182,8 @@ export const skillAreas: SkillArea[] = [
       "C#",
       "Java",
       "HTML",
-      "CSS"
+      "CSS",
+      "PHP"
     ],
     "capabilities": [
       "Typed application code and object-oriented programming.",
@@ -164,7 +198,9 @@ export const skillAreas: SkillArea[] = [
       "React",
       "Next.js 16",
       "Tailwind CSS",
-      "Framer Motion"
+      "Framer Motion",
+      "Vue 3",
+      "Inertia"
     ],
     "capabilities": [
       "App Router, server actions, and reusable React components.",
@@ -201,7 +237,9 @@ export const skillAreas: SkillArea[] = [
       "Supabase",
       "Cosmos DB",
       "Firestore",
-      "SQLite"
+      "SQLite",
+      "Laravel",
+      "MySQL"
     ],
     "capabilities": [
       "REST API design, schema modelling, and database migrations.",
@@ -234,7 +272,8 @@ export const skillAreas: SkillArea[] = [
     ],
     "capabilities": [
       "Subscriptions, checkout, plan allowances, and usage metering.",
-      "Concurrency-safe balance updates and raw-body signature verification."
+      "Concurrency-safe balance updates and raw-body signature verification.",
+      "Idempotent webhook processing and rate-limited API jobs with 429 back-off."
     ]
   },
   {
@@ -261,6 +300,8 @@ export const skillAreas: SkillArea[] = [
       "Cloudflare R2",
       "Firebase Storage",
       "Google Cloud",
+      "Google Cloud Run",
+      "Cloud SQL",
       "Vercel"
     ],
     "capabilities": [
@@ -276,6 +317,7 @@ export const skillAreas: SkillArea[] = [
     "tags": [
       "Git",
       "GitHub Actions",
+      "GitLab CI/CD",
       "Docker"
     ],
     "capabilities": [
@@ -289,6 +331,7 @@ export const skillAreas: SkillArea[] = [
     "symbol": "✓",
     "tags": [
       "Vitest",
+      "PHPUnit",
       "Unit testing",
       "Integration testing",
       "Mocking"
@@ -370,8 +413,13 @@ export const milestones: Milestone[] = [
     year: "August 2026", status: "completed",
   },
   {
-    title: "Open to junior software developer roles",
-    note: "Available for full-time roles in Calgary and across Alberta, remote or on-site.",
+    title: "Payout Reconciler",
+    note: "Learned Laravel and Vue from scratch and shipped a tested, live payout reconciliation app in six days.",
+    year: "October 2026", status: "completed",
+  },
+  {
+    title: "Open to developer, analyst and support roles",
+    note: "Available for full-time software, business systems and technical support roles in Calgary and across Alberta, remote or on-site.",
     year: "2026", status: "available",
   },
 ];

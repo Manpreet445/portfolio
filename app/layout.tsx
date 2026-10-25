@@ -31,7 +31,7 @@ const SITE = {
   name: "Manpreet Singh — Full-Stack Developer",
   title: "Manpreet Singh · Full-Stack Developer",
   description:
-    "Manpreet Singh, a recent SAIT Software Development graduate in Calgary, Alberta. Web, mobile, and cloud projects using TypeScript, React, Next.js, Python, and Azure. Available for full-time junior developer roles.",
+    "Manpreet Singh, a recent SAIT Software Development graduate in Calgary, Alberta. Web, mobile, and cloud projects using TypeScript, React, Next.js, Python, and Azure. Available for full-time developer, analyst and support roles.",
   url: SITE_URL,
 };
 

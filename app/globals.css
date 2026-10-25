@@ -143,12 +143,6 @@ body {
   box-shadow: 1px 1px 0 rgba(15, 12, 28, 0.55);
 }
 
-/* Square corners everywhere (legacy class names kept from v1) */
-.radius-organic,
-.radius-organic-b {
-  border-radius: 2px;
-}
-
 /* The accented phrase in a section heading. Was a shimmering gradient clipped
    to the text; now a flat ember with a hard offset shadow behind it, which is
    what the rest of the type already does. Solid colour also means the word no
@@ -191,24 +185,6 @@ body {
   color: rgba(243, 237, 218, 0.07);
   animation: cloud-drift var(--cloud-dur, 120s) steps(90) infinite;
   animation-delay: var(--cloud-delay, 0s);
-}
-
-@keyframes steam-rise {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  25% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(-14px);
-    opacity: 0;
-  }
-}
-.steam {
-  animation: steam-rise 2.4s steps(6) infinite;
-  animation-delay: var(--steam-delay, 0s);
 }
 
 /* a z drifting up off the sleeping cat, in whole-pixel steps */
@@ -392,16 +368,11 @@ html.lenis body {
   }
   .star,
   .cloud,
-  .steam,
   .cat-z,
   .text-sunset {
     animation: none;
   }
-  .steam {
-    opacity: 0.5;
-  }
 }
-
 
 /* Cinematic composition: art stays open; copy has a deliberate right-hand axis. */
 .hero-shell { position: relative; }
@@ -577,14 +548,15 @@ html.lenis body {
 .project-movies .project-title { font-size:1.5rem; }
 @media(min-width:768px) {
   .work-grid { grid-template-columns:repeat(12,minmax(0,1fr)); }
-  .work-slot-recepie,.work-slot-movies { grid-column:1 / -1; }
+  .work-slot-payout-reconciler,.work-slot-recepie,.work-slot-movies { grid-column:1 / -1; }
   .work-slot-studyspot { grid-column:span 5; }
   .work-slot-conveyor { grid-column:span 7; }
-  .project-recepie .project-card { display:grid; grid-template-columns:1.12fr 1fr; }
-  .project-recepie .project-media { border-right:1px solid var(--color-line); justify-content:center; padding:1.5rem; gap:1.25rem; background:var(--color-abyss); }
-  .project-recepie .project-media > a { border:1px solid var(--color-line); box-shadow:var(--shadow-pixel); }
-  .project-recepie .project-media figcaption { border:0; padding:0; }
-  .project-recepie .project-title { font-size:2.75rem; }
+  /* any card with an app screenshot: image beside the text */
+  .project-shot .project-card { display:grid; grid-template-columns:1.12fr 1fr; }
+  .project-shot .project-media { border-right:1px solid var(--color-line); justify-content:center; padding:1.5rem; gap:1.25rem; background:var(--color-abyss); }
+  .project-shot .project-media > a { border:1px solid var(--color-line); box-shadow:var(--shadow-pixel); }
+  .project-shot .project-media figcaption { border:0; padding:0; }
+  .project-shot .project-title { font-size:2.75rem; }
   .project-movies .project-body { display:grid; grid-template-columns:1fr 1.5fr; align-items:start; gap:1rem 2rem; }
   .project-movies .project-meta { grid-column:1 / -1; }
   .project-movies .project-links { justify-content:flex-end; padding:0; }
@@ -634,7 +606,9 @@ header:focus-within { transform:translateY(0); }
   /* On desktop every project card is the same object — text on the left,
      visual on the right, one height — so the list reads as a set rather
      than four different silhouettes. */
-  .work-grid { grid-template-columns:minmax(0,1fr); gap:1.5rem; --card-h:30rem; }
+  /* auto-rows 1fr sizes every row to the tallest card, so the set stays
+     even whichever project has the most to say */
+  .work-grid { grid-template-columns:minmax(0,1fr); grid-auto-rows:1fr; gap:1.5rem; --card-h:30rem; }
   .work-grid > .work-slot { grid-column:1 / -1; }
   .work-slot .project-card { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); position:relative; min-height:var(--card-h); }
   .work-slot .project-body { grid-column:1; grid-row:1; display:flex; align-items:stretch; }
@@ -650,3 +624,10 @@ header:focus-within { transform:translateY(0); }
   .work-slot .project-media figcaption { border:0; padding:0; font-size:.7rem; text-align:center; }
   .plate-note { font-family:var(--font-mono); font-size:.68rem; color:var(--color-dust); text-align:center; }
 }
+
+/* Case study — the only long-form reading column on the site. Body type steps
+   up from the 15px used in cards to the 17px the design system specifies for
+   long-form, and the measure is capped so lines stay scannable on desktop. */
+.case-prose { max-width:34rem; font-size:1.0625rem; line-height:1.75; color:var(--color-mist); }
+.case-prose > p + p { margin-top:1.15rem; }
+.case-standfirst { max-width:34rem; font-size:1.125rem; line-height:1.65; color:var(--color-fog); }
